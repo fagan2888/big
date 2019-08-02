@@ -129,9 +129,9 @@ class Worth:
     '''
     def get_operation(self,):
         if(not self.now_bar.empty):
-            if(self.expre_Sig[0] == 1): #or self.expre_Sig[2] == 2):
+            if(self.expre_Sig[0] == 2): #or self.expre_Sig[2] == 2):
                 self.operation = 'long'
-            elif(self.expre_Sig[1] == 1): #加入全局风控
+            elif(self.expre_Sig[0] == 1): #加入全局风控
                 self.operation = 'short'
         return self.operation
 
@@ -497,8 +497,8 @@ def main(result_save_path = result_save_path,Expression = Expression):
     print(WD_pv)
 
 if __name__ == "__main__":
+    _meta_stra_name = 'price_close_trend'
     for w in [5,10,20,40,80]:
-        _Expression =['close_EMA_'+str(w)+'#2#1&trend','close_EMA_'+str(w)+'#2#0&trend']
-        _meta_stra_name = 'trend_long_short'
+        _Expression =['close#close_EMA_'+str(w)+'&cross']
         _result_save_path = up_file+'/result/'+_meta_stra_name+'/'+str(w)+'/'
         main(result_save_path = _result_save_path,Expression = _Expression)
