@@ -1,0 +1,2 @@
+code close_EMA_5#close_EMA_10&cross K#80#1&thre CCI#-100#0&thre J#80#1&thre ROC_6#ROC_12&cross MACD#0#1&thre WR#20#0&thre D#20#0&thre RSI_6#80#1&thre ROC_6#0#1&thre BIAS_5#-10#0&thre K#20#0&thre J#20#0&thre D#80#1&thre J#D&cross close_EMA_12#close_EMA_26&cross CCI#100#1&thre RSI_6#RSI_12&cross close_EMA_5#2#1&trend K#D&cross RSI_6#20#0&thre BIAS_5#10#1&thre BIAS_5#BIAS_50&cross WR#80#1&thre close_EMA_5#2#0&trend
+000001.XSHE 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0

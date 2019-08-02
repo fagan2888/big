@@ -1,0 +1,10 @@
+Expression = ['close_EMA_5#close_EMA_10&cross','close_EMA_12#close_EMA_26&cross','RSI_6#85#1&thre','J#100#1&thre','close_EMA_12#close_EMA_26&cross&HS','K#40#1&thre&HS','close_EMA_5#2#1&trend']
+    def get_operation(self,):
+        if(not self.now_bar.empty):
+            #print('expre',self.code,self.date,self.expre_Sig)
+            if(self.expre_Sig[0] == 2 and self.expre_Sig[5] == 1 and self.expre_Sig[6] == 0): #or self.expre_Sig[2] == 2):
+                self.operation = 1
+            elif((self.expre_Sig[1] == 1 or self.expre_Sig[2] == 1 or self.expre_Sig[3] == 1) or self.expre_Sig[4] == 1): #加入全局风控
+                self.operation = -1
+            #print('inter',self.operation)
+        return self.operation
