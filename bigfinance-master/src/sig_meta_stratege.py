@@ -497,7 +497,7 @@ def main(result_save_path = result_save_path,Expression = Expression):
     print(WD_pv)
 
 if __name__ == "__main__":
-    for w in [5,10,20,40]:
+    for w in [5,10,20,40,80]:
         _Expression =['close_EMA_'+str(w)+'#2#1&trend','close_EMA_'+str(w)+'#2#0&trend']
         _meta_stra_name = 'trend_long_short'
         _result_save_path = up_file+'/result/'+_meta_stra_name+'/'+str(w)+'/'
