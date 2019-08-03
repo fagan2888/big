@@ -80,6 +80,7 @@ class Worth:
         trade_gold = 0 #交易金钱
         trade_price = 0 #交易价格
         is_make_money = 0
+        #print(self.code,self.now_date,self.operation)
         if(self.sell_price>0.9*settle and self.sell_price<1.1*settle):#涨跌停不能买卖
             #做多或者做空
             if(self.l_or_s == 'noo' and 
@@ -129,10 +130,15 @@ class Worth:
     '''
     def get_operation(self,):
         if(not self.now_bar.empty):
-            if(self.expre_Sig[0] == 2): #or self.expre_Sig[2] == 2):
+            if((self.l_or_s == 'long' and self.expre_Sig[1] == 1)
+                or(self.l_or_s == 'short' and self.expre_Sig[0] == 2)): #加入全局风控
+                self.operation = 'sell'
+            elif(self.expre_Sig[0] == 2): #or self.expre_Sig[2] == 2):
                 self.operation = 'long'
-            elif(self.expre_Sig[0] == 1): #加入全局风控
+            elif(self.expre_Sig[1] == 1): #加入全局风控
                 self.operation = 'short'
+            else:
+                self.operation = 'noo'
         return self.operation
 
     # 得到买入和卖出的价格
@@ -254,7 +260,7 @@ class CStock:#计算选股模型的净值
         every_gold = self.get_every_code_gold()#这里必须放到循环前面，不然会导致买多只股票时后面的股票分到的钱为0
         for _code,_worth in zip(self.tbsl,self.tbsW):#####这里以后可能还要改，因为可能有些信号不是立即买，那么分配钱就有问题#######
             _worth.gold = every_gold
-            if(_worth.buy_due <= 0):
+            if(_worth.buy_due <= 0 and _worth.code not in self.hbsl):
                 position,trade_gold,close,trade_price,trade_date,expre_sig,is_make_money = _worth.one_code_trade()
                 if(trade_gold>0): #如果交易金额大于0
                     self.add_result(_code,position,trade_gold,close,trade_price,trade_date,expre_sig,is_make_money)
@@ -298,12 +304,14 @@ class CStock:#计算选股模型的净值
             else:
                 self.Sig.expre_sig[_code] = np.zeros(len(self.Sig.expression))
             #把今天要买的股票加入列表
+            _worth.expre_Sig = copy.copy(self.Sig.expre_sig[_code])#今天的信号
             _opera = copy.copy(_worth.get_operation())
+            #print('buy_opearation',self._nowdate,_code,_opera)
             if(_opera == 'long' or _opera == 'short' or _opera == 'noo'):
                 self.write_one_code_result(_code,_opera)
             if(_worth.date in _worth.trade_date_list and 
-                (_opera == 'long' or _opera == 'short') 
-                and _worth.code not in self.hbsl):
+                (_opera == 'long' or _opera == 'short')): 
+                #and _worth.code not in self.hbsl):
                 self.tbsl.append(_code)    
                 self.tbsW.append(_worth)
             self.result.y_pre_list.append(copy.copy(self.Sig.expre_sig[_code]))
@@ -312,7 +320,10 @@ class CStock:#计算选股模型的净值
     def get_tssl(self,):
         self.tssl = []
         for _code,_worth in zip(self.hbsl,self.hbsW):
-            _worth.expre_Sig = self.Sig.expre_sig[_code]#卖出用的当天的信号，因为这个函数在得到买入股票之后，信号已经更新了
+            #print('expre',self.Sig.expre_sig[_code])
+            _worth.expre_Sig = copy.copy(self.Sig.expre_sig[_code])#卖出用的当天的信号，因为这个函数在得到买入股票之后，信号已经更新了
+            _operation = _worth.get_operation()
+            #print('sell_opearation',self._nowdate,_code,_operation)
             if(_worth.now_date in _worth.trade_date_list and 
                 ( _worth.get_operation() == 'sell' and _worth.sell_due <= 0
                 or _code not in self.ccsl)): #出现卖的信号或者换仓的时候平仓
@@ -329,8 +340,8 @@ class CStock:#计算选股模型的净值
         for _code,_worth in zip(self.hbsl,self.hbsW):
             _worth.sell_due_close() #卖due减一
             _worth.update_trade_price(self._nowdate)
-        self.get_tssl() #得到今天要卖的股票列表
         self.get_tbsl() #获得今天要买的股票列表和worth
+        self.get_tssl() #得到今天要卖的股票列表
         self.write_all_code_result()
         self.Sig.date = self._nowdate #Sig的日期更新
 
@@ -497,8 +508,8 @@ def main(result_save_path = result_save_path,Expression = Expression):
     print(WD_pv)
 
 if __name__ == "__main__":
-    _meta_stra_name = 'price_close_trend'
+    _meta_stra_name = 'price_track_cross'
     for w in [5,10,20,40,80]:
-        _Expression =['close#close_EMA_'+str(w)+'&cross']
+        _Expression =['close#close_EMA_'+str(w)+'_3&cross','close#close_EMA_'+str(w)+'_-3&cross']
         _result_save_path = up_file+'/result/'+_meta_stra_name+'/'+str(w)+'/'
         main(result_save_path = _result_save_path,Expression = _Expression)

@@ -50,6 +50,16 @@ def cal_index_data(code):
         data = index_24.calculateEMA(data,'close',20)
         data = index_24.calculateEMA(data,'close',40)
         data = index_24.calculateEMA(data,'close',80)
+        data = index_24.calculateTD(data,'close',5,'EMA',3)
+        data = index_24.calculateTD(data,'close',10,'EMA',3)
+        data = index_24.calculateTD(data,'close',20,'EMA',3)
+        data = index_24.calculateTD(data,'close',40,'EMA',3)
+        data = index_24.calculateTD(data,'close',80,'EMA',3)
+        data = index_24.calculateTD(data,'close',5,'EMA',-3)
+        data = index_24.calculateTD(data,'close',10,'EMA',-3)
+        data = index_24.calculateTD(data,'close',20,'EMA',-3)
+        data = index_24.calculateTD(data,'close',40,'EMA',-3)
+        data = index_24.calculateTD(data,'close',80,'EMA',-3)
         data = index_24.calculateBIAS(data,5)#计算BIAS
         data = index_24.calculateBIAS(data,50)#计算BIAS
         data = index_24.calculateCCI(data)

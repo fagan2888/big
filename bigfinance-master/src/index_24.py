@@ -88,7 +88,7 @@ def calculateTD(df,name,period,MA_type,percent,M=12,d = 0):
         df = calculateEMA(df, name, period)
         array_EMA = np.array(df[str(name) + '_EMA_' + str(period)])
         for i in range(0,len(array_EMA)):
-            array_EMA[i] = array_EMA[i]*percent/(percent/100+1)
+            array_EMA[i] = array_EMA[i]*(percent/100+1)
         _df[str(name)+'_EMA_'+str(period)+'_'+str(percent)]=array_EMA
     elif(MA_type=='MA'):
         df = calculateMA(df, name, period)
@@ -101,7 +101,7 @@ def calculateTD(df,name,period,MA_type,percent,M=12,d = 0):
         array_SMA = np.array(
             df[str(name) + '_SMA_' + str(period)+'_' + str(M)])
         for i in range(0, len(array_SMA)):
-            array_SMA[i] = array_SMA[i]*percent/(percent/100+1)
+            array_SMA[i] = array_SMA[i]*(percent/100+1)
         _df[str(name)+'_SMA_'+str(period)+'_'+str(M)+'_'+str(percent)] = array_SMA
     return _df
 
