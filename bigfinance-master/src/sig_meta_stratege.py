@@ -117,12 +117,12 @@ class Worth:
 
     def get_operation(self,):
         if(not self.now_bar.empty):
-            if((self.l_or_s == 'long' and (self.expre_Sig[0] == 1 or self.expre_Sig[1] == 1))
-                or(self.l_or_s == 'short' and (self.expre_Sig[0] == 2 or self.expre_Sig[1] == 2))): #加入全局风控
+            if((self.l_or_s == 'long' and (self.expre_Sig[2] == 1 or self.expre_Sig[1] == 1))
+                or(self.l_or_s == 'short' and (self.expre_Sig[0] == 1 or self.expre_Sig[3] == 1))): #加入全局风控
                 self.operation = 'sell'
-            elif(self.expre_Sig[0] == 2 and self.expre_Sig[1] == 2): #or self.expre_Sig[2] == 2):
+            elif(self.expre_Sig[0] == 1 and self.expre_Sig[1] == 1): #or self.expre_Sig[2] == 2):
                 self.operation = 'long'
-            elif(self.expre_Sig[0] == 1 and self.expre_Sig[1] == 1): #加入全局风控
+            elif(self.expre_Sig[2] == 1 and self.expre_Sig[3] == 1): #加入全局风控
                 self.operation = 'short'
             else:
                 self.operation = 'noo'
@@ -495,8 +495,8 @@ def main(result_save_path = result_save_path,Expression = Expression):
     print(WD_pv)
 
 if __name__ == "__main__":
-    _meta_stra_name = 'price_long_short_cross'
+    _meta_stra_name = 'long_short_cross_together'
     for w in [10,20,40,80]:
-        _Expression =['close#close_EMA_5&cross','close#close_EMA_'+str(w)+'&cross']
+        _Expression =['close_EMA_5#2#1&trend','close_EMA_'+str(w)+'#2#1&trend','close_EMA_5#2#0&trend','close_EMA_'+str(w)+'#2#0&trend']
         _result_save_path = up_file+'/result/'+_meta_stra_name+'/'+str(w)+'/'
         main(result_save_path = _result_save_path,Expression = _Expression)
