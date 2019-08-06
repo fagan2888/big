@@ -114,34 +114,21 @@ class Worth:
         self.pure_value = self.asset/self.original_gold
         return self.position,trade_gold,close,trade_price,self.now_date,self.expre_Sig,is_make_money
     
-    '''
-    #得到操作信号
+
     def get_operation(self,):
         if(not self.now_bar.empty):
-            if(self.expre_Sig[0] == 2 and self.expre_Sig[1] == 2 and self.expre_Sig[2] == 4): #or self.expre_Sig[2] == 2):
+            if((self.l_or_s == 'long' and (self.expre_Sig[0] == 1 or self.expre_Sig[1] == 1))
+                or(self.l_or_s == 'short' and (self.expre_Sig[0] == 2 or self.expre_Sig[1] == 2))): #加入全局风控
+                self.operation = 'sell'
+            elif(self.expre_Sig[0] == 2 and self.expre_Sig[1] == 2): #or self.expre_Sig[2] == 2):
                 self.operation = 'long'
-            elif(self.expre_Sig[0] == 1 and self.expre_Sig[1] == 1 and self.expre_Sig[2] == 1): #and self.expre_Sig[4] == 1):
-                self.operation = 'short'
-            elif(self.l_or_s == 'long' and (self.expre_Sig[0] == 1 or self.expre_Sig[1] == 1 or self.expre_Sig[2] == 1)): #加入全局风控
-                self.operation = 'sell'
-            elif(self.l_or_s == 'short' and (self.expre_Sig[0] == 2 or self.expre_Sig[1] == 2 or self.expre_Sig[2] == 4)): #加入全局风控
-                self.operation = 'sell'
-        return self.operation
-    '''
-    def get_operation(self,):
-        if(not self.now_bar.empty):
-            if((self.l_or_s == 'long' and self.expre_Sig[2] == 1)
-                or(self.l_or_s == 'short' and self.expre_Sig[2] == 2)): #加入全局风控
-                self.operation = 'sell'
-            elif(self.expre_Sig[0] == 2): #or self.expre_Sig[2] == 2):
-                self.operation = 'long'
-            elif(self.expre_Sig[1] == 1): #加入全局风控
+            elif(self.expre_Sig[0] == 1 and self.expre_Sig[1] == 1): #加入全局风控
                 self.operation = 'short'
             else:
                 self.operation = 'noo'
         return self.operation
 
-    # 得到买入和卖出的价格
+    # 得到买入和卖出的价格s
     def get_trade_price(self,):
         if(not self.now_bar.empty and 'close' in self.now_bar.keys()):
             self.buy_price = self.now_bar['close'].iloc[-1] #以当天收盘价为买入价格
@@ -508,8 +495,8 @@ def main(result_save_path = result_save_path,Expression = Expression):
     print(WD_pv)
 
 if __name__ == "__main__":
-    _meta_stra_name = 'price_track_mean_cross'
-    for w in [5,10,20,40,80]:
-        _Expression =['close#close_EMA_'+str(w)+'_3&cross','close#close_EMA_'+str(w)+'_-3&cross','close#close_EMA_'+str(w)+'&cross']
+    _meta_stra_name = 'price_long_short_cross'
+    for w in [10,20,40,80]:
+        _Expression =['close#close_EMA_5&cross','close#close_EMA_'+str(w)+'&cross']
         _result_save_path = up_file+'/result/'+_meta_stra_name+'/'+str(w)+'/'
         main(result_save_path = _result_save_path,Expression = _Expression)
