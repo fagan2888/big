@@ -63,6 +63,7 @@ class Worth:
         self.now_bar = now_bar #当天的数据bar，每天更新
         self.expre_Sig =  expre_Sig #每天的expression的信号
         self.l_or_s = 'noo' #判断是做多还是做空
+        self.hold_day = 0 #持仓时间
     #某一天的买入卖出函数
     
     def one_code_trade(self,):
@@ -315,7 +316,7 @@ class CStock:#计算选股模型的净值
                 ( _worth.get_operation() == 'sell' and _worth.sell_due <= 0
                 or _code not in self.ccsl)): #出现卖的信号或者换仓的时候平仓
                 self.tssl.append(_code)
-                self.write_one_code_result(_code,'sell',_worth.sell_price,_worth.l_or_s,_worth.ori_buy_price,_worth.date)
+                self.write_one_code_result(_code,'sell',_worth.sell_price,_worth.l_or_s,_worth.hold_day,_worth.ori_buy_price,_worth.date)
                 #_worth.operation = 'sell'
 
     #开盘前操作
@@ -341,6 +342,7 @@ class CStock:#计算选股模型的净值
                     _worth.asset = _worth.gold+100*_worth.position*_worth.now_bar['close'].iloc[-1]#在更新now_bar之前更新已买入股票的资产
                 else:
                     _worth.asset = _worth.gold+100*_worth.position*_worth.ori_buy_price#在更新now_bar之前更新已买入股票的资产
+                _worth.hold_day += 1
             #这里还要重复是因为在不交易的时候也能更新持仓净值，否则就会出现直线                                             
         self.Sig.update()
     
@@ -405,18 +407,19 @@ class CStock:#计算选股模型的净值
                 f.write(str(self._nowdate)+' '+code+' '+'sell\n')
                 f.close()
 
-    def write_one_code_result(self,code,operation,price,l_or_s,buy_price = 0,buy_date = 0):
+    def write_one_code_result(self,code,operation,price,l_or_s,hold_day = 0,buy_price = 0,buy_date = 0):
         w_s = self.result_save_path+'code/'
         if not os.path.exists(w_s):
             os.makedirs(w_s)
         if(operation == 'sell'):
             if not os.path.exists(w_s+code+l_or_s+'_operation.txt'):
                 with open(w_s+code+l_or_s+'_operation.txt','a') as f:
-                    f.write('time'+' '+'operation'+' '+'sell_price'+' '+'buy_price'+' '+'buy_date\n')
+                    f.write('time'+' '+'operation'+' '+'sell_price'+' '+'hold_day'
+                    +' '+'buy_price'+' '+'buy_date\n')
                     f.close()
             with open(w_s+code+l_or_s+'_operation.txt','a') as f:
                 f.write(str(self._nowdate)+' '+str(operation)+' '+str(price)
-                +' '+str(buy_price)+' '+str(buy_date)+'\n')
+                +' '+str(hold_day)+' '+str(buy_price)+' '+str(buy_date)+'\n')
                 f.close()
         if not os.path.exists(w_s+code+'_operation.txt'):
             with open(w_s+code+'_operation.txt','a') as f:
