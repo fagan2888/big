@@ -295,7 +295,7 @@ class CStock:#计算选股模型的净值
             _opera = copy.copy(_worth.get_operation())
             #print('buy_opearation',self._nowdate,_code,_opera)
             if(_opera == 'long' or _opera == 'short' or _opera == 'noo'):
-                self.write_one_code_result(_code,_opera)
+                self.write_one_code_result(_code,_opera,_worth.buy_price,_worth.l_or_s)
             if(_worth.date in _worth.trade_date_list and 
                 (_opera == 'long' or _opera == 'short')): 
                 #and _worth.code not in self.hbsl):
@@ -315,7 +315,7 @@ class CStock:#计算选股模型的净值
                 ( _worth.get_operation() == 'sell' and _worth.sell_due <= 0
                 or _code not in self.ccsl)): #出现卖的信号或者换仓的时候平仓
                 self.tssl.append(_code)
-                self.write_one_code_result(_code,'sell')
+                self.write_one_code_result(_code,'sell',_worth.sell_price,_worth.l_or_s,_worth.ori_buy_price,_worth.date)
                 #_worth.operation = 'sell'
 
     #开盘前操作
@@ -405,19 +405,27 @@ class CStock:#计算选股模型的净值
                 f.write(str(self._nowdate)+' '+code+' '+'sell\n')
                 f.close()
 
-    def write_one_code_result(self,code,operation):
+    def write_one_code_result(self,code,operation,price,l_or_s,buy_price = 0,buy_date = 0):
         w_s = self.result_save_path+'code/'
         if not os.path.exists(w_s):
             os.makedirs(w_s)
+        if(operation == 'sell'):
+            if not os.path.exists(w_s+code+l_or_s+'_operation.txt'):
+                with open(w_s+code+l_or_s+'_operation.txt','a') as f:
+                    f.write('time'+' '+'operation'+' '+'sell_price'+' '+'buy_price'+' '+'buy_date\n')
+                    f.close()
+            with open(w_s+code+l_or_s+'_operation.txt','a') as f:
+                f.write(str(self._nowdate)+' '+str(operation)+' '+str(price)
+                +' '+str(buy_price)+' '+str(buy_date)+'\n')
+                f.close()
         if not os.path.exists(w_s+code+'_operation.txt'):
             with open(w_s+code+'_operation.txt','a') as f:
-                f.write('time'+' '+'operation\n')
+                f.write('time'+' '+'operation'+' '+'trade_price\n')
                 f.close()
         with open(w_s+code+'_operation.txt','a') as f:
-            #print(str(operation),)
-            f.write(str(self._nowdate)+' '+str(operation)+'\n')
+            f.write(str(self._nowdate)+' '+str(operation)+' '+str(price)+'\n')
             f.close()
-            
+        
 
 # 得到交易一些记录，para_data是净值和资金的记录，每天都有记录；
 # trade_data是交易的记录，只有在交易时才会有记录
