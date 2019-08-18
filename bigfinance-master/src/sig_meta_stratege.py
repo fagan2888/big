@@ -118,12 +118,12 @@ class Worth:
 
     def get_operation(self,):
         if(not self.now_bar.empty):
-            if((self.l_or_s == 'long' and (self.expre_Sig[2] == 1 or self.expre_Sig[1] == 1))
-                or(self.l_or_s == 'short' and (self.expre_Sig[0] == 1 or self.expre_Sig[3] == 1))): #加入全局风控
+            if((self.l_or_s == 'long' and self.expre_Sig[2] == 1)
+                or(self.l_or_s == 'short' and self.expre_Sig[2] == 2)): #加入全局风控
                 self.operation = 'sell'
-            elif(self.expre_Sig[0] == 1 and self.expre_Sig[1] == 1): #or self.expre_Sig[2] == 2):
+            elif(self.expre_Sig[0] == 2): 
                 self.operation = 'long'
-            elif(self.expre_Sig[2] == 1 and self.expre_Sig[3] == 1): #加入全局风控
+            elif(self.expre_Sig[1] == 1): #加入全局风控
                 self.operation = 'short'
             else:
                 self.operation = 'noo'
@@ -421,13 +421,14 @@ class CStock:#计算选股模型的净值
                 f.write(str(self._nowdate)+' '+str(operation)+' '+str(price)
                 +' '+str(hold_day)+' '+str(buy_price)+' '+str(buy_date)+'\n')
                 f.close()
-        if not os.path.exists(w_s+code+'_operation.txt'):
+        else:
+            if not os.path.exists(w_s+code+'_operation.txt'):
+                with open(w_s+code+'_operation.txt','a') as f:
+                    f.write('time'+' '+'operation'+' '+'trade_price\n')
+                    f.close()
             with open(w_s+code+'_operation.txt','a') as f:
-                f.write('time'+' '+'operation'+' '+'trade_price\n')
+                f.write(str(self._nowdate)+' '+str(operation)+' '+str(price)+'\n')
                 f.close()
-        with open(w_s+code+'_operation.txt','a') as f:
-            f.write(str(self._nowdate)+' '+str(operation)+' '+str(price)+'\n')
-            f.close()
         
 
 # 得到交易一些记录，para_data是净值和资金的记录，每天都有记录；
@@ -506,8 +507,8 @@ def main(result_save_path = result_save_path,Expression = Expression):
     print(WD_pv)
 
 if __name__ == "__main__":
-    _meta_stra_name = 'long_short_cross_together'
-    for w in [10,20,40,80]:
-        _Expression =['close_EMA_5#2#1&trend','close_EMA_'+str(w)+'#2#1&trend','close_EMA_5#2#0&trend','close_EMA_'+str(w)+'#2#0&trend']
+    _meta_stra_name = 'price_track_mean_cross'
+    for w in [5,10,20,40,80]:
+        _Expression =['close#close_EMA_'+str(w)+'_3&cross','close#close_EMA_'+str(w)+'_-3&cross','close#close_EMA_'+str(w)+'&cross']
         _result_save_path = up_file+'/result/'+_meta_stra_name+'/'+str(w)+'/'
         main(result_save_path = _result_save_path,Expression = _Expression)
