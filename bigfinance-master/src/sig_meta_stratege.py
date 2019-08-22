@@ -204,7 +204,7 @@ class CStock:#计算选股模型的净值
     def __init__(self,_nowdate='',ori_gold = 0,gold = 0,asset = 0,have_buy_stocks_list = [],have_buy_stocks_Worth = [],
                  tomorrow_buy_stocks_list = [],tomorrow_buy_stocks_Worth = [],dp_trade_date = dp_trade_date,close = 1,
                  today_sell_stocks_list = [],could_choose_stocks_list = [],result = Result(),all_choose_stocks_list = [],
-                 init_close = 0,Expression = [],result_save_path = result_save_path):
+                 init_close = 0,Expression = [],result_save_path = result_save_path,today_sell_stocks_Worth = []):
         self.ori_gold = ori_gold #本金
         self._nowdate = _nowdate
         self.gold = gold #现有可投入资金
@@ -214,6 +214,7 @@ class CStock:#计算选股模型的净值
         self.tbsl = tomorrow_buy_stocks_list #将要买的股票列表
         self.tbsW = tomorrow_buy_stocks_Worth #将要买的股票的worth列表
         self.tssl = today_sell_stocks_list #今天要卖的股票列表
+        self.tssW = today_sell_stocks_Worth #今天要卖的股票的worth列表
         self.ccsl = could_choose_stocks_list #可以挑选的股票列表
         self.acsl = all_choose_stocks_list #所有可以挑选的股票列表
         self.result = result
@@ -307,6 +308,7 @@ class CStock:#计算选股模型的净值
     #得到今天要卖的股票列表
     def get_tssl(self,):
         self.tssl = []
+        self.tssW = []
         for _code,_worth in zip(self.hbsl,self.hbsW):
             #print('expre',self.Sig.expre_sig[_code])
             _worth.expre_Sig = copy.copy(self.Sig.expre_sig[_code])#卖出用的当天的信号，因为这个函数在得到买入股票之后，信号已经更新了
@@ -316,6 +318,7 @@ class CStock:#计算选股模型的净值
                 ( _worth.get_operation() == 'sell' and _worth.sell_due <= 0
                 or _code not in self.ccsl)): #出现卖的信号或者换仓的时候平仓
                 self.tssl.append(_code)
+                self.tssW.append(_worth)
                 self.write_one_code_result(_code,'sell',_worth.sell_price,_worth.l_or_s,_worth.hold_day,_worth.ori_buy_price,_worth.date)
                 #_worth.operation = 'sell'
 
@@ -398,13 +401,13 @@ class CStock:#计算选股模型的净值
             with open(w_s+'all_operation.txt','a') as f:
                 f.write('time'+' '+'code'+' '+'operation\n')
                 f.close()
-        for code in self.tbsl:
+        for code,worth in zip(self.tbsl,self.tbsW):
             with open(w_s+'all_operation.txt','a') as f:
-                f.write(str(self._nowdate)+' '+code+' '+'buy\n')
+                f.write(str(self._nowdate)+' '+code+' '+worth.operation+'\n')
                 f.close()
-        for code in self.tssl:
+        for code,worth in zip(self.tssl,self.tssW):
             with open(w_s+'all_operation.txt','a') as f:
-                f.write(str(self._nowdate)+' '+code+' '+'sell\n')
+                f.write(str(self._nowdate)+' '+code+' '+worth.l_or_s+'_sell\n')
                 f.close()
 
     def write_one_code_result(self,code,operation,price,l_or_s,hold_day = 0,buy_price = 0,buy_date = 0):
@@ -489,9 +492,9 @@ def All_trade(code_list,begin_date,result_save_path = result_save_path,Expressio
     return C_S.result.gold_list[-1]
 
 def main(result_save_path = result_save_path,Expression = Expression):
-    code_list = ['000001.XSHE','000016.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
+    #code_list = ['000001.XSHE','000016.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
     #code_list = get_all_code(now_file+'/wmdata')
-    #code_list = get_code_list()
+    code_list = get_code_list()
     _code_list = copy.copy(code_list)
     off_line=False
     if(not off_line):
