@@ -108,11 +108,11 @@ class Signal:
         index_name_short,index_name_long = type_name.split('&')[0].split('#')
         if(data[index_name_short].iloc[-2] > data[index_name_long].iloc[-2] 
            and data[index_name_short].iloc[-1] < data[index_name_long].iloc[-1]):
-            self.signal[code][self.type_list == type_name] = 1
+            self.signal[code][self.type_list == type_name] = -1
             self.life[code][self.type_list == type_name] = lf
         elif(data[index_name_short].iloc[-2] < data[index_name_long].iloc[-2] 
              and data[index_name_short].iloc[-1] > data[index_name_long].iloc[-1]):
-            self.signal[code][self.type_list == type_name] = 2
+            self.signal[code][self.type_list == type_name] = 1
             self.life[code][self.type_list == type_name] = lf
     
     #得到和expression匹配的信号
@@ -159,8 +159,8 @@ class Signal:
                     self.trend[trend_index_name+'_ema_'+str(ema_w)][i] = 0
     #信号随时间更新
     def update(self,):
-        #self.write_code_result()#在更新之前写入分股票结果
-        #self.write_time_result()#在更新之前写入分时结果
+        self.write_code_result()#在更新之前写入分股票结果
+        self.write_time_result()#在更新之前写入分时结果
         #self.write_trend_result()#在更新之前写入趋势结果
         for code in self.code_list:
             self.life[code][self.life[code] != 0] = self.life[code][self.life[code] != 0] - 1

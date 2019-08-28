@@ -118,12 +118,12 @@ class Worth:
 
     def get_operation(self,):
         if(not self.now_bar.empty):
-            if((self.l_or_s == 'long' and self.expre_Sig[2] == 1)
-                or(self.l_or_s == 'short' and self.expre_Sig[2] == 2)): #加入全局风控
+            if((self.l_or_s == 'long' and self.expre_Sig[2] == -1)
+                or(self.l_or_s == 'short' and self.expre_Sig[2] == 1)): #加入全局风控
                 self.operation = 'sell'
-            elif(self.expre_Sig[0] == 2): 
+            elif(self.expre_Sig[0] == 1): 
                 self.operation = 'long'
-            elif(self.expre_Sig[1] == 1): #加入全局风控
+            elif(self.expre_Sig[1] == -1): #加入全局风控
                 self.operation = 'short'
             else:
                 self.operation = 'noo'
