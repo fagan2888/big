@@ -118,13 +118,12 @@ class Worth:
 
     def get_operation(self,):
         if(not self.now_bar.empty):
-            if((self.l_or_s == 'long' and self.expre_Sig[2] == -1)
-                or(self.l_or_s == 'short' and self.expre_Sig[2] == 1)): #加入全局风控
+            if(self.expre_Sig[4] != 1 or self.expre_Sig[6] != 1): #加入全局风控
                 self.operation = 'sell'
-            elif(self.expre_Sig[0] == 1): 
+            elif(self.expre_Sig[0] == 1 and self.expre_Sig[1] == 1 and self.expre_Sig[2] == 1
+            and self.expre_Sig[3] == 1 and self.expre_Sig[4] == 1 and self.expre_Sig[5] == 1
+            and self.expre_Sig[6] == 1): 
                 self.operation = 'long'
-            elif(self.expre_Sig[1] == -1): #加入全局风控
-                self.operation = 'short'
             else:
                 self.operation = 'noo'
         return self.operation
@@ -495,9 +494,9 @@ def All_trade(code_list,begin_date,result_save_path = result_save_path,Expressio
     return C_S.result.gold_list[-1]
 
 def main(result_save_path = result_save_path,Expression = Expression):
-    code_list = ['000001.XSHE','000016.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
+    #code_list = ['000001.XSHE','000016.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
     #code_list = get_all_code(now_file+'/wmdata')
-    #code_list = get_code_list()
+    code_list = get_code_list()
     _code_list = copy.copy(code_list)
     off_line=False
     if(not off_line):
@@ -513,8 +512,9 @@ def main(result_save_path = result_save_path,Expression = Expression):
     print(WD_pv)
 
 if __name__ == "__main__":
-    _meta_stra_name = 'price_track_mean_cross'
-    for w in [5,10,20,40,80]:
-        _Expression =['close#close_EMA_'+str(w)+'_3&cross','close#close_EMA_'+str(w)+'_-3&cross','close#close_EMA_'+str(w)+'&cross']
-        _result_save_path = up_file+'/result/'+_meta_stra_name+'/'+str(w)+'/'
-        main(result_save_path = _result_save_path,Expression = _Expression)
+    _meta_stra_name = 'zhongli'
+    _Expression =['close_EMA_7#close_EMA_15&diff','close_EMA_15#close_EMA_25&diff',
+    'close_EMA_15#2#1&trend','close_EMA_25#2#1&trend','MACD#0#1&thre','close#close_shift_4&diff',
+    'K#40#1&thre&HS']
+    _result_save_path = up_file+'/result/'+_meta_stra_name+'/'
+    main(result_save_path = _result_save_path,Expression = _Expression)

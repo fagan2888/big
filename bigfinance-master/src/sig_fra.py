@@ -115,12 +115,23 @@ class Signal:
             self.signal[code][self.type_list == type_name] = 1
             self.life[code][self.type_list == type_name] = lf
     
+    def diff_sig(self,data,code,type_name,lf = 1):#指标差值
+        index_name_1,index_name_2 = type_name.split('&')[0].split('#')
+        if(data[index_name_1].iloc[-1] < data[index_name_2].iloc[-1]):
+            self.signal[code][self.type_list == type_name] = -1
+            self.life[code][self.type_list == type_name] = lf
+        elif(data[index_name_1].iloc[-1] > data[index_name_2].iloc[-1]):
+            self.signal[code][self.type_list == type_name] = 1
+            self.life[code][self.type_list == type_name] = lf
+
     #得到和expression匹配的信号
     def get_expre_sig(self,data,code,type_name):
         if('thre' in type_name):
-            self.threshold_sig(data,code,type_name = type_name,lf = 1)
+            self.threshold_sig(data, code, type_name = type_name, lf = 1)
         elif('cross' in type_name):
-            self.cross_sig(data,code,type_name = type_name,lf = 1)
+            self.cross_sig(data, code, type_name = type_name, lf = 1)
+        elif('diff' in type_name):
+            self.diff_sig(data, code, type_name = type_name, lf = 1)
         elif ('trend' in type_name):
             self.trend_sig(data, code, type_name=type_name, lf = 1)
         else:
@@ -128,17 +139,14 @@ class Signal:
     
     #得到不同的数据和expression匹配的信号
     def type_sig(self,data,code):
-        #print(data)
-        #self.trend_cal()
         for type_name in self.type_list:
-            #try:
+
             if('HS' in type_name):#计算全局风控
                 hs_data = copy.copy(sig_data.get_windows_data(self.HScode,self.date,w = 100))
                 self.get_expre_sig(hs_data,code,type_name)
             else:
                 self.get_expre_sig(data,code,type_name)
-            #except Exception as e:
-                #print('type_sig',code,e)
+            
         for i in range(0,len(self.input_expression)):#可以在这里变成只算输入的expression
             expre = self.input_expression[i]  
             self.expre_sig[code][i] = Cal_fra.replace_exp(expre,self.get_type_list([expre]),self.type_list,self.signal[code])

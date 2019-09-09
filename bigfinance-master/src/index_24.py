@@ -105,6 +105,15 @@ def calculateTD(df,name,period,MA_type,percent,M=12,d = 0):
         _df[str(name)+'_SMA_'+str(period)+'_'+str(M)+'_'+str(percent)] = array_SMA
     return _df
 
+def calculatehistory(df,index_name = 'close',Period = 4,d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    index_data = df[index_name]
+    new_data = index_data.shift(Period)
+    _df[index_name+'_'+'shift'+'_'+str(Period)] = np.array(new_data)
+    return _df
+
 def calculateMACD(df, shortPeriod=12, longPeriod=26, signalPeriod=9,d = 0):
     _df = copy.copy(df)
     if(d != 0 ):

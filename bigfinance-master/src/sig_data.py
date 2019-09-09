@@ -45,7 +45,10 @@ def cal_index_data(code):
         #data = get_wm_data(code)#通过tornado获取数据
         #print(data)
         data = index_24.calculateEMA(data,'close',5)
+        data = index_24.calculateEMA(data,'close',7)
         data = index_24.calculateEMA(data,'close',3)
+        data = index_24.calculateEMA(data,'close',15)
+        data = index_24.calculateEMA(data,'close',25)
         data = index_24.calculateEMA(data,'close',10)
         data = index_24.calculateEMA(data,'close',20)
         data = index_24.calculateEMA(data,'close',40)
@@ -60,6 +63,7 @@ def cal_index_data(code):
         data = index_24.calculateTD(data,'close',20,'EMA',-3)
         data = index_24.calculateTD(data,'close',40,'EMA',-3)
         data = index_24.calculateTD(data,'close',80,'EMA',-3)
+        data = index_24.calculatehistory(data,'close',4)
         data = index_24.calculateBIAS(data,5)#计算BIAS
         data = index_24.calculateBIAS(data,50)#计算BIAS
         data = index_24.calculateCCI(data)
@@ -69,7 +73,7 @@ def cal_index_data(code):
         data = index_24.calculateRSI(data,12)
         data = index_24.calculateROC(data,6)
         data = index_24.calculateROC(data,12)
-        #data = index_24.calculateRSI(data,24)
+        data = index_24.calculateRSI(data,24)
         data = index_24.calculateMACD(data)#计算MACD
         #print(data)
         data.to_csv(up_file+'/index/'+code+'.csv',header=True, index='date')
