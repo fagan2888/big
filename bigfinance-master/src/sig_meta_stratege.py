@@ -424,6 +424,9 @@ class CStock:#计算选股模型的净值
                 f.write(str(self._nowdate)+' '+str(operation)+' '+str(price)
                 +' '+str(hold_day)+' '+str(buy_price)+' '+str(buy_date)+'\n')
                 f.close()
+            with open(w_s+code+'_operation.txt','a') as f:
+                f.write(str(self._nowdate)+' '+l_or_s+'_'+str(operation)+' '+str(price)+'\n')
+                f.close()
         else:
             if not os.path.exists(w_s+code+'_operation.txt'):
                 with open(w_s+code+'_operation.txt','a') as f:
@@ -492,9 +495,9 @@ def All_trade(code_list,begin_date,result_save_path = result_save_path,Expressio
     return C_S.result.gold_list[-1]
 
 def main(result_save_path = result_save_path,Expression = Expression):
-    #code_list = ['000001.XSHE','000016.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
+    code_list = ['000001.XSHE','000016.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
     #code_list = get_all_code(now_file+'/wmdata')
-    code_list = get_code_list()
+    #code_list = get_code_list()
     _code_list = copy.copy(code_list)
     off_line=False
     if(not off_line):

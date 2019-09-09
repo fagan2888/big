@@ -159,8 +159,8 @@ class Signal:
                     self.trend[trend_index_name+'_ema_'+str(ema_w)][i] = 0
     #信号随时间更新
     def update(self,):
-        self.write_code_result()#在更新之前写入分股票结果
-        self.write_time_result()#在更新之前写入分时结果
+        #self.write_code_result()#在更新之前写入分股票结果
+        #self.write_time_result()#在更新之前写入分时结果
         #self.write_trend_result()#在更新之前写入趋势结果
         for code in self.code_list:
             self.life[code][self.life[code] != 0] = self.life[code][self.life[code] != 0] - 1
@@ -169,7 +169,6 @@ class Signal:
     #把结果按股票代码分类写入txt文件
     def write_code_result(self,):
         w_s = result_save_path+'code/'
-        #print(not os.listdir(w_s))
         for code in self.code_list:
             if not os.path.exists(w_s+code+'.txt'):
                 with open(w_s+code+'.txt','a') as f:
@@ -183,7 +182,7 @@ class Signal:
                     f.close()
             else:
                 with open(w_s+code+'.txt','a') as f:
-                    f.write(self.date+' ')
+                    f.write(str(self.date)+' ')
                     for i in range(len(self.signal[code])):
                             f.write(str(self.signal[code][i]))
                             if(i == (len(self.signal[code])-1)):
