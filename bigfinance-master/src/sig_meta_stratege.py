@@ -82,32 +82,32 @@ class Worth:
         trade_price = 0 #交易价格
         is_make_money = 0
         #print(self.code,self.now_date,self.operation)
-        if(self.sell_price>0.9*settle and self.sell_price<1.1*settle):#涨跌停不能买卖
-            #做多或者做空
-            if(self.l_or_s == 'noo' and 
-                (self.operation == 'long' or self.operation == 'short') 
-                and self.gold>all_buy_price and self.buy_price!=0): 
-                    #buy_position = int(self.gold/all_buy_price)
-                    buy_position = 1 #只买一手
-                    self.position = self.position+buy_position#不用迭代的方式会出现股票价格大跌时再次买入资产断崖式下跌
-                    trade_gold = all_buy_price*buy_position
-                    trade_price = self.buy_price
-                    self.gold = self.gold-all_buy_price*buy_position
-                    self.l_or_s = copy.copy(self.operation)
-                    self.ori_buy_price = self.buy_price
-            #卖出
-            elif(self.operation == 'sell' and self.position>0 and self.sell_price!=0):
-                trade_gold = all_sell_price*self.position           
-                trade_price = self.sell_price
-                if(self.l_or_s == 'long'):#做多是正常卖出，本金增加
-                    self.gold = self.gold+all_sell_price*self.position
-                    if(trade_price>self.ori_buy_price):
-                        is_make_money = 1
-                else:#做空是还贷买入，本金其实是减少了的
-                    self.gold = self.gold-all_sell_price*self.position+2*self.position*100*self.ori_buy_price
-                    if(trade_price<self.ori_buy_price):
-                        is_make_money = 1
-                self.position = 0
+        
+        #做多或者做空
+        if(self.l_or_s == 'noo' and 
+            (self.operation == 'long' or self.operation == 'short') 
+            and self.gold>all_buy_price and self.buy_price!=0): 
+                #buy_position = int(self.gold/all_buy_price)
+                buy_position = 1 #只买一手
+                self.position = self.position+buy_position#不用迭代的方式会出现股票价格大跌时再次买入资产断崖式下跌
+                trade_gold = all_buy_price*buy_position
+                trade_price = self.buy_price
+                self.gold = self.gold-all_buy_price*buy_position
+                self.l_or_s = copy.copy(self.operation)
+                self.ori_buy_price = self.buy_price
+        #卖出
+        elif(self.operation == 'sell' and self.position>0 and self.sell_price!=0):
+            trade_gold = all_sell_price*self.position           
+            trade_price = self.sell_price
+            if(self.l_or_s == 'long'):#做多是正常卖出，本金增加
+                self.gold = self.gold+all_sell_price*self.position
+                if(trade_price>self.ori_buy_price):
+                    is_make_money = 1
+            else:#做空是还贷买入，本金其实是减少了的
+                self.gold = self.gold-all_sell_price*self.position+2*self.position*100*self.ori_buy_price
+                if(trade_price<self.ori_buy_price):
+                    is_make_money = 1
+            self.position = 0
         if(self.operation == 'long'):
             self.asset = self.gold+100*self.position*close
         else:#做空的净值其实是要减去仓位乘以当天的收盘的
@@ -236,6 +236,7 @@ class CStock:#计算选股模型的净值
     
     #得到每只股票的资金
     def get_every_code_gold(self,):
+        self.gold = 10000000000
         if(len(self.tbsl)):
             #evg = int(self.gold/(len(self.tbsl))) #所有股票均分现有资金
             evg = int(self.gold/(3*len(self.tbsl))) #所有股票均分现有资金的三分之一
@@ -494,7 +495,7 @@ def All_trade(code_list,begin_date,result_save_path = result_save_path,Expressio
     return C_S.result.gold_list[-1]
 
 def main(result_save_path = result_save_path,Expression = Expression):
-    #code_list = ['000001.XSHE','000016.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
+    #code_list = ['000001.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
     #code_list = get_all_code(now_file+'/wmdata')
     code_list = get_code_list()
     _code_list = copy.copy(code_list)
