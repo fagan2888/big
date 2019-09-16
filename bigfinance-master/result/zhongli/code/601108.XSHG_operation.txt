@@ -860,6 +860,8 @@ time operation trade_price
 20181122 noo 8.52
 20181123 noo 7.98
 20181126 noo 8.01
+20181127 long_sell 7.98
+20181128 long_sell 8.25
 20190108 noo 7.93
 20190109 noo 7.91
 20190110 noo 7.73
@@ -872,6 +874,7 @@ time operation trade_price
 20190121 noo 7.83
 20190122 noo 7.69
 20190123 noo 7.55
+20190124 long_sell 7.69
 20190213 noo 8.07
 20190214 long 8.12
 20190215 long 8.25
@@ -896,3 +899,4 @@ time operation trade_price
 20190314 noo 12.95
 20190315 noo 12.59
 20190318 noo 12.83
+20190319 long_sell 12.63

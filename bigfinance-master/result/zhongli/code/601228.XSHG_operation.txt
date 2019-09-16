@@ -678,6 +678,7 @@ time operation trade_price
 20171101 noo 7.06
 20171102 noo 7.1
 20171103 noo 6.98
+20171106 long_sell 6.9
 20171107 noo 7.22
 20171108 long 7.16
 20171109 long 7.22
@@ -686,6 +687,7 @@ time operation trade_price
 20171114 long 7.3
 20171115 long 7.24
 20171116 noo 7.09
+20171117 long_sell 6.78
 20171227 noo 6.2
 20171228 noo 6.14
 20171229 noo 6.11
@@ -711,6 +713,7 @@ time operation trade_price
 20180129 long 6.45
 20180130 long 6.36
 20180131 noo 6.14
+20180201 long_sell 5.93
 20180226 noo 6.03
 20180227 noo 5.83
 20180228 noo 5.83
@@ -727,6 +730,7 @@ time operation trade_price
 20180315 noo 5.98
 20180316 noo 5.96
 20180319 noo 5.88
+20180320 long_sell 5.8
 20180411 noo 5.72
 20180412 noo 5.61
 20180413 noo 5.68
@@ -748,6 +752,8 @@ time operation trade_price
 20180523 long 6.1
 20180524 long 6.29
 20180525 noo 6.21
+20180528 long_sell 5.98
+20180529 long_sell 5.99
 20180720 noo 5.14
 20180723 noo 5.21
 20180724 noo 5.31
@@ -839,5 +845,7 @@ time operation trade_price
 20190308 noo 4.85
 20190311 long 5.02
 20190312 noo 5.01
+20190313 long_sell 4.86
 20190403 long 5.3
 20190404 long 5.25
+20190408 long_sell 5.15

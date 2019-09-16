@@ -1018,3 +1018,5 @@ time operation trade_price
 20190308 long 15.93
 20190311 long 15.31
 20190312 noo 15.61
+20190313 long_sell 14.9
+20190314 long_sell 14.36
