@@ -70,8 +70,8 @@ def get_bk_codes(bkname):
     return L
 
 
-def main():
-    stockcodes = get_code_list()
+def main(stockcodes):
+    #stockcodes = get_code_list()
     for code in stockcodes:
         copy_data(code)
 

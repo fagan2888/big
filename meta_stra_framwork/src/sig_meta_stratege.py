@@ -15,6 +15,7 @@ import index_24
 import sys
 from rqdata import up_file,now_file
 sys.path.append(now_file)
+import params
 
 #warnings.filterwarnings("ignore")
 
@@ -29,11 +30,6 @@ Original_gold = 100000
 dp_code = '999999.XSHG'
 dp_trade_date = sig_data.get_dp_trade_date(dp_code)#上证指数的交易日期列表
 #dp_trade_date = np.array([str(i) for i in dp_trade_date])
-
-Expression =['close_EMA_5#2#1&trend']
-meta_stra_name = 'trend_long_short'
-result_save_path = up_file+'/result/'+meta_stra_name
-
 class Worth:
     
     #初始化函数，初始化元素为股票代码，分数阶差分阶数，可操作资金，此股票仓位，买入价格，卖出价格，净值，模型名字，
@@ -79,7 +75,6 @@ class Worth:
         trade_gold = 0 #交易金钱
         trade_price = 0 #交易价格
         is_make_money = 0
-        #print(self.code,self.now_date,self.operation)
         
         #做多或者做空
         if(self.l_or_s == 'noo' and 
@@ -116,11 +111,9 @@ class Worth:
 
     def get_operation(self,):
         if(not self.now_bar.empty):
-            if(self.expre_Sig[4] != 1 or self.expre_Sig[6] != 1): #加入全局风控
+            if(self.expre_Sig[1] > 0): #加入全局风控
                 self.operation = 'sell'
-            elif(self.expre_Sig[0] == 1 and self.expre_Sig[1] == 1 and self.expre_Sig[2] == 1
-            and self.expre_Sig[3] == 1 and self.expre_Sig[4] == 1 and self.expre_Sig[5] == 1
-            and self.expre_Sig[6] == 1): 
+            elif(self.expre_Sig[0] > 0): 
                 self.operation = 'long'
             else:
                 self.operation = 'noo'
@@ -201,7 +194,7 @@ class CStock:#计算选股模型的净值
     def __init__(self,_nowdate='',ori_gold = 0,gold = 0,asset = 0,have_buy_stocks_list = [],have_buy_stocks_Worth = [],
                  tomorrow_buy_stocks_list = [],tomorrow_buy_stocks_Worth = [],dp_trade_date = dp_trade_date,close = 1,
                  today_sell_stocks_list = [],could_choose_stocks_list = [],result = Result(),all_choose_stocks_list = [],
-                 init_close = 0,Expression = [],result_save_path = result_save_path,today_sell_stocks_Worth = []):
+                 init_close = 0,Expression = [],signal_save_path = up_file,today_sell_stocks_Worth = []):
         self.ori_gold = ori_gold #本金
         self._nowdate = _nowdate
         self.gold = gold #现有可投入资金
@@ -221,7 +214,7 @@ class CStock:#计算选股模型的净值
         self.Sig = sig_fra.Signal(expression= Expression,code_list = self.ccsl,date = _nowdate)#创建信号系统
         self.Sig.dict_init()#初始化信号系统
 
-        self.result_save_path = result_save_path
+        self.signal_save_path = signal_save_path
 
     #得到日期
     def get_date(self,):#trade_date放里面还是放外面
@@ -293,7 +286,6 @@ class CStock:#计算选股模型的净值
             #把今天要买的股票加入列表
             _worth.expre_Sig = copy.copy(self.Sig.expre_sig[_code])#今天的信号
             _opera = copy.copy(_worth.get_operation())
-            #print('buy_opearation',self._nowdate,_code,_opera)
             if(_opera == 'long' or _opera == 'short' or _opera == 'noo'):
                 self.write_one_code_result(_code,_opera,_worth.buy_price,_worth.l_or_s)
             if(_worth.date in _worth.trade_date_list and 
@@ -308,10 +300,8 @@ class CStock:#计算选股模型的净值
         self.tssl = []
         self.tssW = []
         for _code,_worth in zip(self.hbsl,self.hbsW):
-            #print('expre',self.Sig.expre_sig[_code])
             _worth.expre_Sig = copy.copy(self.Sig.expre_sig[_code])#卖出用的当天的信号，因为这个函数在得到买入股票之后，信号已经更新了
             _operation = _worth.get_operation()
-            #print('sell_opearation',self._nowdate,_code,_operation)
             if(_worth.now_date in _worth.trade_date_list and 
                 ( _worth.get_operation() == 'sell' and _worth.sell_due <= 0
                 or _code not in self.ccsl)): #出现卖的信号或者换仓的时候平仓
@@ -392,7 +382,7 @@ class CStock:#计算选股模型的净值
         self.result.is_make_money.append(is_make_money)
 
     def write_all_code_result(self,):
-        w_s = self.result_save_path+'code/'
+        w_s = self.signal_save_path+'code/'
         if not os.path.exists(w_s):
             os.makedirs(w_s)
         if not os.path.exists(w_s+'all_operation.txt'):
@@ -409,7 +399,7 @@ class CStock:#计算选股模型的净值
                 f.close()
 
     def write_one_code_result(self,code,operation,price,l_or_s,hold_day = 0,buy_price = 0,buy_date = 0):
-        w_s = self.result_save_path+'code/'
+        w_s = self.signal_save_path+'code/'
         if not os.path.exists(w_s):
             os.makedirs(w_s)
         if(operation == 'sell'):
@@ -467,7 +457,7 @@ def get_all_code(file_dir):
         return files #当前路径下所有非目录子文件  
 
 
-def All_trade(code_list,begin_date,result_save_path = result_save_path,Expression = Expression):
+def All_trade(begin_date,code_list,signal_save_path,Expression):
     para_name = 'year/'
     para_data,trade_data = {},{}
     ori_gold = 100000000
@@ -475,27 +465,24 @@ def All_trade(code_list,begin_date,result_save_path = result_save_path,Expressio
                     gold = ori_gold,asset = 0,have_buy_stocks_list = [],have_buy_stocks_Worth = [],
                     tomorrow_buy_stocks_list = [],tomorrow_buy_stocks_Worth = [],result = Result(asset_list = [],close_list = [],
                     y_pre_list = [],position_list = [],trade_gold_list = [],trade_price_list = [],date_list = [],trade_date_list = [],
-                    gold_list = [],code_list = [],is_make_money = [],expre_sig_list =[]),today_sell_stocks_list = [],Expression = Expression,result_save_path = result_save_path)
+                    gold_list = [],code_list = [],is_make_money = [],expre_sig_list =[]),today_sell_stocks_list = [],Expression = Expression,signal_save_path = signal_save_path)
     while(C_S.trade()): #and C_S._nowdate[0:4]==begin_date[0:4]):#当到第二年时重置净值和仓位
         pass
     para_data,trade_data = para_result(para_data,trade_data,C_S)
     date_list = [int(a) for a in C_S.result.date_list]
     para_data = pd.DataFrame(para_data,index = date_list)
     
-    if(not os.path.exists(result_save_path+para_name)):
-            os.makedirs(result_save_path+para_name)
+    if(not os.path.exists(signal_save_path+para_name)):
+            os.makedirs(signal_save_path+para_name)
 
-    para_data.to_excel(result_save_path+para_name+str(begin_date)[0:4]+"_pure.xlsx", header=True, index=True)
+    para_data.to_excel(signal_save_path+para_name+str(begin_date)[0:4]+"_pure.xlsx", header=True, index=True)
     trade_date_list = [int(a) for a in C_S.result.trade_date_list]
     trade_data = pd.DataFrame(trade_data,index = trade_date_list)
-    trade_data.to_excel(result_save_path+para_name+str(begin_date)[0:4]+"_trade.xlsx", header=True, index=True)
+    trade_data.to_excel(signal_save_path+para_name+str(begin_date)[0:4]+"_trade.xlsx", header=True, index=True)
 
     return C_S.result.gold_list[-1]
 
-def main(result_save_path = result_save_path,Expression = Expression):
-    code_list = ['000001.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
-    #code_list = get_all_code(up_file+'/wmdata')
-    #code_list = get_code_list()
+def main(_begin_date,code_list,signal_save_path,Expression):
     _code_list = copy.copy(code_list)
     off_line=False
     if(not off_line):
@@ -505,15 +492,12 @@ def main(result_save_path = result_save_path,Expression = Expression):
         sig_data.cal_index_data('999999.XSHG')
     if('999999.XSHG' in code_list):
         _code_list.remove('999999.XSHG')
-    begin_year = 2019
-    begin_date = dp_trade_date[dp_trade_date>=int((str(begin_year)+'0101'))][0]
-    WD_pv = All_trade(_code_list,begin_date,result_save_path,Expression)
-    print(WD_pv)
+    begin_date = dp_trade_date[dp_trade_date>=int(_begin_date)][0]
+    WD_pv = All_trade(begin_date,_code_list,signal_save_path,Expression)
 
 if __name__ == "__main__":
-    _meta_stra_name = 'zhongli'
-    _Expression =['close_EMA_7#close_EMA_15&diff','close_EMA_15#close_EMA_25&diff',
-    'close_EMA_15#2#1&trend','close_EMA_25#2#1&trend','MACD#0#1&thre','close#close_shift_4&diff',
-    'K#40#1&thre&HS']
-    _result_save_path = up_file+'/result/'+_meta_stra_name+'/'
-    main(result_save_path = _result_save_path,Expression = _Expression)
+    params =  params.PARAMS
+    main(_begin_date = params['begin_date'],
+        code_list = params['code_list'],
+        signal_save_path = params['_signal_save_path'],
+        Expression = params['_Expression'])

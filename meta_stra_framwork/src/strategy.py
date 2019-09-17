@@ -13,16 +13,16 @@ import os
 import tushare as ts
 import numpy as np
 import matplotlib.pyplot as plt
-
-
+import params
+from sig_meta_stratege import main
 
 k = 10
 up_file = '/Users/wode/Documents/signal_framework/big/meta_stra_framwork'
 
 def read_trend_txt():
     trend_dict = {}
-    meta_stra_name = 'zhongli'
-    with open(up_file+'/result/'+meta_stra_name+'/code/all_operation.txt','r') as f:
+    param =  params.PARAMS
+    with open(param['_signal_save_path']+'code/all_operation.txt','r') as f:
         dict_name_list = f.readline().strip().split(' ')
         for i in range(len(dict_name_list)):
             dict_name = dict_name_list[i]
@@ -138,45 +138,10 @@ def handle_bar(context, bar_dict):
 def after_trading(context):
     pass
 
-config = {
-    "base":
-    {
-          # 启动的策略文件路径
-          #strategy_file: strategy.py
-          "benchmark": "399300.XSHE",
-          "margin_multiplier": 1.4,
-          "start_date": "2015-01-01",
-          #start_date: 2018-07-01
-          #start_date: 2019-07-08
-          "end_date":   "2019-02-01",
-          #"end_date":   "2015-01-07",
-          "frequency": "1d",
-          "accounts":{
-            "stock":  100000000,
-            #"future": "~",
-          }
-    },
-    "extra":{
-        "log_level": "warning",
-    },
-    "mod":{
-      "sys_analyser":{
-        "enabled":             True,
-        "report":              True,
-        "plot":                True,
-        #plot:                false
-      },
-      "sys_simulation":{
-        "enabled":               True,
-        "signal":                True,
-        "slippage":              0.0005,
-        #"slippage":              0.0,
-        "matching_type":         "current_bar",
-        "price_limit":           False,
-        "volume_limit":          False,
-        "commission-multiplier": 0,
-      },
-    },
-}
 if __name__ == "__main__":
-    results = run_func(init=init, handle_bar=handle_bar, config=config)
+    param =  params.PARAMS
+    main(_begin_date = param['begin_date'],
+        code_list = param['code_list'],
+        signal_save_path = param['_signal_save_path'],
+        Expression = param['_Expression'])
+    results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])

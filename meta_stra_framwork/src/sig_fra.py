@@ -14,27 +14,23 @@ import sig_data
 import Cal_fra
 import re
 from rqdata import up_file,now_file,result_save_path
+import params
 
+param = params.PARAMS
 warnings.filterwarnings("ignore")
 
 _win_list = [1,2,3,4,5] #trend对应的窗口
 ema_w_list = [3,5,10,20] #trend对应的平滑窗口
 trend_index_name = 'close' #trend对应的index
 
-Expression = ['MACD#0#1&thre','close_EMA_12#close_EMA_26&cross',
-'RSI_6#20#0&thre','RSI_6#80#1&thre','RSI_6#RSI_12&cross',
-'CCI#100#1&thre','CCI#-100#0&thre',
-'WR#20#0&thre','WR#80#1&thre',
-'J#80#1&thre','J#20#0&thre','K#80#1&thre','K#20#0&thre','D#80#1&thre','D#20#0&thre','J#D&cross','K#D&cross',
-'ROC_6#0#1&thre','ROC_6#ROC_12&cross','close_EMA_5#2#1&trend',
-'BIAS_5#-10#0&thre','BIAS_5#10#1&thre','BIAS_5#BIAS_50&cross']
+Expression = ['MACD#0#1&thre','close_EMA_12#close_EMA_26#1&cross']
 
 trend_result = ['1_num','-1_num','0_num','sum']
 #信号类
 class Signal:
     
     #初始化函数，目前类里面元素定为股票（期货）代码，信号类型（阈值类，交叉类），持续时间
-    def __init__(self, expression = [],code_list = [],HScode = '999999.XSHG',date = ''):#code = ''):
+    def __init__(self, expression = [],code_list = [],HScode = param['HS_code'],date = ''):#code = ''):
         #self.code = code
         self.date = date
         self.expression = expression+Expression
@@ -52,6 +48,7 @@ class Signal:
             self.trend[trend_index_name+'_ema_'+str(ema_w)] = np.zeros(len(_win_list))
     #对多股票信号系统的生命，指标，和信号进行初始化
     def dict_init(self,):
+        print(self.code_list)
         for code in self.code_list:
             self.life[code] = np.zeros(len(self.type_list))
             self.signal[code] = np.zeros(len(self.type_list))
@@ -104,25 +101,30 @@ class Signal:
             return 0
     
     #交叉信号
-    def cross_sig(self,data,code,type_name,lf = 1):#1是死叉，2是金叉
-        index_name_short,index_name_long = type_name.split('&')[0].split('#')
-        if(data[index_name_short].iloc[-2] > data[index_name_long].iloc[-2] 
-           and data[index_name_short].iloc[-1] < data[index_name_long].iloc[-1]):
-            self.signal[code][self.type_list == type_name] = -1
-            self.life[code][self.type_list == type_name] = lf
-        elif(data[index_name_short].iloc[-2] < data[index_name_long].iloc[-2] 
+    def cross_sig(self,data,code,type_name,lf = 1):#thre_direction0是死叉，1是金叉
+        index_name_short,index_name_long,thre_direction = type_name.split('&')[0].split('#')
+        if(thre_direction == '1' ):
+            if(data[index_name_short].iloc[-2] < data[index_name_long].iloc[-2] 
              and data[index_name_short].iloc[-1] > data[index_name_long].iloc[-1]):
-            self.signal[code][self.type_list == type_name] = 1
-            self.life[code][self.type_list == type_name] = lf
+                self.signal[code][self.type_list == type_name] = 1
+                self.life[code][self.type_list == type_name] = lf
+        elif(thre_direction == '0' ):
+            if(data[index_name_short].iloc[-2] > data[index_name_long].iloc[-2] 
+            and data[index_name_short].iloc[-1] < data[index_name_long].iloc[-1]):
+                self.signal[code][self.type_list == type_name] = 1
+                self.life[code][self.type_list == type_name] = lf
+   
     
-    def diff_sig(self,data,code,type_name,lf = 1):#指标差值
-        index_name_1,index_name_2 = type_name.split('&')[0].split('#')
-        if(data[index_name_1].iloc[-1] < data[index_name_2].iloc[-1]):
-            self.signal[code][self.type_list == type_name] = -1
-            self.life[code][self.type_list == type_name] = lf
-        elif(data[index_name_1].iloc[-1] > data[index_name_2].iloc[-1]):
-            self.signal[code][self.type_list == type_name] = 1
-            self.life[code][self.type_list == type_name] = lf
+    def diff_sig(self,data,code,type_name,lf = 1):#指标差值,1是前者大于后者，0是后者大于前者
+        index_name_1,index_name_2,thre_direction = type_name.split('&')[0].split('#')
+        if(thre_direction == '0' ):
+            if(data[index_name_1].iloc[-1] < data[index_name_2].iloc[-1]):
+                self.signal[code][self.type_list == type_name] = 1
+                self.life[code][self.type_list == type_name] = lf
+        elif(thre_direction == '1' ):
+            if(data[index_name_1].iloc[-1] > data[index_name_2].iloc[-1]):
+                self.signal[code][self.type_list == type_name] = 1
+                self.life[code][self.type_list == type_name] = lf
 
     #得到和expression匹配的信号
     def get_expre_sig(self,data,code,type_name):
