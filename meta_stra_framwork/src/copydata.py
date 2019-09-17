@@ -15,18 +15,10 @@ def get_code_list():
             code_list[i] = str(code_list[i]) + '.XSHG'
         else:
             code_list[i] = str(code_list[i]) + '.XSHE'
-    #print(type(code_list))
     return code_list.tolist()
 
 def get_industry_code_list(industry_name_list_list):
     ind_code_list = []
-    '''
-    ts.set_token('3429ed8a2aa3e8318690358d0fa981288625bfb59105b2efd8801ddd')
-    pro = ts.pro_api()
-    #查询当前所有正常上市交易的股票列表
-    ind_data_all = pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
-    ind_data_all.to_excel(up_file+'/pic/ind_data_all.xlsx')
-    '''
     ind_data_all = pd.read_excel(up_file+'/pic/ind_data_all.xlsx')
     for industry_name_list in industry_name_list_list:
         _code_list = []
@@ -79,15 +71,7 @@ def get_bk_codes(bkname):
 
 
 def main():
-    #industry_name_list = ['金融行业','家电行业','电器行业']
     stockcodes = get_code_list()
-    #stockcodes = ['000300.XSHG']#get_all_industry_code_list()
-    '''
-    for fname in os.listdir(up_file+'/stocks/'):
-        if 'txt' not in fname:
-            continue
-        stockcodes += get_bk_codes(fname.split('.')[0])
-    '''
     for code in stockcodes:
         copy_data(code)
 

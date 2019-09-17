@@ -15,7 +15,6 @@ import index_24
 import sys
 from rqdata import up_file,now_file
 sys.path.append(now_file)
-import get_code_and_pro as gcap
 
 #warnings.filterwarnings("ignore")
 
@@ -494,9 +493,9 @@ def All_trade(code_list,begin_date,result_save_path = result_save_path,Expressio
     return C_S.result.gold_list[-1]
 
 def main(result_save_path = result_save_path,Expression = Expression):
-    #code_list = ['000001.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
+    code_list = ['000001.XSHE']#,'601398.XSHG','000027.XSHE','000046.XSHE']
     #code_list = get_all_code(up_file+'/wmdata')
-    code_list = get_code_list()
+    #code_list = get_code_list()
     _code_list = copy.copy(code_list)
     off_line=False
     if(not off_line):
@@ -506,7 +505,7 @@ def main(result_save_path = result_save_path,Expression = Expression):
         sig_data.cal_index_data('999999.XSHG')
     if('999999.XSHG' in code_list):
         _code_list.remove('999999.XSHG')
-    begin_year = 2015
+    begin_year = 2019
     begin_date = dp_trade_date[dp_trade_date>=int((str(begin_year)+'0101'))][0]
     WD_pv = All_trade(_code_list,begin_date,result_save_path,Expression)
     print(WD_pv)
