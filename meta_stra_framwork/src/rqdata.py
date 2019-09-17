@@ -76,7 +76,7 @@ def history_bars(code, start=None, end=None, level='1d', fq='qfq', fmt='df', sus
 # 获取股票代码为code的date之前长度为limit的股票数据 日期边界为bound
 def get_1d_data(code, date, limit = 240, bound = '20140101', fixed = True, offline = True):
     if offline:
-        f = open(now_file+'/wmdata/'+code,'r',encoding='utf-8')
+        f = open(up_file+'/wmdata/'+code,'r',encoding='utf-8')
         data = f.readlines()[0]
         f.close()
         data = json.loads(data)

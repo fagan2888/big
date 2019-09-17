@@ -19,7 +19,7 @@ from rqdata import up_file,now_file
 def get_wm_offline_data(code):
     if('XSHG' not in code and 'XSHE' not in code):
         code = code.replace('SH','XSHG').replace('SZ','XSHE')
-    f = open(now_file+'/wmdata/'+code)
+    f = open(up_file+'/wmdata/'+code)
     wm_pd = []
     try:
         wm_data=json.loads(f.read())

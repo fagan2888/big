@@ -54,7 +54,7 @@ def get_all_industry_code_list():
 def copy_data(code):
     L = rq.history_bars(code, end=time.strftime("%Y%m%d", time.localtime()), fmt='list')['data']
     #L = rq.history_bars(code, end='20190419', fmt='list')['data']
-    f = open(now_file+'/wmdata/'+code,'w',encoding='utf-8')
+    f = open(up_file+'/wmdata/'+code,'w',encoding='utf-8')
     f.write(json.dumps(L))
     f.close() 
     print(code,'copy finished.')
@@ -80,8 +80,8 @@ def get_bk_codes(bkname):
 
 def main():
     #industry_name_list = ['金融行业','家电行业','电器行业']
-    #stockcodes = get_industry_code_list(industry_name_list)#get_code_list()
-    stockcodes = ['000300.XSHG']#get_all_industry_code_list()
+    stockcodes = get_code_list()
+    #stockcodes = ['000300.XSHG']#get_all_industry_code_list()
     '''
     for fname in os.listdir(up_file+'/stocks/'):
         if 'txt' not in fname:
@@ -92,5 +92,5 @@ def main():
         copy_data(code)
 
 if __name__ == '__main__':
-    #main()
-    copy_data('000032.XSHE')
+    main()
+    #copy_data('000032.XSHE')
