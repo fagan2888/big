@@ -18,10 +18,13 @@ _signal_save_path = up_file+'/result/newzhongli/', #信号结果储存地址
 # 交叉型信号 指标1名+#+指标2名+#+方向(1为金叉,0为死叉)+&thre,如果为大盘信号，则在最后加上&HS
 # 趋势型信号 指标1名+#+指标2名+#+方向(1为上涨,0为下跌)+&thre,如果为大盘信号，则在最后加上&HS
 # 比较型信号 指标1名+#+指标2名+#+方向(1为指标1大于指标2,0为指标1小于指标2)+&thre,如果为大盘信号，则在最后加上&HS
-# 信号组合可以使用+和*进行或和且逻辑运算
+# 信号组合可以使用+和*进行或和且逻辑运算,指标名称可在index_24中查询
 _Expression =['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close_EMA_15#2#1&trend*close_EMA_25#2#1&trend*MACD#0#1&thre*close#close_shift_4#1&diff*K#40#1&thre&HS',
                 'MACD#0#0&thre+K#40#0&thre&HS'],
-# 回测参数，更多参数设置可以百度搜索rqalpha
+# 回测参数，目前设定是第二天开盘买入，当天收盘卖出，每次以资金的三分之一操作，默认
+# 是下跌1%时候止损卖出
+# 可以在strategy.py中更改
+# 更多参数设置可以百度搜索rqalpha
 _config = {
     "base":
     {
