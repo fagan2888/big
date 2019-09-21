@@ -45,7 +45,8 @@ _config = {
       "sys_analyser":{
         "enabled":             True,
         "report":              True,
-        "plot":                True,
+        #"plot":                True,
+        "plot":                False
       },
       "sys_simulation":{
         "enabled":               True,
