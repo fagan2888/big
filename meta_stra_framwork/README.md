@@ -13,6 +13,7 @@
     sig_meta_strategy.py 策略信号计算 
     diff.py 分数阶差分
     Cal_fra.py 信号组合
+    get_new_expre.py 得到不同参数的表达式
 # 回测
     strategy,py 策略回测
 # 使用方法
