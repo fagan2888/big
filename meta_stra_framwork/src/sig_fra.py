@@ -48,7 +48,6 @@ class Signal:
             self.trend[trend_index_name+'_ema_'+str(ema_w)] = np.zeros(len(_win_list))
     #对多股票信号系统的生命，指标，和信号进行初始化
     def dict_init(self,):
-        print(self.code_list)
         for code in self.code_list:
             self.life[code] = np.zeros(len(self.type_list))
             self.signal[code] = np.zeros(len(self.type_list))
@@ -58,34 +57,36 @@ class Signal:
     #根据expression得到type_list
     def get_type_list(self,expression):#得到type_list
         type_list = []
-        #print('expression',expression)
         for expre in expression:
             _expression = re.sub('[()]', '',expre)
             add_l=_expression.split('+')
             mul_l = []
             for al in add_l:
                 mul_l = copy.copy(mul_l)+al.split('*')
-            #print('mul_l',mul_l)
+            
             type_list += copy.copy(mul_l)
         type_list = list(set(type_list)) 
-        #print(type_list)
         return type_list
 
     #阈值型信号
-    def threshold_sig(self,data,code,type_name,lf = 1,thre_direction = 1):
+    def threshold_sig(self,data,code,type_name,lf = 1,thre_direction = 1,Save = True):
         index_name,index_thre,thre_direction = type_name.split('&')[0].split('#')
         index_thre = float(index_thre)
-        if(thre_direction == '1' and data[index_name].iloc[-1] >= index_thre):
-            self.signal[code][self.type_list == type_name] = 1
-            self.life[code][self.type_list == type_name] = lf
-        elif(thre_direction == '0' and data[index_name].iloc[-1] <= index_thre):
-            self.signal[code][self.type_list == type_name] = 1
-            self.life[code][self.type_list == type_name] = lf
-
+        if((thre_direction == '1' and data[index_name].iloc[-1] >= index_thre) 
+            or (thre_direction == '0' and data[index_name].iloc[-1] <= index_thre)):
+            if(Save):
+                self.signal[code][self.type_list == type_name] = 1
+                self.life[code][self.type_list == type_name] = lf
+            return 1
+        else:
+            return 0
+        
     #趋势型信号
-    def trend_sig(self,data,code,type_name,lf = 1,thre_direction = 1):
+    def trend_sig(self,data,code,type_name,lf = 1,thre_direction = 1,Save = True):
         index_name,trend_num,thre_direction = type_name.split('&')[0].split('#')
         trend_num = int(trend_num)
+        if(len(data) < trend_num):
+            return 0
         if(thre_direction == '1' ):
             d = data[index_name].diff()
             d = d.apply(lambda x:x/x if x>0 else x-x)
@@ -93,7 +94,7 @@ class Signal:
             d = data[index_name].diff()
             d = d.apply(lambda x:x/x if x<0 else x-x)
         if(d.iloc[-trend_num:].sum() == trend_num):
-            if(code != self.HScode):
+            if(code != self.HScode and Save):
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
             return 1
@@ -101,34 +102,61 @@ class Signal:
             return 0
     
     #交叉信号
-    def cross_sig(self,data,code,type_name,lf = 1):#thre_direction0是死叉，1是金叉
+    def cross_sig(self,data,code,type_name,lf = 1,Save = True):#thre_direction0是死叉，1是金叉
         index_name_short,index_name_long,thre_direction = type_name.split('&')[0].split('#')
-        if(thre_direction == '1' ):
-            if(data[index_name_short].iloc[-2] < data[index_name_long].iloc[-2] 
-             and data[index_name_short].iloc[-1] > data[index_name_long].iloc[-1]):
+        if((thre_direction == '1' and (data[index_name_short].iloc[-2] < data[index_name_long].iloc[-2] 
+            and data[index_name_short].iloc[-1] > data[index_name_long].iloc[-1])) or ((thre_direction == '0' and (data[index_name_short].iloc[-2] > data[index_name_long].iloc[-2] 
+            and data[index_name_short].iloc[-1] < data[index_name_long].iloc[-1])))):
+            if(Save):
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
-        elif(thre_direction == '0' ):
-            if(data[index_name_short].iloc[-2] > data[index_name_long].iloc[-2] 
-            and data[index_name_short].iloc[-1] < data[index_name_long].iloc[-1]):
-                self.signal[code][self.type_list == type_name] = 1
-                self.life[code][self.type_list == type_name] = lf
-   
+            return 1
+        else:
+            return 0
     
-    def diff_sig(self,data,code,type_name,lf = 1):#指标差值,1是前者大于后者，0是后者大于前者
+    def diff_sig(self,data,code,type_name,lf = 1,Save = True):#指标差值,1是前者大于后者，0是后者大于前者
         index_name_1,index_name_2,thre_direction = type_name.split('&')[0].split('#')
-        if(thre_direction == '0' ):
-            if(data[index_name_1].iloc[-1] < data[index_name_2].iloc[-1]):
+        if((thre_direction == '0' and data[index_name_1].iloc[-1] < data[index_name_2].iloc[-1]) 
+            or (thre_direction == '1' and data[index_name_1].iloc[-1] > data[index_name_2].iloc[-1])):
+            if(Save):
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
-        elif(thre_direction == '1' ):
-            if(data[index_name_1].iloc[-1] > data[index_name_2].iloc[-1]):
-                self.signal[code][self.type_list == type_name] = 1
-                self.life[code][self.type_list == type_name] = lf
+            return 1
+        else:
+            return 0
 
+
+    def times_sig(self,data,code,type_name,lf = 1,Save = True):
+        sub_type_name = type_name.split('&')[0]
+        sub_sig_list = []
+        for i in range(len(data)-1):
+            sub_data = data.iloc[:(len(data)-i)]
+            if('thre' in type_name):
+                sub_sig = self.threshold_sig(sub_data, code, type_name = sub_type_name,Save = False)
+            elif('cross' in type_name):
+                sub_sig = self.cross_sig(sub_data, code, type_name = sub_type_name, Save = False)
+            elif('diff' in type_name):
+                sub_sig = self.diff_sig(sub_data, code, type_name = sub_type_name, Save = False)
+            elif ('trend' in type_name):
+                sub_sig = self.trend_sig(sub_data, code, type_name = sub_type_name, Save = False)
+            else:
+                sub_sig = 0
+            sub_sig_list.append(sub_sig)
+        #print(self.date,np.array(sub_sig_list).sum())
+        if(np.array(sub_sig_list).sum() >= 2):
+            if(Save):
+                self.signal[code][self.type_list == type_name] = 1
+                self.life[code][self.type_list == type_name] = lf
+            return 1
+        else:
+            return 0
+    
     #得到和expression匹配的信号
     def get_expre_sig(self,data,code,type_name):
-        if('thre' in type_name):
+        #print(type_name,len(data),data.index.tolist()[0],data.index.tolist()[-1])
+        if('times' in type_name):
+            self.times_sig(data, code, type_name = type_name, lf = 1)
+        elif('thre' in type_name):
             self.threshold_sig(data, code, type_name = type_name, lf = 1)
         elif('cross' in type_name):
             self.cross_sig(data, code, type_name = type_name, lf = 1)
@@ -142,13 +170,11 @@ class Signal:
     #得到不同的数据和expression匹配的信号
     def type_sig(self,data,code):
         for type_name in self.type_list:
-
             if('HS' in type_name):#计算全局风控
                 hs_data = copy.copy(sig_data.get_windows_data(self.HScode,self.date,w = 100))
                 self.get_expre_sig(hs_data,code,type_name)
             else:
                 self.get_expre_sig(data,code,type_name)
-            
         for i in range(0,len(self.input_expression)):#可以在这里变成只算输入的expression
             expre = self.input_expression[i]  
             self.expre_sig[code][i] = Cal_fra.replace_exp(expre,self.get_type_list([expre]),self.type_list,self.signal[code])
@@ -156,7 +182,6 @@ class Signal:
     #计算对应指数的大趋势
     def trend_cal(self,now_date):
         index_data = copy.copy(sig_data.get_windows_data(self.HScode,now_date,w = 100))
-        #print(now_date,index_data.iloc[-1])
         for ema_w in ema_w_list:
             for i in range(len(_win_list)):
                 ac_type_name = copy.copy(trend_index_name+'_EMA_'+str(ema_w)+'#'+str(_win_list[i])+'#1&trend')
