@@ -13,10 +13,11 @@ import warnings
 import sig_data
 import Cal_fra
 import re
-from rqdata import up_file,now_file,result_save_path
+from rqdata import up_file,now_file
 import params
 
 param = params.PARAMS
+result_save_path = param['_signal_save_path']+'sig'
 warnings.filterwarnings("ignore")
 
 _win_list = [1,2,3,4,5] #trend对应的窗口
@@ -127,23 +128,25 @@ class Signal:
 
 
     def times_sig(self,data,code,type_name,lf = 1,Save = True):
-        sub_type_name = type_name.split('&')[0]
+        sub_name = type_name.split('&')[0]
+        sub_split = sub_name.split('#')
+        sub_type_name = '#'.join(sub_split[:(len(sub_split)-1)])
+        times_num = int(sub_split[-1])
         sub_sig_list = []
         for i in range(len(data)-1):
             sub_data = data.iloc[:(len(data)-i)]
             if('thre' in type_name):
-                sub_sig = self.threshold_sig(sub_data, code, type_name = sub_type_name,Save = False)
+                sub_sig = self.threshold_sig(sub_data, code, type_name = sub_type_name,Save = False,lf = 1)
             elif('cross' in type_name):
-                sub_sig = self.cross_sig(sub_data, code, type_name = sub_type_name, Save = False)
+                sub_sig = self.cross_sig(sub_data, code, type_name = sub_type_name, Save = False,lf = 1)
             elif('diff' in type_name):
-                sub_sig = self.diff_sig(sub_data, code, type_name = sub_type_name, Save = False)
+                sub_sig = self.diff_sig(sub_data, code, type_name = sub_type_name, Save = False,lf = 1)
             elif ('trend' in type_name):
-                sub_sig = self.trend_sig(sub_data, code, type_name = sub_type_name, Save = False)
+                sub_sig = self.trend_sig(sub_data, code, type_name = sub_type_name, Save = False,lf = 1)
             else:
                 sub_sig = 0
             sub_sig_list.append(sub_sig)
-        #print(self.date,np.array(sub_sig_list).sum())
-        if(np.array(sub_sig_list).sum() >= 2):
+        if(np.array(sub_sig_list).sum() >= times_num):
             if(Save):
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
@@ -155,11 +158,11 @@ class Signal:
     def get_expre_sig(self,data,code,type_name):
         #print(type_name,len(data),data.index.tolist()[0],data.index.tolist()[-1])
         if('times' in type_name):
-            self.times_sig(data, code, type_name = type_name, lf = 1)
+            self.date,self.times_sig(data, code, type_name = type_name, lf = 1)
         elif('thre' in type_name):
             self.threshold_sig(data, code, type_name = type_name, lf = 1)
         elif('cross' in type_name):
-            self.cross_sig(data, code, type_name = type_name, lf = 1)
+            self.cross_sig(data, code, type_name = type_name, lf = 20)
         elif('diff' in type_name):
             self.diff_sig(data, code, type_name = type_name, lf = 1)
         elif ('trend' in type_name):
@@ -194,7 +197,7 @@ class Signal:
                     self.trend[trend_index_name+'_ema_'+str(ema_w)][i] = 0
     #信号随时间更新
     def update(self,):
-        #self.write_code_result()#在更新之前写入分股票结果
+        self.write_code_result()#在更新之前写入分股票结果
         #self.write_time_result()#在更新之前写入分时结果
         #self.write_trend_result()#在更新之前写入趋势结果
         for code in self.code_list:
@@ -204,6 +207,8 @@ class Signal:
     #把结果按股票代码分类写入txt文件
     def write_code_result(self,):
         w_s = result_save_path+'code/'
+        if(not os.path.exists(w_s)):
+            os.makedirs(w_s)
         for code in self.code_list:
             if not os.path.exists(w_s+code+'.txt'):
                 with open(w_s+code+'.txt','a') as f:
@@ -228,6 +233,8 @@ class Signal:
     
     def write_trend_result(self,):
         w_s = result_save_path+'trend/'
+        if(not os.path.exists(w_s)):
+            os.makedirs(w_s)
         for code in self.code_list:
             if not os.path.exists(w_s+code+'.txt'):
                 with open(w_s+code+'.txt','a') as f:
@@ -255,6 +262,8 @@ class Signal:
     #把结果按时间分类写入txt文件
     def write_time_result(self,):
         w_s = result_save_path+'date/'
+        if(not os.path.exists(w_s)):
+            os.makedirs(w_s)
         with open(w_s+self.date+'.txt','a') as f:
             f.write('code'+' ')
             for type_name in self.type_list:

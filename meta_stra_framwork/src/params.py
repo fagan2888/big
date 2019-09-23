@@ -7,7 +7,7 @@ sys.path.append(up_file)
 
 
 PARAMS = defaultdict(
-begin_date = 20190101,#信号计算开始日期
+begin_date = 20150101,#信号计算开始日期
 code_list = ['000001.XSHE'],#信号计算的股票池
 get_code_data = True,#是否重新获得原始数据
 HS_code = '999999.XSHG',#信号中的大盘信号代码
@@ -19,8 +19,8 @@ _signal_save_path = up_file+'/result/newzhongli/', #信号结果储存地址
 # 趋势型信号 指标1名+#+指标2名+#+方向(1为上涨,0为下跌)+&trend,如果为大盘信号，则在最后加上&HS
 # 比较型信号 指标1名+#+指标2名+#+方向(1为指标1大于指标2,0为指标1小于指标2)+&diff,如果为大盘信号，则在最后加上&HS
 # 信号组合可以使用+和*进行或和且逻辑运算,指标名称可在index_24中查询
-_Expression =['close_EMA_20#close_EMA_50#1&cross&times',
-                'close_EMA_20#close_EMA_50#1&cross'],
+_Expression =['close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*high#close_EMA_20#0#3&cross&times+close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*low#close_EMA_50#1#3&cross&times',
+                'close_EMA_20#close_EMA_50#0&diff*close_EMA_20#close_EMA_50#0&cross*high#close_EMA_20#1#1&cross&times'],
 # 回测参数，目前设定是第二天开盘买入，当天收盘卖出，每次以资金的三分之一操作，默认
 # 是下跌1%时候止损卖出
 # 可以在strategy.py中更改
@@ -45,8 +45,8 @@ _config = {
       "sys_analyser":{
         "enabled":             True,
         "report":              True,
-        #"plot":                True,
-        "plot":                False
+        "plot":                True,
+        #"plot":                False
       },
       "sys_simulation":{
         "enabled":               True,
