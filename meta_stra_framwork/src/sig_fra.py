@@ -18,6 +18,7 @@ import params
 
 param = params.PARAMS
 result_save_path = param['_signal_save_path']+'sig'
+signal_lf = param['signal_lf']
 warnings.filterwarnings("ignore")
 
 _win_list = [1,2,3,4,5] #trend对应的窗口
@@ -156,17 +157,16 @@ class Signal:
     
     #得到和expression匹配的信号
     def get_expre_sig(self,data,code,type_name):
-        #print(type_name,len(data),data.index.tolist()[0],data.index.tolist()[-1])
         if('times' in type_name):
-            self.date,self.times_sig(data, code, type_name = type_name, lf = 1)
+            self.date,self.times_sig(data, code, type_name = type_name, lf = signal_lf[4])
         elif('thre' in type_name):
-            self.threshold_sig(data, code, type_name = type_name, lf = 1)
+            self.threshold_sig(data, code, type_name = type_name, lf = signal_lf[0])
         elif('cross' in type_name):
-            self.cross_sig(data, code, type_name = type_name, lf = 20)
-        elif('diff' in type_name):
-            self.diff_sig(data, code, type_name = type_name, lf = 1)
+            self.cross_sig(data, code, type_name = type_name, lf = signal_lf[1])
         elif ('trend' in type_name):
-            self.trend_sig(data, code, type_name=type_name, lf = 1)
+            self.trend_sig(data, code, type_name=type_name, lf = signal_lf[2])
+        elif('diff' in type_name):
+            self.diff_sig(data, code, type_name = type_name, lf = signal_lf[3])
         else:
             print("can't cal"+type_name)
     
