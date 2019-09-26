@@ -18,7 +18,7 @@ def split_expre(ori_list):
     return new_list
 
 def compose_expre(meta_list):
-    signal_type = ['diff','cross','thre','trend','HS']
+    signal_type = ['diff','cross','thre','trend','HS','times']
     index_list = []
     for meta in meta_list:
         #print(meta)

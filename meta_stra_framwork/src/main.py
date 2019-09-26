@@ -43,5 +43,5 @@ def optimal_expre():
         expre_result_fra = pd.DataFrame(expre_result)
         expre_result_fra.to_excel(param['_signal_save_path']+'expre.xlsx')
 if __name__ == "__main__":
-    #optimal_expre()
-    singel_expre_test()
+    optimal_expre()
+    #singel_expre_test()

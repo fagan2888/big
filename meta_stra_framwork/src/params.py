@@ -7,7 +7,7 @@ sys.path.append(up_file)
 
 
 PARAMS = defaultdict(
-begin_date = 20150101,#信号计算开始日期
+begin_date = 20190101,#信号计算开始日期
 code_list = ['000001.XSHE'],#信号计算的股票池
 get_code_data = True,#是否重新获得原始数据
 HS_code = '999999.XSHG',#信号中的大盘信号代码
@@ -48,8 +48,8 @@ _config = {
       "sys_analyser":{
         "enabled":             True,
         "report":              True,
-        "plot":                True,
-        #"plot":                False
+        #"plot":                True,
+        "plot":                False
       },
       "sys_simulation":{
         "enabled":               True,
