@@ -37,7 +37,7 @@ def fra_diff(x,d):
         for j in range(temp):
             y[i] += sitas[j]*x[i-j]
     return y
-'''
+
 def R_fra_diff(x,d):#R语言中的fracdiff包里的分数阶差分，用python的rpy2包借调的R中的函数
     #fracdiff=importr('fracdiff')
     rvector = robjects.FloatVector(x)#先要将python中的list转成R中的vector
@@ -46,7 +46,7 @@ def R_fra_diff(x,d):#R语言中的fracdiff包里的分数阶差分，用python�
 def get_max_like_d(x):#得到最大似然的分数阶差分
     rvector = robjects.FloatVector(x)#先要将python中的list转成R中的vector
     return(list(r['coef'](fracdiff.fracdiff(rvector)))[0])#得到其中的d
-'''
+
 #def 
 
 def diffseris(x,d):
@@ -60,8 +60,8 @@ def diffseris(x,d):
             d-=1
         return(x_seris.tolist())#这里要将seris转成list，不然会出现dataframe里面全是NAN
     else:
-        return(fra_diff(x,d))
-        #return(R_fra_diff(x,d))
+        #return(fra_diff(x,d))
+        return(R_fra_diff(x,d))
     
 def data_frame_diff(f,d=0.5):
     #print 'd in diff',d
