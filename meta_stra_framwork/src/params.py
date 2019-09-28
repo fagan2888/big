@@ -33,7 +33,7 @@ _config = {
     {
           "benchmark": "399300.XSHE", #基准
           "margin_multiplier": 1.4, #
-          "start_date": "2015-01-01", #回测开始日期
+          "start_date": "2019-01-01", #回测开始日期
           "end_date":   "2019-02-01", #回测结束日期
           "frequency": "1d", #回测频率
           "accounts":{

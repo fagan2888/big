@@ -41,6 +41,7 @@ class Signal:
         self.type_list = np.array(self.get_type_list(self.expression))
         self.life = {}
         self.signal = {}
+        self.signal_date = {}
         self.expre_sig = {}
         self.trend = {}
         self.HScode =  HScode
@@ -53,6 +54,7 @@ class Signal:
         for code in self.code_list:
             self.life[code] = np.zeros(len(self.type_list))
             self.signal[code] = np.zeros(len(self.type_list))
+            self.signal_date[code] = np.zeros(len(self.type_list))
             self.expre_sig[code] = np.zeros(len(self.expression))
         self.trend_init()
 
@@ -79,6 +81,7 @@ class Signal:
             if(Save):
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
+                self.signal_date[code][self.type_list == type_name] = self.date
             return 1
         else:
             return 0
@@ -99,6 +102,7 @@ class Signal:
             if(code != self.HScode and Save):
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
+                self.signal_date[code][self.type_list == type_name] = self.date
             return 1
         else:
             return 0
@@ -112,6 +116,7 @@ class Signal:
             if(Save):
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
+                self.signal_date[code][self.type_list == type_name] = self.date
             return 1
         else:
             return 0
@@ -121,6 +126,7 @@ class Signal:
         if((thre_direction == '0' and data[index_name_1].iloc[-1] < data[index_name_2].iloc[-1]) 
             or (thre_direction == '1' and data[index_name_1].iloc[-1] > data[index_name_2].iloc[-1])):
             if(Save):
+                self.signal_date[code][self.type_list == type_name] = self.date
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
             return 1
@@ -128,7 +134,14 @@ class Signal:
             return 0
 
 
-    def times_sig(self,data,code,type_name,lf = 1,Save = True):
+    def times_sig(self,data,code,type_name,trace_type_name = None,lf = 1,Save = True):
+        trace_type_name = 'close_EMA_20#close_EMA_50#1&cross'
+        if(trace_type_name != None):
+            self.get_expre_sig(data,code,trace_type_name)
+            trace_date = self.signal_date[code][self.type_list == trace_type_name][0]
+            print(trace_date in data.index.tolist())
+            if(trace_date in data.index.tolist()):
+                data = data.loc[trace_date:]
         sub_name = type_name.split('&')[0]
         sub_split = sub_name.split('#')
         sub_type_name = '#'.join(sub_split[:(len(sub_split)-1)])
@@ -147,10 +160,12 @@ class Signal:
             else:
                 sub_sig = 0
             sub_sig_list.append(sub_sig)
+        print(self.date,len(data),np.array(sub_sig_list).sum(),data.index.tolist()[0])
         if(np.array(sub_sig_list).sum() >= times_num):
             if(Save):
                 self.signal[code][self.type_list == type_name] = 1
                 self.life[code][self.type_list == type_name] = lf
+                self.signal_date[code][self.type_list == type_name] = self.date
             return 1
         else:
             return 0
@@ -203,6 +218,7 @@ class Signal:
         for code in self.code_list:
             self.life[code][self.life[code] != 0] = self.life[code][self.life[code] != 0] - 1
             self.signal[code][self.life[code] == 0] = 0
+            self.signal_date[code][self.life[code] == 0] = 0
 
     #把结果按股票代码分类写入txt文件
     def write_code_result(self,):
