@@ -134,19 +134,18 @@ class Signal:
             return 0
 
 
-    def times_sig(self,data,code,type_name,trace_type_name = None,lf = 1,Save = True):
-        trace_type_name = 'close_EMA_20#close_EMA_50#1&cross'
-        if(trace_type_name != None):
+    def times_sig(self,data,code,type_name,trace_type_name = 'times',lf = 1,Save = True):
+        #trace_type_name = 'close_EMA_20#close_EMA_50#1&cross'
+        split_name = type_name.split('&')
+        trace_type_name = split_name[1]+'&'+split_name[-3]
+        sub_type_name = split_name[0]+'&'+split_name[-2]
+        times_num = int(split_name[2])
+        sub_sig_list = []
+        if('times' not in trace_type_name):
             self.get_expre_sig(data,code,trace_type_name)
             trace_date = self.signal_date[code][self.type_list == trace_type_name][0]
-            print(trace_date in data.index.tolist())
             if(trace_date in data.index.tolist()):
                 data = data.loc[trace_date:]
-        sub_name = type_name.split('&')[0]
-        sub_split = sub_name.split('#')
-        sub_type_name = '#'.join(sub_split[:(len(sub_split)-1)])
-        times_num = int(sub_split[-1])
-        sub_sig_list = []
         for i in range(len(data)-1):
             sub_data = data.iloc[:(len(data)-i)]
             if('thre' in type_name):

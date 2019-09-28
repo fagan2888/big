@@ -7,7 +7,7 @@ sys.path.append(up_file)
 
 
 PARAMS = defaultdict(
-begin_date = 20190101,#信号计算开始日期
+begin_date = 20180101,#信号计算开始日期
 code_list = ['000001.XSHE'],#信号计算的股票池
 get_code_data = True,#是否重新获得原始数据
 HS_code = '999999.XSHG',#信号中的大盘信号代码
@@ -19,11 +19,13 @@ _signal_save_path = up_file+'/result/newzhongli/', #信号结果储存地址
 # 交叉型信号 指标1名+#+指标2名+#+方向(1为金叉,0为死叉)+&cross,如果为大盘信号，则在最后加上&HS
 # 趋势型信号 指标1名+#+指标2名+#+方向(1为上涨,0为下跌)+&trend,如果为大盘信号，则在最后加上&HS
 # 比较型信号 指标1名+#+指标2名+#+方向(1为指标1大于指标2,0为指标1小于指标2)+&diff,如果为大盘信号，则在最后加上&HS
-# 计数型信号 其他信号+&+times 注意 计算型信号的次数参数要在其他信号的#号型参数之后+#+次数
-# 比如 high#close_EMA_20#1#1&cross&times 第二个#1就是对应计数型信号的阈值次数
+# 计数型信号 其他信号+&+时间对标信号+&次数+&其他信号类型&+时间对标信号类型+&+times 注意 
+# 比如 high#close_EMA_20#1&close_EMA_20#close_EMA_50#0&1&cross&cross&times 在写其他信号和时间对标信号时不写类型
+# 如果不想要时间对标信号，可以写一个永远不会成立的时间对标信号，比如low#high#1&diff,这样
+# 计数型信号就会计算100天内其他信号发生的次数
 # 信号组合可以使用+和*进行或和且逻辑运算,指标名称可在index_24中查询
-_Expression =['close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*high#close_EMA_20#0#3&cross&times+close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*low#close_EMA_50#1#3&cross&times',
-                'close_EMA_20#close_EMA_50#0&diff*close_EMA_20#close_EMA_50#0&cross*high#close_EMA_20#1#1&cross&times'],
+_Expression =['close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*high#close_EMA_20#0&close_EMA_20#close_EMA_50#1&3&cross&cross&times+close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*low#close_EMA_50#1&close_EMA_20#close_EMA_50#1&3&cross&cross&times',
+                'close_EMA_20#close_EMA_50#0&diff*close_EMA_20#close_EMA_50#0&cross*high#close_EMA_20#1&close_EMA_20#close_EMA_50#0&1&cross&cross&times'],
 # 回测参数，目前设定是第二天开盘买入，当天收盘卖出，每次以资金的三分之一操作，默认
 # 是下跌1%时候止损卖出
 # 可以在strategy.py中更改

@@ -44,6 +44,7 @@ def add_sub(s):# 计算没有乘除的表达式，得出最后不包含括号表
     return sum
  
 def basic_operation(s):# 计算一个基本的4则运算
+    #print(s)
     s = s.replace(' ', '')
     return add_sub(remove_md(s))# 调用前面定义的函数，先乘除，后加减
  
