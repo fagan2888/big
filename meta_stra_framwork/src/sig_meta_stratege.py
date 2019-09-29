@@ -489,9 +489,11 @@ def main(_begin_date,code_list,signal_save_path,Expression):
         for code in code_list:
             if(sig_data.cal_index_data(code) == 0):
                 _code_list.remove(code)
-        sig_data.cal_index_data('999999.XSHG')
-    if('999999.XSHG' in code_list):
-        _code_list.remove('999999.XSHG')
+        params =  params.PARAMS
+        HS_code = params['HS_code']
+        sig_data.cal_index_data(HS_code)
+    if(HS_code in code_list):
+        _code_list.remove(HS_code)
     begin_date = dp_trade_date[dp_trade_date>=int(_begin_date)][0]
     WD_pv = All_trade(begin_date,_code_list,signal_save_path,Expression)
 
