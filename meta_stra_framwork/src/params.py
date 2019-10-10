@@ -17,12 +17,12 @@ sys.path.append(up_file)
 
 
 PARAMS = defaultdict(
-begin_date = 20180101,#信号计算开始日期
+begin_date = 20150101,#信号计算开始日期
 code_list = get_code_list(),#信号计算的股票池
 get_code_data = True,#是否重新获得原始数据
 HS_code = '399300.XSHE',#信号中的大盘信号代码
 signal_lf = [1,20,1,1,1], #分别对应下面五种信号的生命周期,阈值，交叉，趋势，比较，计数
-_signal_save_path = up_file+'/result/newzhongli/', #信号结果储存地址
+_signal_save_path = up_file+'/result/jiang/', #信号结果储存地址
 # 信号的表达式，第一个为做多买入信号，第二个为做多卖出信号
 # 信号的构建方法为 
 # 阈值型信号 指标名+#+方向(1为大于,0为小于)+&thre,如果为大盘信号，则在最后加上&HS
