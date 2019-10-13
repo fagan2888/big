@@ -1,0 +1,2 @@
+time operation sell_price hold_day buy_price buy_date
+20160216 sell 27.74 24 31.59 20160106

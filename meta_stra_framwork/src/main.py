@@ -42,6 +42,17 @@ def optimal_expre():
             print(e)
         expre_result_fra = pd.DataFrame(expre_result)
         expre_result_fra.to_excel(param['_signal_save_path']+'expre.xlsx')
+
+def bayesian_opt(expression):
+    param =  params.PARAMS
+    if(param['get_code_data']):
+        copydata.main(param['code_list'])
+    main(_begin_date = param['begin_date'],
+                code_list = param['code_list'],
+                signal_save_path = param['_signal_save_path'],
+                Expression = expression)
+    results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
+    return results["sys_analyser"]['summary']['unit_net_value']
 if __name__ == "__main__":
     optimal_expre()
     #singel_expre_test()
