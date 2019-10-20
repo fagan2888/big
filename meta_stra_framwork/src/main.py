@@ -16,7 +16,8 @@ def singel_expre_test():
     main(_begin_date = param['begin_date'],
         code_list = param['code_list'],
         signal_save_path = param['_signal_save_path'],
-        Expression = param['_Expression'])
+        Expression = param['_Expression'],
+        HS_code = param['HS_code'])
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
 
 def optimal_expre():
@@ -27,6 +28,7 @@ def optimal_expre():
     new_expre_list = [ori_expre]
     new_expre_list += get_new_expre.get_new_expre_list(ori_expre)
     expre_result = {}
+    unit_seris = {}
     expre_result['expression'] = []
     expre_result['unit_net_value'] = []
     for new_expre in new_expre_list:
@@ -34,15 +36,19 @@ def optimal_expre():
             main(_begin_date = param['begin_date'],
                 code_list = param['code_list'],
                 signal_save_path = param['_signal_save_path'],
-                Expression = new_expre)
+                Expression = new_expre,
+                HS_code = param['HS_code'])
             results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
             expre_result['expression'].append(new_expre)
+            unit_seris[str(new_expre)] = results["sys_analyser"]['portfolio']['unit_net_value'].tolist()
             expre_result['unit_net_value'].append(results["sys_analyser"]['summary']['unit_net_value'])
         except Exception as e:
             print(e)
-        expre_result_fra = pd.DataFrame(expre_result)
-        expre_result_fra.to_excel(param['_signal_save_path']+'expre.xlsx')
-
+    unit_seris['date'] = results["sys_analyser"]['portfolio']['unit_net_value'].index.tolist()
+    expre_result_fra = pd.DataFrame(expre_result)
+    expre_result_fra.to_excel(param['_signal_save_path']+'expre.xlsx')
+    unit_seris_fra = pd.DataFrame(unit_seris)
+    unit_seris_fra.to_excel(param['_signal_save_path']+'unit.xlsx')
 def bayesian_opt(expression):
     param =  params.PARAMS
     if(param['get_code_data']):
@@ -50,7 +56,8 @@ def bayesian_opt(expression):
     main(_begin_date = param['begin_date'],
                 code_list = param['code_list'],
                 signal_save_path = param['_signal_save_path'],
-                Expression = expression)
+                Expression = expression,
+                HS_code = param['HS_code'])
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     return results["sys_analyser"]['summary']['unit_net_value']
 if __name__ == "__main__":

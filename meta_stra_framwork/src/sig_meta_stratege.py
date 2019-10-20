@@ -5,7 +5,7 @@
 import sig_data
 import pandas as pd 
 import numpy as np
-import tushare as ts 
+#import tushare as ts 
 import datetime
 import os
 import copy
@@ -266,6 +266,7 @@ class CStock:#计算选股模型的净值
     #用昨天的信号得到今天天要买的股票和worth
     def get_tbsl(self,):
         self.tbsl,self.tbsW = [],[] #将今天要买的股票列表和worth清空
+        #print(self.ccsl)
         for _code in self.ccsl:
             _worth = Worth(code = _code,gold = 0,position = 0,asset = 0,buy_price = 0,w = 100,
                           sell_price = 0,pure_value = 1,date = self._nowdate,operation = 'noo',obuy_price = 0,
@@ -286,6 +287,7 @@ class CStock:#计算选股模型的净值
             #把今天要买的股票加入列表
             _worth.expre_Sig = copy.copy(self.Sig.expre_sig[_code])#今天的信号
             _opera = copy.copy(_worth.get_operation())
+            #print('buy',_opera == 'long',_opera == 'short',_opera == 'noo')
             if(_opera == 'long' or _opera == 'short' or _opera == 'noo'):
                 self.write_one_code_result(_code,_opera,_worth.buy_price,_worth.l_or_s)
             if(_worth.date in _worth.trade_date_list and 
@@ -302,6 +304,7 @@ class CStock:#计算选股模型的净值
         for _code,_worth in zip(self.hbsl,self.hbsW):
             _worth.expre_Sig = copy.copy(self.Sig.expre_sig[_code])#卖出用的当天的信号，因为这个函数在得到买入股票之后，信号已经更新了
             _operation = _worth.get_operation()
+            #print('sell',_worth.now_date in _worth.trade_date_list,_worth.get_operation() == 'sell',_worth.sell_due <= 0)
             if(_worth.now_date in _worth.trade_date_list and 
                 ( _worth.get_operation() == 'sell' and _worth.sell_due <= 0
                 or _code not in self.ccsl)): #出现卖的信号或者换仓的时候平仓
@@ -400,6 +403,7 @@ class CStock:#计算选股模型的净值
 
     def write_one_code_result(self,code,operation,price,l_or_s,hold_day = 0,buy_price = 0,buy_date = 0):
         w_s = self.signal_save_path+'code/'
+        #print(operation)
         if not os.path.exists(w_s):
             os.makedirs(w_s)
         if(operation == 'sell'):
@@ -417,6 +421,7 @@ class CStock:#计算选股模型的净值
                 f.close()
         else:
             if not os.path.exists(w_s+code+'_operation.txt'):
+                #print(w_s+code+'_operation.txt')
                 with open(w_s+code+'_operation.txt','a') as f:
                     f.write('time'+' '+'operation'+' '+'trade_price\n')
                     f.close()
@@ -442,7 +447,7 @@ def para_result(para_data,trade_data,C_S):
     trade_data['position']=copy.copy(C_S.result.position_list)
     
     return para_data,trade_data
-
+'''
 def get_code_list():
     code_list = ts.get_hs300s()['code']
     for i in range(len(code_list)):
@@ -451,7 +456,7 @@ def get_code_list():
         else:
             code_list[i] = str(code_list[i]) + '.XSHE'
     return code_list.tolist()
-
+'''
 def get_all_code(file_dir):   
     for root, dirs, files in os.walk(file_dir):  
         return files #当前路径下所有非目录子文件  
@@ -482,18 +487,16 @@ def All_trade(begin_date,code_list,signal_save_path,Expression):
 
     return C_S.result.gold_list[-1]
 
-def main(_begin_date,code_list,signal_save_path,Expression):
+def main(_begin_date,code_list,signal_save_path,Expression,HS_code):
     _code_list = copy.copy(code_list)
     off_line=False
     if(not off_line):
         for code in code_list:
             if(sig_data.cal_index_data(code) == 0):
                 _code_list.remove(code)
-        params =  params.PARAMS
-        HS_code = params['HS_code']
         sig_data.cal_index_data(HS_code)
     if(HS_code in code_list):
-        _code_list.remove(HS_code)
+       _code_list.remove(HS_code)
     begin_date = dp_trade_date[dp_trade_date>=int(_begin_date)][0]
     WD_pv = All_trade(begin_date,_code_list,signal_save_path,Expression)
 
@@ -502,4 +505,5 @@ if __name__ == "__main__":
     main(_begin_date = params['begin_date'],
         code_list = params['code_list'],
         signal_save_path = params['_signal_save_path'],
-        Expression = params['_Expression'])
+        Expression = params['_Expression'],
+        HS_code = params['HS_code'])

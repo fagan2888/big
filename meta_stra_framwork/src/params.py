@@ -1,7 +1,8 @@
 import sys,os
 from collections import defaultdict
-import tushare as ts
+#import tushare as ts
 
+'''
 def get_code_list():
     code_list = ts.get_hs300s()['code']
     for i in range(len(code_list)):
@@ -10,7 +11,7 @@ def get_code_list():
         else:
             code_list[i] = str(code_list[i]) + '.XSHE'
     return code_list.tolist()
-
+'''
 now_file = os.path.abspath(os.path.dirname(__file__))
 up_file = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(up_file)
@@ -18,10 +19,10 @@ sys.path.append(up_file)
 
 PARAMS = defaultdict(
 begin_date = 20150101,#信号计算开始日期
-code_list = get_code_list(),#信号计算的股票池
+code_list = ['000001.XSHE'],#get_code_list(),#信号计算的股票池
 get_code_data = True,#是否重新获得原始数据
-HS_code = '399300.XSHE',#信号中的大盘信号代码
-signal_lf = [1,20,1,1,1], #分别对应下面五种信号的生命周期,阈值，交叉，趋势，比较，计数
+HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
+signal_lf = [1,1,1,1,1], #分别对应下面五种信号的生命周期,阈值，交叉，趋势，比较，计数
 _signal_save_path = up_file+'/result/jiang/', #信号结果储存地址
 # 信号的表达式，第一个为做多买入信号，第二个为做多卖出信号
 # 信号的构建方法为 
@@ -34,18 +35,21 @@ _signal_save_path = up_file+'/result/jiang/', #信号结果储存地址
 # 如果不想要时间对标信号，可以写一个永远不会成立的时间对标信号，比如low#high#1&diff,这样
 # 计数型信号就会计算100天内其他信号发生的次数
 # 信号组合可以使用+和*进行或和且逻辑运算,指标名称可在index_24中查询
-_Expression =['close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*high#close_EMA_20#0&close_EMA_20#close_EMA_50#1&3&cross&cross&times+close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*low#close_EMA_50#1&close_EMA_20#close_EMA_50#1&3&cross&cross&times',
-                'close_EMA_20#close_EMA_50#0&diff*close_EMA_20#close_EMA_50#0&cross*high#close_EMA_20#1&close_EMA_20#close_EMA_50#0&1&cross&cross&times'],
+_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close_EMA_15#2#1&trend*close_EMA_25#2#1&trend*MACD#0#1&thre*close#close_shift_4#1&diff*K#40#1&thre&HS',
+                'MACD#0#0&thre+K#40#0&thre&HS'],
+#=['close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*high#close_EMA_20#0&close_EMA_20#close_EMA_50#1&3&cross&cross&times+close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*low#close_EMA_50#1&close_EMA_20#close_EMA_50#1&3&cross&cross&times',
+                #'close_EMA_20#close_EMA_50#0&diff*close_EMA_20#close_EMA_50#0&cross*high#close_EMA_20#1&close_EMA_20#close_EMA_50#0&1&cross&cross&times'],
 # 回测参数，目前设定是第二天开盘买入，当天收盘卖出，每次以资金的三分之一操作，默认
 # 是下跌1%时候止损卖出
 # 可以在strategy.py中更改
 # 更多参数设置可以百度搜索rqalpha
+_optimal = True,
 _config = {
     "base":
     {
           "benchmark": "399300.XSHE", #基准
           "margin_multiplier": 1.4, #
-          "start_date": "2019-01-01", #回测开始日期
+          "start_date": "2015-01-01", #回测开始日期
           "end_date":   "2019-02-01", #回测结束日期
           "frequency": "1d", #回测频率
           "accounts":{

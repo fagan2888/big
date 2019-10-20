@@ -10,7 +10,7 @@ import traceback
 from rqalpha.api import *
 from rqalpha import run_func
 import os
-import tushare as ts
+#import tushare as ts
 import numpy as np
 import matplotlib.pyplot as plt
 import params
@@ -36,6 +36,8 @@ def read_trend_txt():
             line = f.readline().strip()
     trend_fra = pd.DataFrame(trend_dict)
     #trend_fra.set_index(['time'],inplace = True)
+    if(param['_optimal']):
+        os.remove(param['_signal_save_path']+'code/all_operation.txt')
     return trend_fra
 
 def myround(value, n):

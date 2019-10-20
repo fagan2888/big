@@ -1,2 +1,0 @@
-time operation sell_price hold_day buy_price buy_date
-20180628 sell 7.71 14 7.93 20180607

@@ -6,7 +6,7 @@ import rqdata as rq
 import json
 import copy
 from rqdata import up_file,now_file
-import tushare as ts
+#import tushare as ts
 
 def get_code_list():
     code_list = ts.get_hs300s()['code']

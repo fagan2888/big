@@ -1,3 +1,0 @@
-time operation sell_price hold_day buy_price buy_date
-20170510 sell 20.61 19 23.56 20170412
-20180427 sell 15.76 44 17.12 20180222
