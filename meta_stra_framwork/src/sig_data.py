@@ -81,6 +81,8 @@ def cal_index_data(code):
         data = index_24.calculateROC(data,12)
         data = index_24.calculateRSI(data,24)
         data = index_24.calculateMACD(data)#计算MACD
+        data = index_24.calculateMA(data,'close',5)
+        data = index_24.calculateMA(data,'close',30)
         #print(data)
         data.to_csv(up_file+'/index/'+code+'.csv',header=True, index='date')
         return 1

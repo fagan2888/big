@@ -50,8 +50,9 @@ def calculateMA(df,name,period,d = 0):
     for i in  range(0,period-1):
         maArray.append(np.nan)
         nan_number += 1
+    #print(Array.shape)
     for i in range(nan_number, length):
-        ma =Array[i-period+1,i+1]
+        ma = np.mean(Array[i-period+1:i+1])
         maArray.append(ma)
     _df[str(name) + '_MA_' + str(period)] = maArray
 

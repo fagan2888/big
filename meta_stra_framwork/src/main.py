@@ -31,7 +31,7 @@ def optimal_expre():
     unit_seris = {}
     expre_result['expression'] = []
     expre_result['unit_net_value'] = []
-    for new_expre in new_expre_list:
+    for new_expre in new_expre_list: 
         try:
             main(_begin_date = param['begin_date'],
                 code_list = param['code_list'],
@@ -61,5 +61,5 @@ def bayesian_opt(expression):
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     return results["sys_analyser"]['summary']['unit_net_value']
 if __name__ == "__main__":
-    optimal_expre()
-    #singel_expre_test()
+    #optimal_expre()
+    singel_expre_test()
