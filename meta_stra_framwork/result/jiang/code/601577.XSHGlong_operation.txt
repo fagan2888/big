@@ -1,0 +1,4 @@
+time operation sell_price hold_day buy_price buy_date
+20190411 sell 10.85 5 11.12 20190403
+20190412 sell 10.85 6 11.12 20190403
+20190423 sell 10.79 2 11.18 20190419
