@@ -639,3 +639,53 @@ def calculateADL(df,period):
     #多只股票上涨只数
     pass
 
+def calculateKlength(df,d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    closeArray = np.array(df['close'])
+    openArray = np.array(df['open'])
+    _df['Klength'] = closeArray - openArray
+    return _df
+
+def calculateKUpperLength(df,d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    closeArray = np.array(df['close'])
+    openArray = np.array(df['open'])
+    highArray = np.array(df['high'])
+    KUL = []
+    for _high,_close,_open in zip(highArray,closeArray,openArray):
+        KUL.append(_high-np.max([_close,_open]))
+    _df['KUpperlength'] = np.array(KUL)
+    return _df
+
+def calculateKLowerLength(df,d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    closeArray = np.array(df['close'])
+    openArray = np.array(df['open'])
+    lowArray = np.array(df['low'])
+    KLL = []
+    for _low,_close,_open in zip(lowArray,closeArray,openArray):
+        KLL.append(np.min([_close,_open])-_low)
+    _df['KLowerlength'] = np.array(KLL)
+    return _df
+
+def calculateMeanAmplitude(df, period, d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    closeArray = np.array(df['close'])
+    highArray = np.array(df['high'])
+    lowArray = np.array(df['low'])
+    MALArray = (highArray-lowArray)/closeArray
+    MAL = []
+    for i in range(0,period):
+        MAL.append(np.nan)
+    for i in range(period,len(closeArray)):
+        MAL.append(MALArray[i-period:i].mean())
+    _df['MeanAmplitude'] = np.array(MAL)
+    return _df
