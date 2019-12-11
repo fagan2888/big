@@ -683,9 +683,9 @@ def calculateMeanAmplitude(df, period, d = 0):
     lowArray = np.array(df['low'])
     MALArray = (highArray-lowArray)/closeArray
     MAL = []
-    for i in range(0,period):
+    for i in range(0,period-1):
         MAL.append(np.nan)
-    for i in range(period,len(closeArray)):
-        MAL.append(MALArray[i-period:i].mean())
+    for i in range(period-1,len(closeArray)):
+        MAL.append(MALArray[i-period+1:i+1].mean())
     _df['MeanAmplitude'] = np.array(MAL)
     return _df

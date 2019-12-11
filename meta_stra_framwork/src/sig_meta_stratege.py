@@ -495,6 +495,7 @@ def main(_begin_date,code_list,signal_save_path,Expression,HS_code):
             if(sig_data.cal_index_data(code) == 0):
                 _code_list.remove(code)
         sig_data.cal_index_data(HS_code)
+        print(_code_list)
     if(HS_code in code_list):
        _code_list.remove(HS_code)
     begin_date = dp_trade_date[dp_trade_date>=int(_begin_date)][0]

@@ -85,6 +85,10 @@ def cal_index_data(code):
         data = index_24.calculateMA(data,'close',10)
         data = index_24.calculateMA(data,'close',20)
         data = index_24.calculateMA(data,'close',30)
+        data = index_24.calculateKlength(data)
+        data = index_24.calculateKUpperLength(data)
+        data = index_24.calculateKLowerLength(data)
+        data = index_24.calculateMeanAmplitude(data,10)
         #print(data)
         data.to_csv(up_file+'/index/'+code+'.csv',header=True, index='date')
         return 1

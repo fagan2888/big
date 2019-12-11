@@ -1,0 +1,6 @@
+time MACD#0#1&thre close_MA_5#close_MA_10#0&cross close_MA_5#close_MA_20#1&cross close_EMA_12#close_EMA_26#1&cross
+20150106 1.0 0.0 0.0 0.0
+20150107 1.0 0.0 0.0 0.0
+20150108 1.0 0.0 0.0 0.0
+20150109 1.0 0.0 0.0 0.0
+20150112 1.0 0.0 0.0 0.0

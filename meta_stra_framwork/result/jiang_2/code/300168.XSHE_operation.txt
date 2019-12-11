@@ -1,0 +1,7 @@
+time operation trade_price
+20150105 noo 0
+20150106 noo 0
+20150107 noo 0
+20150108 noo 48.73
+20150109 noo 52.64
+20150112 noo 52.95
