@@ -8,6 +8,7 @@ import copy
 import get_new_expre
 import pandas as pd
 from rqdata import up_file,now_file
+import quick_sig as qs
 
 def singel_expre_test():
     param =  params.PARAMS
@@ -31,19 +32,17 @@ def optimal_expre():
     unit_seris = {}
     expre_result['expression'] = []
     expre_result['unit_net_value'] = []
+    code_list = param['code_list']
+    print(new_expre_list)
     for new_expre in new_expre_list: 
-        try:
-            main(_begin_date = param['begin_date'],
-                code_list = param['code_list'],
-                signal_save_path = param['_signal_save_path'],
-                Expression = new_expre,
-                HS_code = param['HS_code'])
-            results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
-            expre_result['expression'].append(new_expre)
-            unit_seris[str(new_expre)] = results["sys_analyser"]['portfolio']['unit_net_value'].tolist()
-            expre_result['unit_net_value'].append(results["sys_analyser"]['summary']['unit_net_value'])
-        except Exception as e:
-            print(e)
+        #try:
+        qs.get_signal(code_list,new_expre,off_line = False)
+        results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
+        expre_result['expression'].append(new_expre)
+        unit_seris[str(new_expre)] = results["sys_analyser"]['portfolio']['unit_net_value'].tolist()
+        expre_result['unit_net_value'].append(results["sys_analyser"]['summary']['unit_net_value'])
+        #except Exception as e:
+            #print(e)
     unit_seris['date'] = results["sys_analyser"]['portfolio']['unit_net_value'].index.tolist()
     expre_result_fra = pd.DataFrame(expre_result)
     expre_result_fra.to_excel(param['_signal_save_path']+'expre.xlsx')
@@ -61,5 +60,5 @@ def bayesian_opt(expression):
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     return results["sys_analyser"]['summary']['unit_net_value']
 if __name__ == "__main__":
-    #optimal_expre()
-    singel_expre_test()
+    optimal_expre()
+    #singel_expre_test()

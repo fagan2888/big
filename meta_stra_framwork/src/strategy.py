@@ -47,7 +47,7 @@ def myround(value, n):
         return round((value - 10**(-n-8)), n)
 
 def init(context):
-    context.signals         = read_trend_txt()
+    context.signals         = pd.read_csv(up_file+'/result/quick/quick_sig.csv',index_col = 0)
     context.signals         = context.signals[context.signals.code!='601360.XSHG']
     context.signals.time    = context.signals.time.map(lambda x:str(x))
     context.operlist        = []
@@ -135,15 +135,11 @@ def handle_bar(context, bar_dict):
     sell(context, bar_dict)
     after_trading(context)
     plot('market', context.portfolio.market_value/context.portfolio.total_value)
-    #plot('stocknum', len(context.operlist))
-    #print('%s, %4.2f, %10.2f' % (now, context.portfolio.market_value/context.portfolio.total_value, context.portfolio.total_value))
+    plot('stocknum', len(context.operlist))
+    print('%s, %4.2f, %10.2f' % (now, context.portfolio.market_value/context.portfolio.total_value, context.portfolio.total_value))
 def after_trading(context):
     pass
 
 if __name__ == "__main__":
     param =  params.PARAMS
-    main(_begin_date = param['begin_date'],
-        code_list = param['code_list'],
-        signal_save_path = param['_signal_save_path'],
-        Expression = param['_Expression'])
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])

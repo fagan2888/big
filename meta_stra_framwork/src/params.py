@@ -1,8 +1,8 @@
 import sys,os
 from collections import defaultdict
-#import tushare as ts
+import tushare as ts
 
-'''
+
 def get_code_list():
     code_list = ts.get_hs300s()['code']
     for i in range(len(code_list)):
@@ -11,7 +11,7 @@ def get_code_list():
         else:
             code_list[i] = str(code_list[i]) + '.XSHE'
     return code_list.tolist()
-'''
+
 now_file = os.path.abspath(os.path.dirname(__file__))
 up_file = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(up_file)
@@ -19,15 +19,15 @@ sys.path.append(up_file)
 
 PARAMS = defaultdict(
 begin_date = 20150101,#信号计算开始日期
-code_list = ['002309.XSHE','002484.XSHE','300168.XSHE'],
-#ode_list = get_code_list(),#信号计算的股票池
-get_code_data = True,#是否重新获得原始数据
+#code_list = ['002309.XSHE','002484.XSHE','300168.XSHE'],
+code_list = get_code_list(),#信号计算的股票池
+get_code_data = False,#是否重新获得原始数据
 HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
 signal_lf = [1,1,1,1,1], #分别对应下面五种信号的生命周期,阈值，交叉，趋势，比较，计数
 _signal_save_path = up_file+'/result/jiang_2/', #信号结果储存地址
 # 信号的表达式，第一个为做多买入信号，第二个为做多卖出信号
 # 信号的构建方法为 
-# 阈值型信号 指标名+#+方向(1为大于,0为小于)+&thre,如果为大盘信号，则在最后加上&HS
+# 阈值型信号 指标名+#+阈值+#+方向(1为大于,0为小于)+&thre,如果为大盘信号，则在最后加上&HS
 # 交叉型信号 指标1名+#+指标2名+#+方向(1为金叉,0为死叉)+&cross,如果为大盘信号，则在最后加上&HS
 # 趋势型信号 指标1名+#+趋势延续天数+#+方向(1为上涨,0为下跌)+&trend,如果为大盘信号，则在最后加上&HS
 # 比较型信号 指标1名+#+指标2名+#+方向(1为指标1大于指标2,0为指标1小于指标2)+&diff,如果为大盘信号，则在最后加上&HS
@@ -52,8 +52,8 @@ _config = {
     {
           "benchmark": "399300.XSHE", #基准
           "margin_multiplier": 1.4, #
-          "start_date": "2015-01-01", #回测开始日期
-          "end_date":   "2019-02-01", #回测结束日期
+          "start_date": "2005-05-01", #回测开始日期
+          "end_date":   "2013-02-01", #回测结束日期
           "frequency": "1d", #回测频率
           "accounts":{
             "stock":  100000000, #回测本金

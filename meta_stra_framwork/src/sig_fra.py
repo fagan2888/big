@@ -172,7 +172,7 @@ class Signal:
     #得到和expression匹配的信号
     def get_expre_sig(self,data,code,type_name):
         if('times' in type_name):
-            self.date,self.times_sig(data, code, type_name = type_name, lf = signal_lf[4])
+            self.times_sig(data, code, type_name = type_name, lf = signal_lf[4])
         elif('thre' in type_name):
             self.threshold_sig(data, code, type_name = type_name, lf = signal_lf[0])
         elif('cross' in type_name):
