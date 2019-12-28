@@ -15,9 +15,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import params
 from sig_meta_stratege import main
-
+from rqdata import up_file,now_file
 k = 10
-up_file = '/Users/wode/Documents/signal_framework/big/meta_stra_framwork'
+#up_file = '/Users/wode/Documents/signal_framework/big/meta_stra_framwork'
 
 def read_trend_txt():
     trend_dict = {}

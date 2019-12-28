@@ -43,6 +43,7 @@ def optimal_expre():
         expre_result['unit_net_value'].append(results["sys_analyser"]['summary']['unit_net_value'])
         #except Exception as e:
             #print(e)
+    unit_seris['benchmark'] = results["sys_analyser"]['benchmark_portfolio']['unit_net_value'].tolist()
     unit_seris['date'] = results["sys_analyser"]['portfolio']['unit_net_value'].index.tolist()
     expre_result_fra = pd.DataFrame(expre_result)
     expre_result_fra.to_excel(param['_signal_save_path']+'expre.xlsx')
