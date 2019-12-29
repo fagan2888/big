@@ -86,6 +86,7 @@ def cal_index_data(code):
         data = index_24.calculateMA(data,'close',20)
         data = index_24.calculateMA(data,'close',30)
         data = index_24.calculateMA(data,'close',40)
+        data = index_24.calculateMA(data,'close',60)
         data = index_24.calculateKlength(data)
         data = index_24.calculateKUpperLength(data)
         data = index_24.calculateKLowerLength(data)

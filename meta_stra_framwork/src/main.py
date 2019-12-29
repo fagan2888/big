@@ -37,8 +37,6 @@ def optimal_expre(off_line = False):
             if(sig_data.cal_index_data(code) == 0):
                 _code_list.remove(code)
         #sig_data.cal_index_data(HS_code)
-        #print(_code_list)
-    #print(new_expre_list)
     for new_expre in new_expre_list: 
         #try:
         start = time.clock()

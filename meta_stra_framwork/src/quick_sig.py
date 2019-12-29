@@ -16,25 +16,52 @@ def threshold_sig(data,type_name):
     
 def diff_sig(data,type_name):
     index_name_1,index_name_2,thre_direction = type_name.split('&')[0].split('#')
-    if(thre_direction == '0'): 
-        data[type_name] = ((data[index_name_1]-data[index_name_2])<0)*1
-    elif(thre_direction == '1' ):
-        data[type_name] = ((data[index_name_1]-data[index_name_2])>0)*1
+    if(index_name_1 == index_name_2):
+        print('error,two same index can not cal sig')
+    else:
+        if(thre_direction == '0'): 
+            data[type_name] = ((data[index_name_1]-data[index_name_2])<0)*1
+        elif(thre_direction == '1' ):
+            data[type_name] = ((data[index_name_1]-data[index_name_2])>0)*1
     return data
 
 def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
     index_name_short,index_name_long,thre_direction = type_name.split('&')[0].split('#')
-    if(thre_direction == '1'):
-        now = (data[index_name_short]-data[index_name_long])>0
-        yes = (data[index_name_short]-data[index_name_long])<0
-        result = now.shift(1)*yes
-        result.iloc[0] = 0
-    elif(thre_direction == '0'):
-        now = (data[index_name_short]-data[index_name_long])<0
-        yes = (data[index_name_short]-data[index_name_long])>0
-        result = now.shift(1)*yes
-        result.iloc[0] = 0
-    data[type_name] = result
+    if(index_name_short == index_name_long):
+        print('error,two same index can not cal sig')
+    else:
+        if(thre_direction == '1'):
+            now = (data[index_name_short]-data[index_name_long])>0
+            yes = (data[index_name_short]-data[index_name_long])<0
+            result = now.shift(1)*yes
+            result.iloc[0] = 0
+        elif(thre_direction == '0'):
+            now = (data[index_name_short]-data[index_name_long])<0
+            yes = (data[index_name_short]-data[index_name_long])>0
+            result = now.shift(1)*yes
+            result.iloc[0] = 0
+        data[type_name] = result
+    return data
+
+def trend_sig(data,type_name):
+    index_name,trend_num,thre_direction = type_name.split('&')[0].split('#')
+    trend_num = int(trend_num)
+    if(len(data) < trend_num):
+        print('error,can not cal trend sig length less than trend num')
+        return data
+    if(thre_direction == '1' ):
+        d = data[index_name].diff()
+        d = d.apply(lambda x:x/x if x>0 else x-x)
+    elif(thre_direction == '0' ):
+        d = data[index_name].diff()
+        d = d.apply(lambda x:x/x if x<0 else x-x)
+    trend = []
+    for i in range(len(data)):
+        if(i<trend_num):
+            trend.append((d.iloc[:i].sum() == trend_num)*1)
+        else:
+            trend.append((d.iloc[(i-trend_num):i].sum() == trend_num)*1)
+    data[type_name] = trend
     return data
 
 def cal_sig(type_name,data):
@@ -45,6 +72,8 @@ def cal_sig(type_name,data):
         data = cross_sig(data,type_name)
     elif('diff' in type_name):
         data = diff_sig(data,type_name)
+    elif('trend' in type_name):
+        data = trend_sig(data,type_name)
     else:
         print("can't cal"+type_name)
     return data
