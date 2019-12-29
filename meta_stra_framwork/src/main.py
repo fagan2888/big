@@ -9,7 +9,8 @@ import get_new_expre
 import pandas as pd
 from rqdata import up_file,now_file
 import quick_sig as qs
-
+import time
+import sig_data
 def singel_expre_test():
     param =  params.PARAMS
     if(param['get_code_data']):
@@ -21,26 +22,36 @@ def singel_expre_test():
         HS_code = param['HS_code'])
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
 
-def optimal_expre():
+def optimal_expre(off_line = False):
     param =  params.PARAMS
     if(param['get_code_data']):
         copydata.main(param['code_list'])
-    ori_expre = param['_Expression']
+    ori_expre,code_list = param['_Expression'],param['code_list']
     new_expre_list = [ori_expre]
     new_expre_list += get_new_expre.get_new_expre_list(ori_expre)
-    expre_result = {}
-    unit_seris = {}
-    expre_result['expression'] = []
-    expre_result['unit_net_value'] = []
-    code_list = param['code_list']
-    print(new_expre_list)
+    expre_result,unit_seris = {},{}
+    expre_result['expression'],expre_result['unit_net_value'] = [],[]
+    _code_list = copy.copy(code_list)
+    if(not off_line):
+        for code in code_list:
+            if(sig_data.cal_index_data(code) == 0):
+                _code_list.remove(code)
+        #sig_data.cal_index_data(HS_code)
+        #print(_code_list)
+    #print(new_expre_list)
     for new_expre in new_expre_list: 
         #try:
-        qs.get_signal(code_list,new_expre,off_line = False)
+        start = time.clock()
+        qs.get_signal(_code_list,new_expre)
+        end = time.clock()
+        print('sig',str(end-start))
+        start = time.clock()
         results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
         expre_result['expression'].append(new_expre)
         unit_seris[str(new_expre)] = results["sys_analyser"]['portfolio']['unit_net_value'].tolist()
         expre_result['unit_net_value'].append(results["sys_analyser"]['summary']['unit_net_value'])
+        end = time.clock()
+        print('back',str(end-start))
         #except Exception as e:
             #print(e)
     unit_seris['benchmark'] = results["sys_analyser"]['benchmark_portfolio']['unit_net_value'].tolist()
@@ -61,5 +72,5 @@ def bayesian_opt(expression):
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     return results["sys_analyser"]['summary']['unit_net_value']
 if __name__ == "__main__":
-    optimal_expre()
+    optimal_expre(off_line = False)
     #singel_expre_test()

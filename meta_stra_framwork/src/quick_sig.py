@@ -1,22 +1,9 @@
 import numpy as np
 import pandas as pd
 import json
-import index_24
 import copy
 import re
-import tushare as ts
 from rqdata import up_file,now_file
-import sig_data
-import params
-
-def get_code_list():
-    code_list = ts.get_hs300s()['code']
-    for i in range(len(code_list)):
-        if(str(code_list[i])[0]=='6'):
-            code_list[i] = str(code_list[i]) + '.XSHG'
-        else:
-            code_list[i] = str(code_list[i]) + '.XSHE'
-    return code_list.tolist()
 
 def threshold_sig(data,type_name):
     index_name,index_thre,thre_direction = type_name.split('&')[0].split('#')
@@ -118,37 +105,30 @@ def calculate(expression):# 计算包含括号的表达式
     expression = expression.replace(k, str(basic_operation(k[1:len(k) - 1])))
     return calculate(expression)
     
-def replace_exp(expression_list,data):
+def replace_exp(expression_list,data,code):
     for expression in expression_list:
         new_expre = []
         type_list = get_type_list(expression)
+        for _type in type_list:
+            if(_type not in data.columns.tolist()):
+                data = cal_sig(_type,data)
         for i in range(len(data)):
             new_expression = copy.copy(expression)
             for _type in type_list:
-                if(_type not in data.columns.tolist()):
-                    data = cal_sig(_type,data)
-                #print(_type,str(data[_type].iloc[i]),i,expression.replace(_type,str(data[_type].iloc[i])))
                 new_expression = copy.copy(new_expression.replace(_type,str(data[_type].iloc[i])))
-                #print(expression)
             new_expre.append(calculate(new_expression))
-        data[expression] = np.array(new_expre)>0
-    return data[expression_list]
+        data[expression] = np.array(new_expre)
+    
+    #data.to_csv(up_file+'/index/'+code+'.csv')
+    return data[expression_list]>0
 
 def get_trade_date(code,expression):
     data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date')
-    code_sig = replace_exp(expression,data)
+    code_sig = replace_exp(expression,data,code)
     code_sig.loc[:,'code'] = code
     return code_sig[code_sig[expression[0]]]['code'],code_sig[code_sig[expression[1]]]['code']
 
-def get_signal(code_list,expression,off_line = True):
-    _code_list = copy.copy(code_list)
-    if(not off_line):
-        for code in code_list:
-            if(sig_data.cal_index_data(code) == 0):
-                _code_list.remove(code)
-        #sig_data.cal_index_data(HS_code)
-        print(_code_list)
-
+def get_signal(_code_list,expression):
     all_buy,all_sell = pd.Series([]),pd.Series([])
     for code in _code_list:
         buy_date,sell_date = get_trade_date(code,expression)
