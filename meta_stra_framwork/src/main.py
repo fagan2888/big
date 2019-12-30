@@ -37,7 +37,7 @@ def optimal_expre(off_line = False):
         for code in code_list:
             if(sig_data.cal_index_data(code) == 0):
                 _code_list.remove(code)
-        HS_code = param.HS_code
+        HS_code = param['HS_code']
         sig_data.cal_index_data(HS_code)
     for new_expre in new_expre_list: 
         try:

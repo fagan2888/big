@@ -8,8 +8,7 @@ import params
 
 def threshold_sig(data,type_name):
     if('HS' in type_name):
-        param =  params.PARAMS
-        HS_code = param.HS_code
+        HS_code = params.PARAMS['HS_code']
         use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index]
     else:
         use_data = copy.copy(data)
@@ -23,8 +22,7 @@ def threshold_sig(data,type_name):
     
 def diff_sig(data,type_name):
     if('HS' in type_name):
-        param =  params.PARAMS
-        HS_code = param.HS_code
+        HS_code = params.PARAMS['HS_code']
         use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
@@ -40,8 +38,7 @@ def diff_sig(data,type_name):
 
 def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
     if('HS' in type_name):
-        param =  params.PARAMS
-        HS_code = param.HS_code
+        HS_code = params.PARAMS['HS_code']
         use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
@@ -64,8 +61,7 @@ def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
 
 def trend_sig(data,type_name):
     if('HS' in type_name):
-        param =  params.PARAMS
-        HS_code = param.HS_code
+        HS_code = params.PARAMS['HS_code']
         use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
