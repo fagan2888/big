@@ -166,6 +166,7 @@ def replace_exp(expression_list,data,code):
             new_expression = copy.copy(expression)
             for _type in type_list:
                 new_expression = copy.copy(new_expression.replace(_type,str(data[_type].iloc[i])))
+            #print(new_expression)
             new_expre.append(calculate(new_expression))
         data[expression] = np.array(new_expre)
     
@@ -181,9 +182,12 @@ def get_trade_date(code,expression):
 def get_signal(_code_list,expression):
     all_buy,all_sell = pd.Series([]),pd.Series([])
     for code in _code_list:
-        buy_date,sell_date = get_trade_date(code,expression)
-        all_buy = all_buy.append(buy_date)
-        all_sell = all_sell.append(sell_date)
+        try:
+            buy_date,sell_date = get_trade_date(code,expression)
+            all_buy = all_buy.append(buy_date)
+            all_sell = all_sell.append(sell_date)
+        except Exception as e:
+            print(code,e) 
     buy_df = pd.DataFrame(all_buy)
     buy_df['operation'] = 'long'
     buy_df.columns = ['code','operation']

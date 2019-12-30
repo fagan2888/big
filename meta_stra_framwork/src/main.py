@@ -40,20 +40,20 @@ def optimal_expre(off_line = False):
         HS_code = param['HS_code']
         sig_data.cal_index_data(HS_code)
     for new_expre in new_expre_list: 
-        try:
-            start = time.clock()
-            qs.get_signal(_code_list,new_expre)
-            end = time.clock()
-            print('sig',str(end-start))
-            start = time.clock()
-            results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
-            expre_result['expression'].append(new_expre)
-            unit_seris[str(new_expre)] = results["sys_analyser"]['portfolio']['unit_net_value'].tolist()
-            expre_result['unit_net_value'].append(results["sys_analyser"]['summary']['unit_net_value'])
-            end = time.clock()
-            print('back',str(end-start))
-        except Exception as e:
-            print(e)
+        #try:
+        start = time.clock()
+        qs.get_signal(_code_list,new_expre)
+        end = time.clock()
+        print('sig',str(end-start))
+        start = time.clock()
+        results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
+        expre_result['expression'].append(new_expre)
+        unit_seris[str(new_expre)] = results["sys_analyser"]['portfolio']['unit_net_value'].tolist()
+        expre_result['unit_net_value'].append(results["sys_analyser"]['summary']['unit_net_value'])
+        end = time.clock()
+        print('back',str(end-start))
+        #except Exception as e:
+            #print(e)
     unit_seris['benchmark'] = results["sys_analyser"]['benchmark_portfolio']['unit_net_value'].tolist()
     unit_seris['date'] = results["sys_analyser"]['portfolio']['unit_net_value'].index.tolist()
     expre_result_fra = pd.DataFrame(expre_result)
@@ -72,5 +72,5 @@ def bayesian_opt(expression):
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     return results["sys_analyser"]['summary']['unit_net_value']
 if __name__ == "__main__":
-    optimal_expre(off_line = False)
+    optimal_expre(off_line = True)
     #singel_expre_test()
