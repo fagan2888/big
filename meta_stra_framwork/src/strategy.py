@@ -136,7 +136,7 @@ def handle_bar(context, bar_dict):
     after_trading(context)
     #plot('market', context.portfolio.market_value/context.portfolio.total_value)
     #plot('stocknum', len(context.operlist))
-    #print('%s, %4.2f, %10.2f' % (now, context.portfolio.market_value/context.portfolio.total_value, context.portfolio.total_value))
+    print('%s, %4.2f, %10.2f' % (now, context.portfolio.market_value/context.portfolio.total_value, context.portfolio.total_value))
 def after_trading(context):
     pass
 

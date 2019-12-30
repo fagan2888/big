@@ -4,56 +4,81 @@ import json
 import copy
 import re
 from rqdata import up_file,now_file
+import params
 
 def threshold_sig(data,type_name):
+    if('HS' in type_name):
+        param =  params.PARAMS
+        HS_code = param.HS_code
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index]
+    else:
+        use_data = copy.copy(data)
     index_name,index_thre,thre_direction = type_name.split('&')[0].split('#')
     index_thre = float(index_thre)
     if(thre_direction == '1'): 
-        data[type_name] = (data[index_name] >= index_thre)*1
+        data[type_name] = (use_data[index_name] >= index_thre)*1
     elif(thre_direction == '0'):
-        data[type_name] = (data[index_name] <= index_thre)*1
+        data[type_name] = (use_data[index_name] <= index_thre)*1
     return data    
     
 def diff_sig(data,type_name):
+    if('HS' in type_name):
+        param =  params.PARAMS
+        HS_code = param.HS_code
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+    else:
+        use_data = copy.copy(data)
     index_name_1,index_name_2,thre_direction = type_name.split('&')[0].split('#')
     if(index_name_1 == index_name_2):
         print('error,two same index can not cal sig')
     else:
         if(thre_direction == '0'): 
-            data[type_name] = ((data[index_name_1]-data[index_name_2])<0)*1
+            data[type_name] = ((use_data[index_name_1]-use_data[index_name_2])<0)*1
         elif(thre_direction == '1' ):
-            data[type_name] = ((data[index_name_1]-data[index_name_2])>0)*1
+            data[type_name] = ((use_data[index_name_1]-use_data[index_name_2])>0)*1
     return data
 
 def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
+    if('HS' in type_name):
+        param =  params.PARAMS
+        HS_code = param.HS_code
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+    else:
+        use_data = copy.copy(data)
     index_name_short,index_name_long,thre_direction = type_name.split('&')[0].split('#')
     if(index_name_short == index_name_long):
         print('error,two same index can not cal sig')
     else:
         if(thre_direction == '1'):
-            now = (data[index_name_short]-data[index_name_long])>0
-            yes = (data[index_name_short]-data[index_name_long])<0
+            now = (use_data[index_name_short]-use_data[index_name_long])>0
+            yes = (use_data[index_name_short]-use_data[index_name_long])<0
             result = now.shift(1)*yes
             result.iloc[0] = 0
         elif(thre_direction == '0'):
-            now = (data[index_name_short]-data[index_name_long])<0
-            yes = (data[index_name_short]-data[index_name_long])>0
+            now = (use_data[index_name_short]-use_data[index_name_long])<0
+            yes = (use_data[index_name_short]-use_data[index_name_long])>0
             result = now.shift(1)*yes
             result.iloc[0] = 0
         data[type_name] = result
     return data
 
 def trend_sig(data,type_name):
+    if('HS' in type_name):
+        param =  params.PARAMS
+        HS_code = param.HS_code
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+    else:
+        use_data = copy.copy(data)
     index_name,trend_num,thre_direction = type_name.split('&')[0].split('#')
     trend_num = int(trend_num)
-    if(len(data) < trend_num):
+    if(len(use_data) < trend_num):
         print('error,can not cal trend sig length less than trend num')
         return data
     if(thre_direction == '1' ):
-        d = data[index_name].diff()
+        d = use_data[index_name].diff()
         d = d.apply(lambda x:x/x if x>0 else x-x)
     elif(thre_direction == '0' ):
-        d = data[index_name].diff()
+        d = use_data[index_name].diff()
         d = d.apply(lambda x:x/x if x<0 else x-x)
     trend = []
     for i in range(len(data)):
