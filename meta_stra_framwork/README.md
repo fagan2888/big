@@ -14,6 +14,8 @@
     diff.py 分数阶差分
     Cal_fra.py 信号组合
     get_new_expre.py 得到不同参数的表达式
+    quick_sig.py 快速计算信号，等同于sig_fra.py
+    get_new_expre.py 根据给定的信号公式得到新的参数公式列表
 # 回测
     strategy,py 策略回测
 # 使用方法
