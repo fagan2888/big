@@ -97,5 +97,5 @@ def bayesian_opt(expression):
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     return results["sys_analyser"]['summary']['unit_net_value']
 if __name__ == "__main__":
-    #optimal_expre(off_line = True)
+    #optimal_expre()
     singel_expre_test()

@@ -19,8 +19,8 @@ sys.path.append(up_file)
 
 PARAMS = defaultdict(
 begin_date = 20150101,#信号计算开始日期
-code_list = ['600000.XSHG','000001.XSHE'],
-#code_list = get_code_list(),#信号计算的股票池
+#code_list = ['600000.XSHG','000001.XSHE'],
+code_list = get_code_list(),#信号计算的股票池
 get_code_data = False,#是否重新获得原始数据
 HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
 signal_lf = [1,1,1,1,1], #分别对应下面五种信号的生命周期,阈值，交叉，趋势，比较，计数
@@ -36,10 +36,11 @@ _signal_save_path = up_file+'/result/mul/', #信号结果储存地址
 # 如果不想要时间对标信号，可以写一个永远不会成立的时间对标信号，比如low#high#1&diff,这样
 # 计数型信号就会计算100天内其他信号发生的次数
 # 信号组合可以使用+和*进行或和且逻辑运算,指标名称可在index_24中查询
-_Expression = ['close_MA_5#close_MA_30#1&cross','close_MA_5#1#0&trend'],
+#_Expression = ['close_MA_5#close_MA_30#1&cross','close_MA_5#1#0&trend'],
 #_Expression = ['close_MA_5#close_MA_20#1&cross','close_MA_5#close_MA_10#0&cross'],  
 #_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close_EMA_15#2#1&trend*close_EMA_25#2#1&trend*MACD#0#1&thre*close#close_shift_4#1&diff*K#40#1&thre&HS',
                 #'MACD#0#0&thre+K#40#0&thre&HS'],
+_Expression = ['close#2#0&trend&HS*MACD#2#1&trend*MB#2#1&trend','close#2#1&trend&HS*MACD#2#0&trend*MB#2#0&trend'],
 #=['close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*high#close_EMA_20#0&close_EMA_20#close_EMA_50#1&3&cross&cross&times+close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*low#close_EMA_50#1&close_EMA_20#close_EMA_50#1&3&cross&cross&times',
                 #'close_EMA_20#close_EMA_50#0&diff*close_EMA_20#close_EMA_50#0&cross*high#close_EMA_20#1&close_EMA_20#close_EMA_50#0&1&cross&cross&times'],
 # 回测参数，目前设定是第二天开盘买入，当天收盘卖出，每次以资金的三分之一操作，默认

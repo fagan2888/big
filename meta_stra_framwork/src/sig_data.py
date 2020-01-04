@@ -91,6 +91,7 @@ def cal_index_data(code):
         data = index_24.calculateKUpperLength(data)
         data = index_24.calculateKLowerLength(data)
         data = index_24.calculateMeanAmplitude(data,10)
+        data = index_24.calculateBOLL(data,20)
         #print(data)
         data.to_csv(up_file+'/index/'+code+'.csv',header=True, index='date')
         return 1
