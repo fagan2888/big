@@ -12,7 +12,21 @@ import quick_sig as qs
 import time
 import sig_data
 import os
+import sharpe_2 as s2
+
 single_expre_save_path = up_file+'/result/single/single.xlsx'
+unit_save_path = up_file+'/result/single/unit.xlsx'
+
+def get_year_result(unit_seris,summ):
+    date = unit_seris.index.tolist()
+    year_list = list(set([x.year for x in date]))
+    for year in year_list:
+        one_unit = unit_seris.loc[str(year)+'0101':str(year)+'1231']
+        one_list = one_unit.tolist()
+        summ[str(year)+'max_draw_down'] = s2.Max_Draw_Down_List(one_list)
+        summ[str(year)+'Sharpe'] = s2.Sharpe_2(one_list)
+        summ[str(year)+'Total_Return'] = s2.Total_Return(one_list)
+    return summ
 
 def add_new_result(old,new):
     if(len(old)==0):
@@ -22,6 +36,31 @@ def add_new_result(old,new):
     for key in new.keys():
         old[key].append(new[key])
     return old
+
+def save_backtest_result(summ):
+    if not os.path.exists(single_expre_save_path):
+        all_re = pd.DataFrame(summ,index = [0])
+    else:
+        all_re = pd.read_excel(single_expre_save_path,index_col = 0)
+        all_re.loc[len(all_re)] = summ
+    all_re.to_excel(single_expre_save_path)
+
+def save_unit_result(unit_seris,benchmark_unit,ori_expre):
+    if os.path.exists(unit_save_path):
+        unit_fra = pd.read_excel(unit_save_path,index_col = 0)
+        if(len(unit_fra) == len(unit_seris)):
+            unit_fra[str(ori_expre)] = unit_seris.tolist()
+        else:
+            unit_dict = {}
+            unit_dict[str(ori_expre)] = unit_seris.tolist()
+            unit_dict['benchmark'] = benchmark_unit.tolist()
+            unit_fra = pd.DataFrame(unit_dict,index = unit_seris.index.tolist())
+    else:
+        unit_dict = {}
+        unit_dict[str(ori_expre)] = unit_seris.tolist()
+        unit_dict['benchmark'] = benchmark_unit.tolist()
+        unit_fra = pd.DataFrame(unit_dict,index = unit_seris.index.tolist())
+    unit_fra.to_excel(unit_save_path)
 
 def singel_expre_test(off_line = False):
     param =  params.PARAMS
@@ -37,16 +76,14 @@ def singel_expre_test(off_line = False):
         sig_data.cal_index_data(HS_code)
     qs.get_signal(_code_list,ori_expre)
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
+    unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
+    benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
     summ = results['sys_analyser']['summary']
     summ['strategy_name'] = str(ori_expre)
     summ['stock_num'] = len(code_list)
-    if not os.path.exists(single_expre_save_path):
-        all_re = pd.DataFrame(summ,index = [0])
-    else:
-        all_re = pd.read_excel(single_expre_save_path,index_col = 0)
-        all_re.loc[len(all_re)] = summ
-    all_re.to_excel(single_expre_save_path)
-
+    summ = get_year_result(unit_seris,summ)
+    save_backtest_result(summ)
+    save_unit_result(unit_seris,benchmark_unit,ori_expre)
 def optimal_expre(off_line = False):
     param =  params.PARAMS
     if(param['get_code_data']):
