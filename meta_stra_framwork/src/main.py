@@ -96,6 +96,7 @@ def singel_expre_test(off_line = False):
     summ['strategy_name'] = str(ori_expre)
     summ['stock_num'] = len(code_list)
     save_result(unit_seris,ori_expre,summ,benchmark_unit)
+    return results
 def optimal_expre(off_line = False):
     param =  params.PARAMS
     if(param['get_code_data']):
