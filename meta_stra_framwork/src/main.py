@@ -13,6 +13,7 @@ import time
 import sig_data
 import os
 import sharpe_2 as s2
+import KB
 
 single_expre_save_path = up_file+'/result/single/single.xlsx'
 unit_save_path = up_file+'/result/single/unit.xlsx'
@@ -79,7 +80,8 @@ def save_result(unit_seris,ori_expre,summ,benchmark_unit):
 def singel_expre_test(off_line = False):
     param =  params.PARAMS
     if(param['get_code_data']):
-        copydata.main(param['code_list'])
+        #copydata.main(param['code_list'])
+        KB.copy_day_data(param['code_list'])
     ori_expre,code_list = param['_Expression'],param['code_list']
     _code_list = copy.copy(code_list)
     if(not off_line):
