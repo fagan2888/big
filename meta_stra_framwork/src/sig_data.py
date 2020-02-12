@@ -33,6 +33,17 @@ def get_wm_offline_data(code):
     wm_pd.set_index(["date"], inplace=True)
     return wm_pd
 
+def get_wm_mongo_data(code):
+    if('XSHG' not in code and 'XSHE' not in code):
+        code = code.replace('SH','XSHG').replace('SZ','XSHE')
+    try:
+        wm_pd = pd.read_excel(up_file+'/day_data/'+code+'.xlsx')
+    except Exception as e:
+        print('offline',code,e)
+    wm_pd['date'] = [int(i) for i in wm_pd['date']]
+    wm_pd.set_index(["date"], inplace=True)
+    return wm_pd
+
 def get_wm_data(code):
     data = rqdata.history_bars(code,start='20120101',end='20190422')['data']#通过tornado获取数据
     #print(data)
@@ -41,7 +52,8 @@ def get_wm_data(code):
 
 def cal_index_data(code):
     try:
-        data = get_wm_offline_data(code)
+        #data = get_wm_offline_data(code)
+        data = get_wm_mongo_data(code)
         #data = get_wm_data(code)#通过tornado获取数据
         #print(data)
         data = index_24.calculateEMA(data,'close',5)
@@ -118,7 +130,8 @@ def get_windows_data(code,date,w):
 def get_dp_trade_date(code):
     #return get_wm_data('999999.SH').index.values
     #code = '999999.SH'
-    dp_index = get_wm_offline_data(code).index.values
+    #dp_index = get_wm_offline_data(code).index.values
+    dp_index = get_wm_mongo_data(code).index.values
     #dp_index = np.array([str(i) for i in dp_index])
     dp_index = np.array([int(i) for i in dp_index])
     return dp_index

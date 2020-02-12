@@ -46,7 +46,7 @@ def get_all_industry_code_list():
 def copy_data(code):
     #print(time.strftime("%Y%m%d", time.localtime()))
     L = rq.history_bars(code, end=time.strftime("%Y%m%d", time.localtime()), fmt='list')['data']
-    #L = rq.history_bars(code, end='20190419', fmt='list')['data']
+    #L = rq.history_bars(code, end='20190619', fmt='list')['data']
     f = open(up_file+'/wmdata/'+code,'w',encoding='utf-8')
     f.write(json.dumps(L))
     f.close() 
