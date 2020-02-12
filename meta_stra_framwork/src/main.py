@@ -88,7 +88,7 @@ def singel_expre_test(off_line = False):
                 _code_list.remove(code)
         HS_code = param['HS_code']
         sig_data.cal_index_data(HS_code)
-    qs.get_signal(_code_list,ori_expre)
+    qs.get_signal(_code_list,ori_expre,param['begin_date'])
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
     benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
@@ -117,7 +117,7 @@ def optimal_expre(off_line = False):
     for new_expre in new_expre_list: 
         try:
             start = time.clock()
-            qs.get_signal(_code_list,new_expre)
+            qs.get_signal(_code_list,new_expre,param['begin_date'])
             end = time.clock()
             print('sig',str(end-start))
             start = time.clock()

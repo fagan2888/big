@@ -173,17 +173,17 @@ def replace_exp(expression_list,data,code):
     #data.to_csv(up_file+'/index/'+code+'.csv')
     return data[expression_list]>0
 
-def get_trade_date(code,expression):
-    data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date')
+def get_trade_date(code,expression,begin_date):
+    data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
     code_sig = replace_exp(expression,data,code)
     code_sig.loc[:,'code'] = code
     return code_sig[code_sig[expression[0]]]['code'],code_sig[code_sig[expression[1]]]['code']
 
-def get_signal(_code_list,expression):
+def get_signal(_code_list,expression,begin_date):
     all_buy,all_sell = pd.Series([]),pd.Series([])
     for code in _code_list:
         try:
-            buy_date,sell_date = get_trade_date(code,expression)
+            buy_date,sell_date = get_trade_date(code,expression,begin_date)
             all_buy = all_buy.append(buy_date)
             all_sell = all_sell.append(sell_date)
         except Exception as e:
