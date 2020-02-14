@@ -1,5 +1,5 @@
 import params
-from sig_meta_stratege import main
+#from sig_meta_stratege import main
 from strategy import init,handle_bar
 from rqalpha import run_func
 import copydata
@@ -82,6 +82,7 @@ def singel_expre_test(off_line = False):
     if(param['get_code_data']):
         #copydata.main(param['code_list'])
         KB.copy_day_data(param['code_list'])
+        KB.copy_day_data([param['HS_code']])
     ori_expre,code_list = param['_Expression'],param['code_list']
     _code_list = copy.copy(code_list)
     if(not off_line):
@@ -148,6 +149,9 @@ def bayesian_opt(expression):
                 HS_code = param['HS_code'])
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     return results["sys_analyser"]['summary']['unit_net_value']
+
+
+
 if __name__ == "__main__":
     #optimal_expre()
     singel_expre_test()

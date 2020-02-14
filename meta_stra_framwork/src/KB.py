@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np 
 import Data_mongo
 import os
-from Data_mongo import up_file
+from rqdata import up_file,now_file
 import tushare as ts
 
 d_name_list = ['date','code','open','close','zf','kb_num','1d_zf',
@@ -94,5 +94,5 @@ def copy_day_data(code_list):
 
 if __name__ == "__main__":
     #get_mongo_data()
-    #get_hs300_min_data()
-    get_hs300_day_data()
+    code_list = ['000001.XSHE']
+    copy_min_data(code_list)
