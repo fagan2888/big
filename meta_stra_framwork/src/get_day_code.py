@@ -11,6 +11,36 @@ import sig_data
 import os
 import KB
 
+import smtplib
+from email.mime.multipart import MIMEMultipart    
+from email.mime.text import MIMEText    
+from email.mime.image import MIMEImage 
+from email.header import Header 
+
+def email(estr,subject):
+    username = 'lsz17801016296@163.com'
+    password = 'mnbb456123'
+    now_time = time.strftime("%Y%m%d", time.localtime())
+
+    msg = MIMEMultipart('mixed') 
+    msg['Subject'] = now_time+' '+subject
+    msg['From'] = 'lsz17801016296@163.com <lsz17801016296@163.com>'
+    msg['To'] = 'lsz19960814@163.com'
+    #收件人为多个收件人,通过join将列表转换为以;为间隔的字符串
+    #msg['To'] = ";".join(receiver) 
+    msg['Date'] = now_time
+
+    #构造文字内容      
+    text_plain = MIMEText(estr,'plain', 'utf-8')    
+    msg.attach(text_plain)    
+
+    smtp = smtplib.SMTP() 
+    smtp.connect('smtp.163.com',25) 
+    smtp.login(username, password) 
+    smtp.sendmail('lsz17801016296@163.com','lsz19960814@163.com', msg.as_string()) 
+    smtp.quit()
+
+
 def get_day_code():
     param =  params.PARAMS
     KB.copy_day_data(param['code_list'])
@@ -31,6 +61,9 @@ def get_day_code():
     new_sell = new_code[new_code['operation'] == 'long_sell']['code']
     print('buy',new_buy.values)
     print('sell',new_sell.values)
+    email(str(new_buy.values),'buy')
+    email(str(new_sell.values),'sell')
+
 
 if __name__ == "__main__":
     get_day_code()
