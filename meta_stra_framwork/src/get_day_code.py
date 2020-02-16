@@ -35,7 +35,7 @@ def email(estr,subject):
     msg.attach(text_plain)    
 
     smtp = smtplib.SMTP() 
-    smtp.connect('smtp.163.com',25) 
+    smtp.connect('smtp.163.com') 
     smtp.login(username, password) 
     smtp.sendmail('lsz17801016296@163.com','lsz19960814@163.com', msg.as_string()) 
     smtp.quit()
