@@ -1,7 +1,7 @@
 import sys,os
 from collections import defaultdict
 import tushare as ts
-
+import pandas as pd
 
 def get_code_list():
     code_list = ts.get_hs300s()['code']
@@ -12,6 +12,10 @@ def get_code_list():
             code_list[i] = str(code_list[i]) + '.XSHE'
     return code_list.tolist()
 
+def get_st_code():
+    st = pd.read_excel('/Users/wode/Desktop/学校/系统方案备份/sig_inter.xlsx',index_col = 0)
+    return st[st['5day_fre']>0.5].index.tolist()
+
 now_file = os.path.abspath(os.path.dirname(__file__))
 up_file = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(up_file)
@@ -20,8 +24,9 @@ sys.path.append(up_file)
 PARAMS = defaultdict(
 begin_date = 20150101,#信号计算开始日期
 #code_list = ['600000.XSHG','002422.XSHE'],
+#code_list = get_st_code(),#
 code_list = get_code_list(),#信号计算的股票池
-get_code_data = True,#是否重新获得原始数据
+get_code_data = False,#True,#是否重新获得原始数据
 #get_code_data = False,#是否重新获得原始数据
 HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
 signal_lf = [1,1,1,1,1], #分别对应下面五种信号的生命周期,阈值，交叉，趋势，比较，计数
@@ -55,8 +60,8 @@ _config = {
     {
           "benchmark": "399300.XSHE", #基准
           "margin_multiplier": 1.4, #
-          "start_date": "2016-11-30", #回测开始日期
-          "end_date":   "2017-01-17", #回测结束日期
+          "start_date": "2015-01-03", #回测开始日期
+          "end_date":   "2020-02-17", #回测结束日期
           "frequency": "1d", #回测频率
           "accounts":{
             "stock":  100000000, #回测本金

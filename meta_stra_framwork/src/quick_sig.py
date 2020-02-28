@@ -197,5 +197,5 @@ def get_signal(_code_list,expression,begin_date):
     signal = sell_df.append(buy_df)
     signal['time'] = [str(x) for x in signal.index.tolist()]
     result = signal.reset_index(drop=True).sort_values(by = ['time'],axis = 0,ascending = True)
-    result.to_csv(up_file+'/result/quick/quick_sig.csv')
-    return 1
+    
+    return result

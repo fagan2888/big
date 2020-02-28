@@ -25,7 +25,7 @@ def email(estr,subject):
     msg = MIMEMultipart('mixed') 
     msg['Subject'] = now_time+' '+subject
     msg['From'] = 'lsz17801016296@163.com <lsz17801016296@163.com>'
-    msg['To'] = 'lsz19960814@163.com'
+    msg['To'] = 'lsz495506796@163.com'
     #收件人为多个收件人,通过join将列表转换为以;为间隔的字符串
     #msg['To'] = ";".join(receiver) 
     msg['Date'] = now_time
@@ -37,7 +37,7 @@ def email(estr,subject):
     smtp = smtplib.SMTP() 
     smtp.connect('smtp.163.com') 
     smtp.login(username, password) 
-    smtp.sendmail('lsz17801016296@163.com','lsz19960814@163.com', msg.as_string()) 
+    smtp.sendmail('lsz17801016296@163.com','lsz495506796@163.com', msg.as_string()) 
     smtp.quit()
 
 
@@ -52,7 +52,8 @@ def get_day_code():
             _code_list.remove(code)
     HS_code = param['HS_code']
     sig_data.cal_index_data(HS_code)
-    qs.get_signal(_code_list,ori_expre,param['begin_date'])
+    result = qs.get_signal(_code_list,ori_expre,param['begin_date'])
+    result.to_csv(up_file+'/result/quick/quick_sig_2.csv')
     new_signal = pd.read_csv(up_file+'/result/quick/quick_sig.csv')
     now_time = time.strftime("%Y%m%d", time.localtime())
     new_code = new_signal[new_signal['time'] == int(now_time)]

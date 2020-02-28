@@ -54,7 +54,7 @@ def save_unit_result(unit_seris,benchmark_unit,ori_expre):
     if os.path.exists(unit_save_path):
         unit_fra = pd.read_excel(unit_save_path,index_col = 0)
         if(len(unit_fra) == len(unit_seris)):
-            unit_fra[str(ori_expre)] = unit_seris.tolist()
+            unit_fra[str(ori_expre)+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())] = unit_seris.tolist()
         else:
             unit_dict = {}
             unit_dict[str(ori_expre)] = unit_seris.tolist()
@@ -91,7 +91,8 @@ def singel_expre_test(off_line = False):
                 _code_list.remove(code)
         HS_code = param['HS_code']
         sig_data.cal_index_data(HS_code)
-    qs.get_signal(_code_list,ori_expre,param['begin_date'])
+    result = qs.get_signal(_code_list,ori_expre,param['begin_date'])
+    result.to_csv(up_file+'/result/quick/quick_sig.csv')
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
     benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
