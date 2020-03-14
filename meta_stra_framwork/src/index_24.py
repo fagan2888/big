@@ -241,7 +241,7 @@ def calculateCR(df,period,d = 0):
         P1=sum(highArray[i+1-period:i+1]-YM)
         P2=sum(YM-lowArray[i+1-period:i+1])
         CR.append(P1/P2*100)
-    _df['CR']=CR
+    _df['CR_'+str(period)]=CR
     return _df
 
 def calculateCCI(df,period=14,d = 0):#word算法错误
@@ -389,7 +389,7 @@ def calculatePSY(df,period,d = 0):
             if(closeArray[j]>closeArray[j-1]):
                 up_number+=1
         PSY.append(up_number/period*100)
-    _df['PSY']=PSY
+    _df['PSY'+str(period)]=PSY
     return _df
 
 def calculateAR_BR(df,period=26,d = 0):
@@ -543,7 +543,7 @@ def calculateSAR(df, period):#4月6号新写
         max_T_old=max_T_new
         min_T_old=min_T_new
     SAR=add_nan(SAR,len_data%period+1)
-    df['SAR']=SAR
+    df['SAR_'+str(period)]=SAR
     return df
 
 def calculateDMI(df,period1,period2):#添加+DI -DI ADX ADXR 指标

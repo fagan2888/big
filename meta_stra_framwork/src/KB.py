@@ -91,8 +91,10 @@ def copy_day_data(code_list):
         if(not all_data.empty):
             print('copy '+code+' finished')
             all_data.to_excel(up_file+'/day_data/'+code+'.xlsx')
+        else:
+            print('copy '+code+' falled')
 
 if __name__ == "__main__":
     #get_mongo_data()
-    code_list = ['000001.XSHE']
-    copy_min_data(code_list)
+    code_list = pd.read_excel(now_file+'/all_code.xlsx')['code']
+    copy_day_data(code_list)

@@ -61,6 +61,7 @@ def cal_index_data(code):
         data = index_24.calculateEMA(data,'close',14)
         data = index_24.calculateEMA(data,'close',21)
         data = index_24.calculateEMA(data,'close',3)
+        '''
         data = index_24.calculateEMA(data,'close',15)
         data = index_24.calculateEMA(data,'close',30)
         data = index_24.calculateEMA(data,'close',45)
@@ -71,6 +72,7 @@ def cal_index_data(code):
         data = index_24.calculateEMA(data,'close',20)
         data = index_24.calculateEMA(data,'close',40)
         data = index_24.calculateEMA(data,'close',80)
+        '''
         data = index_24.calculateTD(data,'close',5,'EMA',3)
         data = index_24.calculateTD(data,'close',10,'EMA',3)
         data = index_24.calculateTD(data,'close',20,'EMA',3)
@@ -104,6 +106,16 @@ def cal_index_data(code):
         data = index_24.calculateKLowerLength(data)
         data = index_24.calculateMeanAmplitude(data,10)
         data = index_24.calculateBOLL(data,20)
+        data = index_24.calculateCR(data,5)
+        data = index_24.calculateCCI(data)
+        data = index_24.calculateMTM_1(data)
+        data = index_24.calculateOBV(data)
+        data = index_24.calculateTRIX(data,4,2)
+        #data = index_24.calculateSAR(data,6)
+        data = index_24.calculateVR(data)
+        data = index_24.calculateAR_BR(data)
+        data = index_24.calculatePSY(data,6)
+        #data = index_24.
         #print(data)
         data.to_csv(up_file+'/index/'+code+'.csv',header=True, index='date')
         return 1
@@ -136,4 +148,6 @@ def get_dp_trade_date(code):
     dp_index = np.array([int(i) for i in dp_index])
     return dp_index
 if __name__ == "__main__":
-    cal_index_data('000001.XSHE')
+    code_list = pd.read_excel(now_file+'/all_code.xlsx')['code']
+    for code in code_list:
+        cal_index_data(code)
