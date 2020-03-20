@@ -13,6 +13,7 @@ import warnings
 import json
 import index_24
 import rqdata
+import tb_index
 from rqdata import up_file,now_file
 #得到沃民的数据
 
@@ -50,6 +51,18 @@ def get_wm_data(code):
     data.set_index(["date"], inplace=True)
     return data
 
+def cal_tb_index_data(code):
+    #try:
+        #data = get_wm_offline_data(code)
+    data = get_wm_mongo_data(code)
+    data = tb_index.calculateAll_tbindex(data)
+    data.to_csv(up_file+'/tb_index/'+code+'.csv',header=True, index='date')
+    return 1
+    '''
+    except Exception as e:
+        print('calindex',code,e)
+        return 0
+    '''
 def cal_index_data(code):
     try:
         #data = get_wm_offline_data(code)
@@ -61,7 +74,6 @@ def cal_index_data(code):
         data = index_24.calculateEMA(data,'close',14)
         data = index_24.calculateEMA(data,'close',21)
         data = index_24.calculateEMA(data,'close',3)
-        '''
         data = index_24.calculateEMA(data,'close',15)
         data = index_24.calculateEMA(data,'close',30)
         data = index_24.calculateEMA(data,'close',45)
@@ -72,7 +84,6 @@ def cal_index_data(code):
         data = index_24.calculateEMA(data,'close',20)
         data = index_24.calculateEMA(data,'close',40)
         data = index_24.calculateEMA(data,'close',80)
-        '''
         data = index_24.calculateTD(data,'close',5,'EMA',3)
         data = index_24.calculateTD(data,'close',10,'EMA',3)
         data = index_24.calculateTD(data,'close',20,'EMA',3)
@@ -150,4 +161,4 @@ def get_dp_trade_date(code):
 if __name__ == "__main__":
     code_list = pd.read_excel(now_file+'/all_code.xlsx')['code']
     for code in code_list:
-        cal_index_data(code)
+        cal_tb_index_data(code)

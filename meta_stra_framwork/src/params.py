@@ -23,9 +23,9 @@ sys.path.append(up_file)
 
 PARAMS = defaultdict(
 begin_date = 20150101,#信号计算开始日期
-#code_list = ['600000.XSHG','002422.XSHE'],
+code_list = ['600000.XSHG','002422.XSHE'],
 #code_list = get_st_code(),#
-code_list = get_code_list(),#信号计算的股票池
+#code_list = get_code_list(),#信号计算的股票池
 get_code_data = False,#True,#是否重新获得原始数据
 #get_code_data = False,#是否重新获得原始数据
 HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
