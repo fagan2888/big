@@ -1,5 +1,0 @@
-time operation trade_price
-20150105 noo 6.11
-20150106 long 6.72
-20150107 long 6.63
-20150107 sell 6.63
