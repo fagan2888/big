@@ -57,12 +57,13 @@ def cal_tb_index_data(code):
     data = get_wm_mongo_data(code)
     data = tb_index.calculateAll_tbindex(data)
     data.to_csv(up_file+'/tb_index/'+code+'.csv',header=True, index='date')
-    return 1
     '''
     except Exception as e:
         print('calindex',code,e)
         return 0
     '''
+    return 1
+
 def cal_index_data(code):
     try:
         #data = get_wm_offline_data(code)
