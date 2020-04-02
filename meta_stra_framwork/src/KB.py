@@ -90,7 +90,7 @@ def copy_day_data(code_list):
         all_data = Data_mongo.get_day_data_mongo(code)
         if(not all_data.empty):
             print('copy '+code+' finished')
-            all_data.to_excel(up_file+'/day_data/'+code+'.xlsx')
+            all_data.to_csv(up_file+'/day_data/'+code+'.csv')
         else:
             print('copy '+code+' falled')
 
