@@ -14,6 +14,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import params
+import talib
 #from sig_meta_stratege import main
 from rqdata import up_file,now_file
 k = 10
@@ -52,8 +53,8 @@ def init(context):
     context.signals.time    = context.signals.time.map(lambda x:str(x))
     context.operlist        = []
     context.selllist        = []
-    context.opergroup       = 3
-
+    context.period       = 5
+    
 
 def before_trading(context):
     now = context.now.strftime('%Y%m%d')
@@ -111,6 +112,8 @@ def sell(context, bar_dict):
         for code, position in positions.items():
             if(code in context.selllist):
                 snap = current_snapshot(code)
+                history_prices = history_bars(code,context.period+1,'1d','close')
+                avg = talib.MA(history_prices,context.period)
                 if position.sellable > 0:
                     if is_suspended(code):
                         #停牌无法卖出
@@ -124,8 +127,13 @@ def sell(context, bar_dict):
                         #print('good limit_up', now, code)
                         continue
                     print('sell', now, code, position.sellable,snap.last)
+                    #止亏
                     if(snap.low<position.avg_price*0.99 and snap.high>position.avg_price*0.99):
                         order_target_percent(code,0,position.avg_price*0.99)
+                    #止盈
+                    elif(snap.low<position.avg_price*1.10 
+                    and snap.high>position.avg_price*1.10 and history_prices[-1] - avg[-1] < 0 and history_prices[-2] - avg[-2] > 0):
+                        order_target_percent(code,0,position.avg_price*1.05)
                     else:
                         order_target_percent(code, 0, snap.open)
 

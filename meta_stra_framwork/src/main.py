@@ -149,7 +149,7 @@ def bayesian_opt(expression):
                 Expression = expression,
                 HS_code = param['HS_code'])
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
-    return results["sys_analyser"]['summary']['unit_net_value']
+    return results["sys_analyser"][   'summary']['unit_net_value']
 
 
 
