@@ -13,7 +13,7 @@ import warnings
 import json
 import index_24
 import rqdata
-import tb_index
+#import tb_index
 from rqdata import up_file,now_file
 #得到沃民的数据
 
@@ -50,20 +50,20 @@ def get_wm_data(code):
     #print(data)
     data.set_index(["date"], inplace=True)
     return data
-
+'''
 def cal_tb_index_data(code):
     #try:
         #data = get_wm_offline_data(code)
     data = get_wm_mongo_data(code)
     data = tb_index.calculateAll_tbindex(data)
     data.to_csv(up_file+'/tb_index/'+code+'.csv',header=True, index='date')
-    '''
+    
     except Exception as e:
         print('calindex',code,e)
         return 0
-    '''
+    
     return 1
-
+'''
 def cal_index_data(code):
     try:
         #data = get_wm_offline_data(code)

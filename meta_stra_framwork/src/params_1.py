@@ -1,7 +1,7 @@
 import sys,os
 from collections import defaultdict
 import tushare as ts
-import pandas as pd
+
 
 def get_code_list():
     code_list = ts.get_hs300s()['code']
@@ -12,10 +12,6 @@ def get_code_list():
             code_list[i] = str(code_list[i]) + '.XSHE'
     return code_list.tolist()
 
-def get_st_code():
-    st = pd.read_excel('/Users/wode/Desktop/学校/系统方案备份/sig_inter.xlsx',index_col = 0)
-    return st[st['5day_fre']>0.5].index.tolist()
-
 now_file = os.path.abspath(os.path.dirname(__file__))
 up_file = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(up_file)
@@ -24,9 +20,8 @@ sys.path.append(up_file)
 PARAMS = defaultdict(
 begin_date = 20150101,#信号计算开始日期
 #code_list = ['600000.XSHG','002422.XSHE'],
-#code_list = get_st_code(),#
 code_list = get_code_list(),#信号计算的股票池
-get_code_data = False,#True,#是否重新获得原始数据
+get_code_data = True,#是否重新获得原始数据
 #get_code_data = False,#是否重新获得原始数据
 HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
 signal_lf = [1,1,1,1,1], #分别对应下面五种信号的生命周期,阈值，交叉，趋势，比较，计数
@@ -44,11 +39,8 @@ _signal_save_path = up_file+'/result/mul/', #信号结果储存地址
 # 信号组合可以使用+和*进行或和且逻辑运算,指标名称可在index_24中查询
 #_Expression = ['close_MA_5#close_MA_30#1&cross','close_MA_5#1#0&trend'],
 #_Expression = ['close_MA_5#close_MA_20#1&cross','close_MA_5#close_MA_10#0&cross'],  
-#_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close_EMA_15#2#1&trend*close_EMA_25#2#1&trend*MACD#0#1&thre*close#close_shift_4#1&diff*K#40#1&thre&HS',
-                #'MACD#0#0&thre+K#40#0&thre&HS'],#+close#close_MA_10#0&cross'],
-_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close#2#0&trend&HS*MACD#3#1&trend*MB#3#1&trend*K#40#1&thre&HS', 'close_EMA_7#close_EMA_15#0&diff*close#2#1&trend&HS*MACD#3#0&trend*MB#3#0&trend*K#40#0&thre&HS'],
-#_Expression = ['close_EMA_25#2#1&trend*MACD#0#1&thre+close_EMA_25#2#1&trend*K#40#0&thre&HS',
- #'MACD#0#0&thre*K#40#0&thre&HS*MACD#0#0&thre+MACD#0#0&thre*K#40#0&thre&HS*close_EMA_25#2#1&trend+MACD#0#0&thre*K#40#0&thre&HS*K#40#0&thre&HS'],
+_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close_EMA_15#2#1&trend*close_EMA_25#2#1&trend*MACD#0#1&thre*close#close_shift_4#1&diff*K#40#1&thre&HS',
+                'MACD#0#0&thre+K#40#0&thre&HS'],
 #_Expression = ['close#2#0&trend&HS*MACD#2#1&trend*MB#2#1&trend','close#2#1&trend&HS*MACD#2#0&trend*MB#2#0&trend'],
 #_Expression = ['close_EMA_12#close_EMA_26#1&cross*RSI_6#RSI_12#1&cross*J#D#1&cross','close_EMA_12#close_EMA_26#1&cross+RSI_6#RSI_12#1&cross+J#D#1&cross'],
 #=['close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*high#close_EMA_20#0&close_EMA_20#close_EMA_50#1&3&cross&cross&times+close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*low#close_EMA_50#1&close_EMA_20#close_EMA_50#1&3&cross&cross&times',
@@ -63,8 +55,8 @@ _config = {
     {
           "benchmark": "399300.XSHE", #基准
           "margin_multiplier": 1.4, #
-          "start_date": "2015-01-03", #回测开始日期
-          "end_date":   "2020-02-17", #回测结束日期
+          "start_date": "2016-11-30", #回测开始日期
+          "end_date":   "2017-01-17", #回测结束日期
           "frequency": "1d", #回测频率
           "accounts":{
             "stock":  100000000, #回测本金
