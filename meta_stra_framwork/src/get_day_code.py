@@ -19,13 +19,13 @@ from email.header import Header
 
 def email(estr,subject):
     username = 'lsz17801016296@163.com'
-    password = 'mnbb456123'
+    password = 'MKJQHGVZYYHTEEDP'
     now_time = time.strftime("%Y%m%d", time.localtime())
 
     msg = MIMEMultipart('mixed') 
     msg['Subject'] = now_time+' '+subject
     msg['From'] = 'lsz17801016296@163.com <lsz17801016296@163.com>'
-    msg['To'] = 'lsz495506796@163.com'
+    msg['To'] = '495506796@qq.com'
     #收件人为多个收件人,通过join将列表转换为以;为间隔的字符串
     #msg['To'] = ";".join(receiver) 
     msg['Date'] = now_time
@@ -37,7 +37,7 @@ def email(estr,subject):
     smtp = smtplib.SMTP() 
     smtp.connect('smtp.163.com') 
     smtp.login(username, password) 
-    smtp.sendmail('lsz17801016296@163.com','lsz495506796@163.com', msg.as_string()) 
+    smtp.sendmail('lsz17801016296@163.com','495506796@qq.com', msg.as_string()) 
     smtp.quit()
 
 

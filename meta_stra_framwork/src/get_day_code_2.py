@@ -55,7 +55,7 @@ def get_day_code():
     result = qs.get_signal(_code_list,ori_expre,param['begin_date'])
     result.to_csv(up_file+'/result/quick/quick_sig_2.csv')
     new_signal = pd.read_csv(up_file+'/result/quick/quick_sig_2.csv')
-    now_time = time.strftime("%Y%m%d", time.localtime())
+    now_time = '20200417'#time.strftime("%Y%m%d", time.localtime())
     new_code = new_signal[new_signal['time'] == int(now_time)]
     #print(new_signal['time'].values[-1],type(new_signal['time'].values[-1]),new_code)
     new_buy = new_code[new_code['operation'] == 'long']['code']

@@ -77,5 +77,5 @@ def main(stockcodes):
         copy_data(code)
 
 if __name__ == '__main__':
-    main()
-    #copy_data('000032.XSHE')
+    #main()
+    copy_data('000562.XSHE')

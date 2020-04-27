@@ -149,7 +149,7 @@ def get_1day_now_data(code,date):
         return [a['open'],a['close'],0]
 
 if __name__ == "__main__":
-    code = '000001.XSHE'
+    code = '000562.XSHE'
     #all_data = get_min_data_mongo(code)
     #all_data.to_excel(up_file+'/data/'+code+'.xlsx')
     #print(all_data)

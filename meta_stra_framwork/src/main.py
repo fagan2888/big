@@ -29,7 +29,7 @@ def get_year_result(writer,unit_seris,ori_expre):
         summ[str(year)+'max_draw_down'] = s2.Max_Draw_Down_List(one_list)
         summ[str(year)+'Sharpe'] = s2.Sharpe_2(one_list)
         summ[str(year)+'Total_Return'] = s2.Total_Return(one_list)
-    save_backtest_result(writer,summ,sheet_name = '分年')
+    save_backtest_result(writer,summ,ori_expre,sheet_name = '分年')
 
 def add_new_result(old,new):
     if(len(old)==0):
@@ -40,14 +40,14 @@ def add_new_result(old,new):
         old[key].append(new[key])
     return old
 
-def save_backtest_result(writer,summ,sheet_name = ''):
+def save_backtest_result(writer,summ,ori_expre,sheet_name = ''):
     df = pd.read_excel(single_expre_save_path, None)
     sheet_names = df.keys()
     if (sheet_name not in sheet_names):
         all_re = pd.DataFrame(summ,index = [0])
     else:
         all_re = pd.read_excel(single_expre_save_path,index_col = 0,sheet_name=sheet_name).T
-        all_re.loc[len(all_re)] = summ
+        all_re.loc[str(ori_expre)+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())] = summ
     all_re.T.to_excel(writer,sheet_name)
 
 def save_unit_result(unit_seris,benchmark_unit,ori_expre):
@@ -73,7 +73,7 @@ def save_result(unit_seris,ori_expre,summ,benchmark_unit):
         all_re.T.to_excel(single_expre_save_path,sheet_name= '综合')
     writer = pd.ExcelWriter(single_expre_save_path)
     get_year_result(writer,unit_seris,ori_expre)
-    save_backtest_result(writer,summ,sheet_name = '综合')
+    save_backtest_result(writer,summ,ori_expre,sheet_name = '综合')
     writer.save()
     save_unit_result(unit_seris,benchmark_unit,ori_expre)
 
@@ -155,4 +155,4 @@ def bayesian_opt(expression):
 
 if __name__ == "__main__":
     #optimal_expre()
-    singel_expre_test()
+    singel_expre_test(True)

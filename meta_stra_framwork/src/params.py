@@ -46,13 +46,17 @@ _signal_save_path = up_file+'/result/mul/', #信号结果储存地址
 #_Expression = ['close_MA_5#close_MA_20#1&cross','close_MA_5#close_MA_10#0&cross'],  
 #_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close_EMA_15#2#1&trend*close_EMA_25#2#1&trend*MACD#0#1&thre*close#close_shift_4#1&diff*K#40#1&thre&HS',
                 #'MACD#0#0&thre+K#40#0&thre&HS'],#+close#close_MA_10#0&cross'],
-_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close#2#0&trend&HS*MACD#3#1&trend*MB#3#1&trend*K#40#1&thre&HS', 'close_EMA_7#close_EMA_15#0&diff*close#2#1&trend&HS*MACD#3#0&trend*MB#3#0&trend*K#40#0&thre&HS'],
+#_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close#2#0&trend&HS*MACD#3#1&trend*MB#3#1&trend*K#40#1&thre&HS', 'close_EMA_7#close_EMA_15#0&diff*close#2#1&trend&HS*MACD#3#0&trend*MB#3#0&trend*K#40#0&thre&HS'],
 #_Expression = ['close_EMA_25#2#1&trend*MACD#0#1&thre+close_EMA_25#2#1&trend*K#40#0&thre&HS',
  #'MACD#0#0&thre*K#40#0&thre&HS*MACD#0#0&thre+MACD#0#0&thre*K#40#0&thre&HS*close_EMA_25#2#1&trend+MACD#0#0&thre*K#40#0&thre&HS*K#40#0&thre&HS'],
 #_Expression = ['close#2#0&trend&HS*MACD#2#1&trend*MB#2#1&trend','close#2#1&trend&HS*MACD#2#0&trend*MB#2#0&trend'],
 #_Expression = ['close_EMA_12#close_EMA_26#1&cross*RSI_6#RSI_12#1&cross*J#D#1&cross','close_EMA_12#close_EMA_26#1&cross+RSI_6#RSI_12#1&cross+J#D#1&cross'],
 #=['close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*high#close_EMA_20#0&close_EMA_20#close_EMA_50#1&3&cross&cross&times+close_EMA_20#close_EMA_50#1&diff*close_EMA_20#close_EMA_50#1&cross*low#close_EMA_50#1&close_EMA_20#close_EMA_50#1&3&cross&cross&times',
                 #'close_EMA_20#close_EMA_50#0&diff*close_EMA_20#close_EMA_50#0&cross*high#close_EMA_20#1&close_EMA_20#close_EMA_50#0&1&cross&cross&times'],
+_Expression = 
+['MACD#2#1&trend*close#2#1&trend&HS',
+ 'MB#2#0&trend*MACD#2#1&trend+MB#2#0&trend*close#2#0&trend&HS']
+,
 # 回测参数，目前设定是第二天开盘买入，当天收盘卖出，每次以资金的三分之一操作，默认
 # 是下跌1%时候止损卖出
 # 可以在strategy.py中更改
