@@ -101,7 +101,7 @@ def buy(context, bar_dict):
                 #print('bad limit_up', now, code)
                 #一字涨停无法买入
                 continue
-            print('buy', now, code, cash_each, snap.last)
+            #print('buy', now, code, cash_each, snap.last)
             order_value(code, cash_each,snap.last)
             
 def sell(context, bar_dict):
@@ -126,7 +126,7 @@ def sell(context, bar_dict):
                         #涨停不用卖出
                         #print('good limit_up', now, code)
                         continue
-                    print('sell', now, code, position.sellable,snap.last)
+                    #print('sell', now, code, position.sellable,snap.last)
                     #止亏
                     if(snap.low<position.avg_price*0.99 and snap.high>position.avg_price*0.99):
                         order_target_percent(code,0,position.avg_price*0.99)

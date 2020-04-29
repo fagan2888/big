@@ -9,7 +9,7 @@ import params
 def threshold_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date').loc[data.index]
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index]
     else:
         use_data = copy.copy(data)
     #print(type_name)
@@ -24,7 +24,7 @@ def threshold_sig(data,type_name):
 def diff_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
     index_name_1,index_name_2,thre_direction = type_name.split('&')[0].split('#')
@@ -40,7 +40,7 @@ def diff_sig(data,type_name):
 def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
     index_name_short,index_name_long,thre_direction = type_name.split('&')[0].split('#')
@@ -63,7 +63,7 @@ def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
 def trend_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
     index_name,trend_num,thre_direction = type_name.split('&')[0].split('#')
@@ -179,7 +179,7 @@ def replace_exp(expression_list,data,code):
 
 def get_trade_date(code,expression,begin_date):
     #data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
-    data = pd.read_csv(up_file+'/tb_index/'+code+'.csv',index_col='date').loc[begin_date:]
+    data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
     code_sig = replace_exp(expression,data,code)
     code_sig.loc[:,'code'] = code
     return code_sig[code_sig[expression[0]]]['code'],code_sig[code_sig[expression[1]]]['code']
