@@ -13,8 +13,9 @@ import warnings
 import json
 import index_24
 import rqdata
-#import tb_index
+import tb_index
 from rqdata import up_file,now_file
+import params
 #得到沃民的数据
 
 def get_wm_offline_data(code):
@@ -39,10 +40,11 @@ def get_wm_mongo_data(code):
         code = code.replace('SH','XSHG').replace('SZ','XSHE')
     try:
         wm_pd = pd.read_excel(up_file+'/day_data/'+code+'.xlsx')
+        wm_pd['date'] = [int(i) for i in wm_pd['date']]
+        wm_pd.set_index(["date"], inplace=True)
     except Exception as e:
+        wm_pd = []
         print('offline',code,e)
-    wm_pd['date'] = [int(i) for i in wm_pd['date']]
-    wm_pd.set_index(["date"], inplace=True)
     return wm_pd
 
 def get_wm_data(code):
@@ -50,20 +52,21 @@ def get_wm_data(code):
     #print(data)
     data.set_index(["date"], inplace=True)
     return data
-'''
+
 def cal_tb_index_data(code):
-    #try:
+    try:
         #data = get_wm_offline_data(code)
-    data = get_wm_mongo_data(code)
-    data = tb_index.calculateAll_tbindex(data)
-    data.to_csv(up_file+'/tb_index/'+code+'.csv',header=True, index='date')
-    
+        data = get_wm_mongo_data(code)
+        if(len(data)>0):
+            data = tb_index.calculateAll_tbindex(data)
+            data.to_csv(up_file+'/tb_index/'+code+'.csv',header=True, index='date')
+
     except Exception as e:
         print('calindex',code,e)
         return 0
     
     return 1
-'''
+
 def cal_index_data(code):
     try:
         #data = get_wm_offline_data(code)
@@ -141,7 +144,8 @@ def get_windows_data(code,date,w):
     #data = get_wm_data(code)
     #data = get_wm_offline_data(code)
     #print(up_file+'/index/'+code+'.csv')
-    data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date')
+    #data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date')
+    data = pd.read_csv(up_file+'/tb_index/'+code+'.csv',index_col='date')
     date_index = data.index.values
     #date_index = np.array([str(i) for i in date_index])
     date_index = np.array([int(i) for i in date_index])
@@ -160,6 +164,8 @@ def get_dp_trade_date(code):
     dp_index = np.array([int(i) for i in dp_index])
     return dp_index
 if __name__ == "__main__":
-    code_list = pd.read_excel(now_file+'/all_code.xlsx')['code']
-    for code in code_list:
-        cal_tb_index_data(code)
+    #code_list = params.get_code_list()
+    #print(len(code_list))
+    #for code in code_list:
+    code = '999999.XSHG'
+    cal_tb_index_data(code)

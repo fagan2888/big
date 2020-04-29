@@ -9,9 +9,10 @@ import params
 def threshold_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index]
+        use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date').loc[data.index]
     else:
         use_data = copy.copy(data)
+    #print(type_name)
     index_name,index_thre,thre_direction = type_name.split('&')[0].split('#')
     index_thre = float(index_thre)
     if(thre_direction == '1'): 
@@ -23,7 +24,7 @@ def threshold_sig(data,type_name):
 def diff_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
     index_name_1,index_name_2,thre_direction = type_name.split('&')[0].split('#')
@@ -39,7 +40,7 @@ def diff_sig(data,type_name):
 def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
     index_name_short,index_name_long,thre_direction = type_name.split('&')[0].split('#')
@@ -62,7 +63,7 @@ def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
 def trend_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
     index_name,trend_num,thre_direction = type_name.split('&')[0].split('#')
@@ -128,6 +129,7 @@ def remove_md(s):# 将不含括号的表达式里的乘除先递归计算完
  
 def add_sub(s):# 计算没有乘除的表达式，得出最后不包含括号表达式的运算结果
     l = re.findall(r'([\d\.]+|-|\+)',s)#将表达式转换成列表，
+    #print(l)
     if l[0] == '-':#如果第一个数是负数，对其进行处理
         l[0] = l[0] + l[1]
         del l[1]
@@ -166,15 +168,18 @@ def replace_exp(expression_list,data,code):
             new_expression = copy.copy(expression)
             for _type in type_list:
                 new_expression = copy.copy(new_expression.replace(_type,str(data[_type].iloc[i])))
-            #print(new_expression)
-            new_expre.append(calculate(new_expression))
+            if('nan' in new_expression):
+                new_expre.append(0)
+            else:
+                new_expre.append(calculate(new_expression))
         data[expression] = np.array(new_expre)
     
     data.to_csv(up_file+'/signal/'+code+'.csv')
     return data[expression_list]>0
 
 def get_trade_date(code,expression,begin_date):
-    data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
+    #data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
+    data = pd.read_csv(up_file+'/tb_index/'+code+'.csv',index_col='date').loc[begin_date:]
     code_sig = replace_exp(expression,data,code)
     code_sig.loc[:,'code'] = code
     return code_sig[code_sig[expression[0]]]['code'],code_sig[code_sig[expression[1]]]['code']
@@ -182,12 +187,12 @@ def get_trade_date(code,expression,begin_date):
 def get_signal(_code_list,expression,begin_date):
     all_buy,all_sell = pd.Series([]),pd.Series([])
     for code in _code_list:
-        try:
-            buy_date,sell_date = get_trade_date(code,expression,begin_date)
-            all_buy = all_buy.append(buy_date)
-            all_sell = all_sell.append(sell_date)
-        except Exception as e:
-            print(code,e) 
+        #try:
+        buy_date,sell_date = get_trade_date(code,expression,begin_date)
+        all_buy = all_buy.append(buy_date)
+        all_sell = all_sell.append(sell_date)
+        #except Exception as e:
+            #print(code,e) 
     buy_df = pd.DataFrame(all_buy)
     buy_df['operation'] = 'long'
     buy_df.columns = ['code','operation']
