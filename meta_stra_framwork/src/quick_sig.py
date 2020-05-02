@@ -9,6 +9,7 @@ import params
 def threshold_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
+        #print(data.index)
         use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index]
     else:
         use_data = copy.copy(data)
@@ -194,12 +195,13 @@ def get_trade_date(code,expression,begin_date):
 def get_signal(_code_list,expression,begin_date):
     all_buy,all_sell = pd.Series([]),pd.Series([])
     for code in _code_list:
-        #try:
-        buy_date,sell_date = get_trade_date(code,expression,begin_date)
-        all_buy = all_buy.append(buy_date)
-        all_sell = all_sell.append(sell_date)
-        #except Exception as e:
-            #print(code,e) 
+        try:
+        #print(code)
+            buy_date,sell_date = get_trade_date(code,expression,begin_date)
+            all_buy = all_buy.append(buy_date)
+            all_sell = all_sell.append(sell_date)
+        except Exception as e:
+            print(code,e) 
     buy_df = pd.DataFrame(all_buy)
     buy_df['operation'] = 'long'
     buy_df.columns = ['code','operation']

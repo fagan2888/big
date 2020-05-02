@@ -18,15 +18,17 @@ import KB
 single_expre_save_path = up_file+'/result/single/single.xlsx'
 unit_save_path = up_file+'/result/single/unit.xlsx'
 
-def get_year_result(writer,unit_seris,ori_expre):
+def get_year_result(writer,trade,unit_seris,ori_expre):
     summ = {}
     date = unit_seris.index.tolist()
     year_list = list(set([x.year for x in date]))
     summ['strategy_name'] = str(ori_expre)
     for year in year_list:
         one_unit = unit_seris.loc[str(year)+'0101':str(year)+'1231']
+        one_trade_num = len(trade.loc[str(year)+'-01-01 15:00:00':str(year)+'-12-31 15:00:00','side'])
         one_list = one_unit.tolist()
         summ[str(year)+'max_draw_down'] = s2.Max_Draw_Down_List(one_list)
+        summ[str(year)+'trade_num'] = one_trade_num 
         summ[str(year)+'Sharpe'] = s2.Sharpe_2(one_list)
         summ[str(year)+'Total_Return'] = s2.Total_Return(one_list)
     save_backtest_result(writer,summ,ori_expre,sheet_name = '分年')
@@ -67,12 +69,12 @@ def save_unit_result(unit_seris,benchmark_unit,ori_expre):
         unit_fra = pd.DataFrame(unit_dict,index = unit_seris.index.tolist())
     unit_fra.to_excel(unit_save_path)
 
-def save_result(unit_seris,ori_expre,summ,benchmark_unit):
+def save_result(unit_seris,ori_expre,summ,trade,benchmark_unit):
     if not os.path.exists(single_expre_save_path):
         all_re = pd.DataFrame(summ,index = [0])
         all_re.T.to_excel(single_expre_save_path,sheet_name= '综合')
     writer = pd.ExcelWriter(single_expre_save_path)
-    get_year_result(writer,unit_seris,ori_expre)
+    get_year_result(writer,trade,unit_seris,ori_expre)
     save_backtest_result(writer,summ,ori_expre,sheet_name = '综合')
     writer.save()
     save_unit_result(unit_seris,benchmark_unit,ori_expre)
@@ -97,9 +99,10 @@ def singel_expre_test(off_line = False):
     unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
     benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
     summ = results['sys_analyser']['summary']
+    _trade = results['sys_analyser']['trades']
     summ['strategy_name'] = str(ori_expre)
     summ['stock_num'] = len(code_list)
-    save_result(unit_seris,ori_expre,summ,benchmark_unit)
+    save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
     return results
 def optimal_expre(off_line = False):
     param =  params.PARAMS
