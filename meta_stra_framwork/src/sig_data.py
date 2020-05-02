@@ -131,6 +131,8 @@ def cal_index_data(code):
         data = index_24.calculateAR_BR(data)
         data = index_24.calculatePSY(data,6)
         data = index_24.calculatehistory(data,index_name = 'open',Period = 1)
+        data = index_24.calculatehistory(data,index_name = 'MACD',Period = 1)
+        data = index_24.calculatehistory(data,index_name = 'RSI_12',Period = 1)
         data = index_24.calculatehistory(data,index_name = 'K',Period = 1)
         data = index_24.calculatehistory(data,index_name = 'D',Period = 1)
         data = index_24.calculatehistory(data,index_name = 'close_MA_20',Period = 1)

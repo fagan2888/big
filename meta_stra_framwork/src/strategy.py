@@ -90,20 +90,23 @@ def buy(context, bar_dict):
         else:
             cash_each = cash / 100 * 0.9
         for code in context.operlist:
-            snap = current_snapshot(code)
-            if is_suspended(code):
-                #停牌无法买入
-                continue
-            if is_st_stock(code):
-                #st股票不考虑
-                continue
-            if snap.low >= snap.limit_up:
-                #print('bad limit_up', now, code)
-                #一字涨停无法买入
-                continue
-            #print('buy', now, code, cash_each, snap.last)
-            order_value(code, cash_each,snap.last)
-            
+            try:
+                snap = current_snapshot(code)
+                if is_suspended(code):
+                    #停牌无法买入
+                    continue
+                if is_st_stock(code):
+                    #st股票不考虑
+                    continue
+                if snap.low >= snap.limit_up:
+                    #print('bad limit_up', now, code)
+                    #一字涨停无法买入
+                    continue
+                #print('buy', now, code, cash_each, snap.last)
+                order_value(code, cash_each,snap.last)
+            except Exception as e:
+                print(code,e)
+
 def sell(context, bar_dict):
     now = context.now.strftime('%Y%m%d')
     #print(context.selllist)
@@ -111,31 +114,35 @@ def sell(context, bar_dict):
         positions = context.portfolio.positions
         for code, position in positions.items():
             if(code in context.selllist):
-                snap = current_snapshot(code)
-                history_prices = history_bars(code,context.period+1,'1d','close')
-                avg = talib.MA(history_prices,context.period)
-                if position.sellable > 0:
-                    if is_suspended(code):
-                        #停牌无法卖出
-                        continue
-                    if snap.last <= snap.limit_down:
-                        #print('bad limit_down', now, code)
-                        #一字跌停无法卖出
-                        continue
-                    if snap.last >= snap.limit_up:
-                        #涨停不用卖出
-                        #print('good limit_up', now, code)
-                        continue
-                    #print('sell', now, code, position.sellable,snap.last)
-                    #止亏
-                    if(snap.low<position.avg_price*0.99 and snap.high>position.avg_price*0.99):
-                        order_target_percent(code,0,position.avg_price*0.99)
-                    #止盈
-                    elif(snap.low<position.avg_price*1.10 
-                    and snap.high>position.avg_price*1.10 and history_prices[-1] - avg[-1] < 0 and history_prices[-2] - avg[-2] > 0):
-                        order_target_percent(code,0,position.avg_price*1.05)
-                    else:
-                        order_target_percent(code, 0, snap.open)
+                try:
+                    snap = current_snapshot(code)
+                    
+                    history_prices = history_bars(code,context.period+1,'1d','close')
+                    avg = talib.MA(history_prices,context.period)
+                    if position.sellable > 0:
+                        if is_suspended(code):
+                            #停牌无法卖出
+                            continue
+                        if snap.last <= snap.limit_down:
+                            #print('bad limit_down', now, code)
+                            #一字跌停无法卖出
+                            continue
+                        if snap.last >= snap.limit_up:
+                            #涨停不用卖出
+                            #print('good limit_up', now, code)
+                            continue
+                        #print('sell', now, code, position.sellable,snap.last)
+                        #止亏
+                        if(snap.low<position.avg_price*0.99 and snap.high>position.avg_price*0.99):
+                            order_target_percent(code,0,position.avg_price*0.99)
+                        #止盈
+                        elif(snap.low<position.avg_price*1.10 
+                        and snap.high>position.avg_price*1.10 and history_prices[-1] - avg[-1] < 0 and history_prices[-2] - avg[-2] > 0):
+                            order_target_percent(code,0,position.avg_price*1.05)
+                        else:
+                            order_target_percent(code, 0, snap.open)
+                except Exception as e:
+                    print(code,snap)
 
 def handle_bar(context, bar_dict):
     now = context.now.strftime('%Y%m%d')
