@@ -14,6 +14,7 @@ import sig_data
 import os
 import sharpe_2 as s2
 import KB
+import get_zl_expre
 
 single_expre_save_path = up_file+'/result/single/single.xlsx'
 unit_save_path = up_file+'/result/single/unit.xlsx'
@@ -104,6 +105,36 @@ def singel_expre_test(off_line = False):
     summ['stock_num'] = len(code_list)
     save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
     return results
+
+def circle_expre(off_line = False):
+    param =  params.PARAMS
+    if(param['get_code_data']):
+        #copydata.main(param['code_list'])
+        KB.copy_day_data(param['code_list'])
+        KB.copy_day_data([param['HS_code']])
+    expre_list = get_expression_list()
+    code_list = param['code_list']
+    _code_list = copy.copy(code_list)
+    if(not off_line):
+        for code in code_list:
+            if(sig_data.cal_index_data(code) == 0):
+                _code_list.remove(code)
+        HS_code = param['HS_code']
+        sig_data.cal_index_data(HS_code)
+    for ori_expre in expre_list:
+        result = qs.get_signal(_code_list,ori_expre,param['begin_date'])
+        result.to_csv(up_file+'/result/quick/quick_sig.csv')
+        results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
+        unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
+        benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
+        summ = results['sys_analyser']['summary']
+        _trade = results['sys_analyser']['trades']
+        summ['strategy_name'] = str(ori_expre)
+        summ['stock_num'] = len(code_list)
+        save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
+        return results
+
+
 def optimal_expre(off_line = False):
     param =  params.PARAMS
     if(param['get_code_data']):
