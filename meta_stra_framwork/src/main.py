@@ -26,7 +26,8 @@ def get_year_result(writer,trade,unit_seris,ori_expre):
     summ['strategy_name'] = str(ori_expre)
     for year in year_list:
         one_unit = unit_seris.loc[str(year)+'0101':str(year)+'1231']
-        one_trade_num = len(trade.loc[str(year)+'-01-01 15:00:00':str(year)+'-12-31 15:00:00','side'])
+        _trade_record = trade.loc[str(year)+'-01-01 15:00:00':str(year)+'-12-31 15:00:00',:]
+        one_trade_num = len(_trade_record)
         one_list = one_unit.tolist()
         summ[str(year)+'max_draw_down'] = s2.Max_Draw_Down_List(one_list)
         summ[str(year)+'trade_num'] = one_trade_num 
@@ -112,7 +113,7 @@ def circle_expre(off_line = False):
         #copydata.main(param['code_list'])
         KB.copy_day_data(param['code_list'])
         KB.copy_day_data([param['HS_code']])
-    expre_list = get_expression_list()
+    expre_list = get_zl_expre.get_expression_list_2()#get_zl_expre.get_expression_list()
     code_list = param['code_list']
     _code_list = copy.copy(code_list)
     if(not off_line):
@@ -122,17 +123,20 @@ def circle_expre(off_line = False):
         HS_code = param['HS_code']
         sig_data.cal_index_data(HS_code)
     for ori_expre in expre_list:
-        result = qs.get_signal(_code_list,ori_expre,param['begin_date'])
-        result.to_csv(up_file+'/result/quick/quick_sig.csv')
-        results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
-        unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
-        benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
-        summ = results['sys_analyser']['summary']
-        _trade = results['sys_analyser']['trades']
-        summ['strategy_name'] = str(ori_expre)
-        summ['stock_num'] = len(code_list)
-        save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
-        return results
+        print(ori_expre)
+        try:
+            result = qs.get_signal(_code_list,ori_expre,param['begin_date'])
+            result.to_csv(up_file+'/result/quick/quick_sig.csv')
+            results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
+            unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
+            benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
+            summ = results['sys_analyser']['summary']
+            _trade = results['sys_analyser']['trades']
+            summ['strategy_name'] = str(ori_expre)
+            summ['stock_num'] = len(code_list)
+            save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
+        except Exception as e:
+            print(e)
 
 
 def optimal_expre(off_line = False):
@@ -183,10 +187,11 @@ def bayesian_opt(expression):
                 Expression = expression,
                 HS_code = param['HS_code'])
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
-    return results["sys_analyser"][   'summary']['unit_net_value']
+    return results["sys_analyser"]['summary']['unit_net_value']
 
 
 
 if __name__ == "__main__":
     #optimal_expre()
-    singel_expre_test(True)
+    #singel_expre_test(True)
+    circle_expre(True)

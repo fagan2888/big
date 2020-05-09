@@ -83,3 +83,10 @@ def get_expression_list():
     return expre_list
     #sf.columns.values
     #best_zl_expre = sf.sort_index(axis = 0,ascending = True,by = [0]).index.values[-1]
+
+def get_expression_list_2():
+    expre_fra = pd.read_csv(up_file+'/expressions/results1_wzh_0422_r0.2.csv',index_col = 0)
+    new_stra_list = []
+    for i in expre_fra.values:#[0].split(',')[0].strip("[]''")
+        new_stra_list.append([i[0].split(',')[0].strip("[]''"),i[0].split(',')[1].strip("[]''")])
+    return new_stra_list

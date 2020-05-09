@@ -53,7 +53,7 @@ def get_one_data(use,signal,data,data_len):
 
 def get_zl_data(code_list):
     data = []
-    for code in code_list:
+    for code in code_list[0:2]:
         try:
             index = pd.read_csv(index_path+'/'+code+'.csv')
             signal = pd.read_csv(signal_path+'/'+code+'.csv')
@@ -70,7 +70,7 @@ def get_zl_data(code_list):
     result['data'] = data
     result["ind_type"] = get_ind_type(nei)
     # 字典转换成json 存入本地文件
-    with open(upfile+'/input.json','w') as f:
+    with open(up_file+'/input.json','w') as f:
         # 设置不转换成ascii  json字符串首缩进
         f.write( json.dumps(result,ensure_ascii=False,indent=2 ) )
 
