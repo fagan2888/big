@@ -15,6 +15,7 @@ import os
 import sharpe_2 as s2
 import KB
 import get_zl_expre
+import os
 
 single_expre_save_path = up_file+'/result/single/single.xlsx'
 unit_save_path = up_file+'/result/single/unit.xlsx'
@@ -113,7 +114,7 @@ def circle_expre(off_line = False):
         #copydata.main(param['code_list'])
         KB.copy_day_data(param['code_list'])
         KB.copy_day_data([param['HS_code']])
-    expre_list = get_zl_expre.get_expression_list_2()#get_zl_expre.get_expression_list()
+    expre_list = get_zl_expre.get_expression_list_3()#get_zl_expre.get_expression_list()
     code_list = param['code_list']
     _code_list = copy.copy(code_list)
     if(not off_line):

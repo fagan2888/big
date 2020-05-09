@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/root/meta_stra_framwork/src/get_day_code.py", line 10, in <module>
+    import sig_data
+  File "/root/meta_stra_framwork/src/sig_data.py", line 16, in <module>
+    import tb_index
+  File "/root/meta_stra_framwork/src/tb_index.py", line 3, in <module>
+    import talib as ta
+  File "/root/download/anconda/lib/python3.7/site-packages/talib/__init__.py", line 43, in <module>
+    from ._ta_lib import (
+ImportError: libta_lib.so.0: cannot open shared object file: No such file or directory
+Traceback (most recent call last):
+  File "/root/meta_stra_framwork/src/get_day_code.py", line 10, in <module>
+    import sig_data
+  File "/root/meta_stra_framwork/src/sig_data.py", line 16, in <module>
+    import tb_index
+  File "/root/meta_stra_framwork/src/tb_index.py", line 3, in <module>
+    import talib as ta
+  File "/root/download/anconda/lib/python3.7/site-packages/talib/__init__.py", line 43, in <module>
+    from ._ta_lib import (
+ImportError: libta_lib.so.0: cannot open shared object file: No such file or directory
+Traceback (most recent call last):
+  File "/root/meta_stra_framwork/src/get_day_code.py", line 10, in <module>
+    import sig_data
+  File "/root/meta_stra_framwork/src/sig_data.py", line 16, in <module>
+    import tb_index
+  File "/root/meta_stra_framwork/src/tb_index.py", line 3, in <module>
+    import talib as ta
+  File "/root/download/anconda/lib/python3.7/site-packages/talib/__init__.py", line 43, in <module>
+    from ._ta_lib import (
+ImportError: libta_lib.so.0: cannot open shared object file: No such file or directory
