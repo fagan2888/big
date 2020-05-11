@@ -13,7 +13,7 @@ import warnings
 import json
 import index_24
 import rqdata
-import tb_index
+#import tb_index
 from rqdata import up_file,now_file
 import params
 #得到沃民的数据
@@ -52,7 +52,7 @@ def get_wm_data(code):
     #print(data)
     data.set_index(["date"], inplace=True)
     return data
-
+'''
 def cal_tb_index_data(code):
     try:
         #data = get_wm_offline_data(code)
@@ -66,7 +66,7 @@ def cal_tb_index_data(code):
         return 0
     
     return 1
-
+'''
 def cal_index_data(code):
     try:
         #data = get_wm_offline_data(code)
@@ -139,6 +139,7 @@ def cal_index_data(code):
         data = index_24.calculatehistory(data,index_name = 'close_MA_10',Period = 1)
         data = index_24.calculatehistory(data,index_name = 'close_MA_5',Period = 1)
         data = index_24.calculatehistory(data,index_name = 'close',Period = 1)
+        data = index_24.calculatehistory(data,index_name = 'DEA',Period = 1)
         #data = index_24.
         #print(data)
         data.to_csv(up_file+'/index/'+code+'.csv',header=True, index='date')

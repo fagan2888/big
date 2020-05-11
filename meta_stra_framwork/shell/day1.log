@@ -1,0 +1,22 @@
+copy 600000.XSHG finished
+copy 600004.XSHG finished
+copy 600009.XSHG finished
+copy 600010.XSHG finished
+copy 600011.XSHG finished
+copy 600015.XSHG finished
+copy 600016.XSHG finished
+copy 600018.XSHG finished
+Traceback (most recent call last):
+  File "/root/meta_stra_framwork/src/get_day_code.py", line 70, in <module>
+    get_day_code()
+  File "/root/meta_stra_framwork/src/get_day_code.py", line 46, in get_day_code
+    KB.copy_day_data(param['code_list'])
+  File "/root/meta_stra_framwork/src/KB.py", line 93, in copy_day_data
+    all_data.to_excel(up_file+'/day_data/'+code+'.xlsx')
+  File "/root/download/anconda/lib/python3.7/site-packages/pandas/core/generic.py", line 2256, in to_excel
+    engine=engine,
+  File "/root/download/anconda/lib/python3.7/site-packages/pandas/io/formats/excel.py", line 739, in write
+    freeze_panes=freeze_panes,
+  File "/root/download/anconda/lib/python3.7/site-packages/pandas/io/excel/_xlsxwriter.py", line 215, in write_cells
+    val, fmt = self._value_with_fmt(cell.val)
+KeyboardInterrupt

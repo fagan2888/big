@@ -1,0 +1,8 @@
+nohup: 忽略输入
+Traceback (most recent call last):
+  File "main.py", line 11, in <module>
+    import quick_sig as qs
+  File "/root/meta_stra_framwork/tb_src/quick_sig.py", line 185
+    if(code == '000001.XSHE')
+                            ^
+SyntaxError: invalid syntax
