@@ -25,7 +25,7 @@ def main():
     vol = {}
     use_expre = []
     k = 0
-    for ori_expre in expre_list[0:2]:
+    for ori_expre in expre_list:
         if('xxx' in ori_expre[0] or 'xxx' in ori_expre[1]):
             continue
         else:
@@ -35,7 +35,7 @@ def main():
                 X['volitility'] = []
                 a_r[str(ori_expre)] = []
                 vol[str(ori_expre)] = []
-                for code in code_list[0:4]:
+                for code in code_list:
                     try:
                         _code_list = [code]
                         result = qs.get_signal(_code_list ,ori_expre,param['begin_date'])
@@ -48,7 +48,7 @@ def main():
                     except:
                         a_r[str(ori_expre)].append(0)
                         vol[str(ori_expre)].append(0)
-                _X = pd.DataFrame(X,index = code_list[0:4])
+                _X = pd.DataFrame(X,index = code_list)
                 #print(len(_X))
                 kmeans_model = KMeans(n_clusters=2, random_state=1).fit(_X)
                 labels = kmeans_model.labels_
@@ -58,8 +58,8 @@ def main():
                 k = k + 1
             except Exception as e:
                 print(e)
-    a_r_fra = pd.DataFrame(a_r,index = code_list[0:4])
-    vol_fra = pd.DataFrame(vol,index = code_list[0:4])
+    a_r_fra = pd.DataFrame(a_r,index = code_list)
+    vol_fra = pd.DataFrame(vol,index = code_list)
     score_fra = pd.DataFrame(score,index = code_list[0:2])
     a_r_fra.to_excel(up_file+'/result/diff/ar.xlsx')
     vol_fra.to_excel(up_file+'/result/diff/vol.xlsx')
