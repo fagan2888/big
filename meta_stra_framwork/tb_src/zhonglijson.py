@@ -53,7 +53,7 @@ def get_one_data(use,signal,data,data_len):
 
 def get_zl_data(code_list):
     data = []
-    for code in code_list[0:2]:
+    for code in code_list[0:30]:
         try:
             index = pd.read_csv(index_path+'/'+code+'.csv')
             signal = pd.read_csv(signal_path+'/'+code+'.csv')

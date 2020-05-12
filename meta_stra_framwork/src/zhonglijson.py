@@ -5,7 +5,7 @@ import json
 import tushare as ts
 
 from rqdata import now_file,up_file
-signal_path = up_file+'/signal'
+signal_path = up_file+'/tb_signal'
 index_path = up_file+'/tb_index'
 data_len = 20
 
