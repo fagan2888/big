@@ -194,5 +194,5 @@ def bayesian_opt(expression):
 
 if __name__ == "__main__":
     #optimal_expre()
-    #singel_expre_test()
-    circle_expre(True)
+    singel_expre_test()
+    #circle_expre(True)

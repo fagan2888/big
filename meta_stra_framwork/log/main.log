@@ -1,70 +1,8 @@
 nohup: 忽略输入
-/root/meta_stra_framwork/tb_src/quick_sig.py:13: FutureWarning: 
-Passing list-likes to .loc or [] with any missing label will raise
-KeyError in the future, you can use .reindex() as an alternative.
-
-See the documentation here:
-https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#deprecate-loc-reindex-listlike
-  use_data = pd.read_csv(up_file+'/tb_index/'+HS_code+'.csv',index_col='date').loc[data.index]
-/root/download/anconda/lib/python3.7/site-packages/pandas/core/algorithms.py:1977: RuntimeWarning: invalid value encountered in subtract
-  out_arr[res_indexer] = arr[res_indexer] - arr[lag_indexer]
-/root/download/anconda/lib/python3.7/site-packages/pandas/core/computation/expressions.py:194: UserWarning: evaluating in Python space because the '*' operator is not supported by numexpr for the bool dtype, use '&' instead
-  op=op_str, alt_op=unsupported[op_str]
-2019-05-06 INFO 600989.XSHG 'NoneType' object has no attribute 'low'
-2019-05-07 INFO 600989.XSHG 'NoneType' object has no attribute 'low'
-2019-05-09 INFO 600989.XSHG 'NoneType' object has no attribute 'low'
-2019-05-10 INFO 600989.XSHG 'NoneType' object has no attribute 'low'
-2019-05-13 INFO 600989.XSHG 'NoneType' object has no attribute 'low'
-2019-05-14 INFO 600989.XSHG 'NoneType' object has no attribute 'low'
-2019-05-15 INFO 600989.XSHG 'NoneType' object has no attribute 'low'
-2019-05-28 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-05-29 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-05-30 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-05-31 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-03 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-04 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-05 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-06 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-10 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-10 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-11 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-11 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-12 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-12 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-12 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-13 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-13 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-13 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-14 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-14 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-14 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-17 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-17 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-17 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-18 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-18 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-18 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-19 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-19 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-19 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-20 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-20 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-20 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-21 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-21 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-21 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-24 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-24 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-24 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-25 INFO 600968.XSHG 'NoneType' object has no attribute 'low'
-2019-06-25 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-25 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-26 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-26 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-27 INFO 601698.XSHG 'NoneType' object has no attribute 'low'
-2019-06-27 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-06-28 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-07-01 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-07-02 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-07-03 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
-2019-07-04 INFO 601236.XSHG 'NoneType' object has no attribute 'low'
+calindex ['002537.XSHE'] 'numpy.ndarray' object has no attribute 'replace'
+Traceback (most recent call last):
+  File "main.py", line 197, in <module>
+    singel_expre_test()
+  File "main.py", line 96, in singel_expre_test
+    _code_list.remove(code)
+AttributeError: 'numpy.ndarray' object has no attribute 'remove'
