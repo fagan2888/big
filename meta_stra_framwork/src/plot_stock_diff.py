@@ -25,7 +25,8 @@ def main():
     vol = {}
     use_expre = []
     k = 0
-    for ori_expre in expre_list:
+    code_list = code_list[0:3]
+    for ori_expre in expre_list[0:2]:
         if('xxx' in ori_expre[0] or 'xxx' in ori_expre[1]):
             continue
         else:

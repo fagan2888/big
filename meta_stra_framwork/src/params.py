@@ -14,7 +14,7 @@ def get_code_list():
 
 def get_all_code_list():
     all_code_list = pd.read_excel(now_file+'/all_code.xlsx',index_col = 0).values
-    return all_code_list.tolist()
+    return [x[0] for x in all_code_list.tolist()]
 
 def get_st_code():
     st = pd.read_excel('/Users/wode/Desktop/学校/系统方案备份/sig_inter.xlsx',index_col = 0)

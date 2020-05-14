@@ -1414,3 +1414,349 @@ copy 300498.XSHE finished
 copy 999999.XSHG finished
 buy []
 sell []
+/root/meta_stra_framwork/src/index_24.py:193: RuntimeWarning: invalid value encountered in double_scalars
+  today_WR=(Hmax-closeArray[i])/(Hmax-Lmin)*100
+/root/meta_stra_framwork/src/index_24.py:217: RuntimeWarning: invalid value encountered in double_scalars
+  RSI.append(positive/(positive+negative)*100)
+/root/meta_stra_framwork/src/index_24.py:243: RuntimeWarning: invalid value encountered in double_scalars
+  CR.append(P1/P2*100)
+/root/meta_stra_framwork/src/index_24.py:243: RuntimeWarning: divide by zero encountered in double_scalars
+  CR.append(P1/P2*100)
+/root/meta_stra_framwork/src/index_24.py:438: RuntimeWarning: divide by zero encountered in double_scalars
+  VR.append((UV+0.5*PV)/(DV+0.5*PV))
+/root/meta_stra_framwork/src/index_24.py:438: RuntimeWarning: invalid value encountered in double_scalars
+  VR.append((UV+0.5*PV)/(DV+0.5*PV))
+/root/meta_stra_framwork/src/index_24.py:410: RuntimeWarning: invalid value encountered in double_scalars
+  sum(openArray[i+1-period:i+1]-lowArray[i+1-period:i+1]))
+/root/meta_stra_framwork/src/index_24.py:413: RuntimeWarning: invalid value encountered in double_scalars
+  sum(closeArray[i-period:i]-lowArray[i+1-period:i+1]))
+/root/meta_stra_framwork/src/index_24.py:410: RuntimeWarning: divide by zero encountered in double_scalars
+  sum(openArray[i+1-period:i+1]-lowArray[i+1-period:i+1]))
+/root/meta_stra_framwork/src/index_24.py:413: RuntimeWarning: divide by zero encountered in double_scalars
+  sum(closeArray[i-period:i]-lowArray[i+1-period:i+1]))
+/root/meta_stra_framwork/src/index_24.py:267: RuntimeWarning: invalid value encountered in double_scalars
+  CCI.append((TYP[i]-MA[i])/(MD[i]*0.015))
+/root/meta_stra_framwork/src/index_24.py:267: RuntimeWarning: divide by zero encountered in double_scalars
+  CCI.append((TYP[i]-MA[i])/(MD[i]*0.015))
+/root/meta_stra_framwork/src/index_24.py:453: RuntimeWarning: invalid value encountered in double_scalars
+  BIAS.append((closeArray[i]-EA[-1])/EA[-1]*100)
+/root/meta_stra_framwork/src/index_24.py:467: RuntimeWarning: invalid value encountered in double_scalars
+  ROC.append((closeArray[i]-closeArray[i-period])/closeArray[i-period]*100)
+/root/meta_stra_framwork/src/index_24.py:467: RuntimeWarning: divide by zero encountered in double_scalars
+  ROC.append((closeArray[i]-closeArray[i-period])/closeArray[i-period]*100)
+/root/meta_stra_framwork/src/index_24.py:684: RuntimeWarning: invalid value encountered in true_divide
+  MALArray = (highArray-lowArray)/closeArray
+/root/meta_stra_framwork/src/index_24.py:341: RuntimeWarning: invalid value encountered in double_scalars
+  TRIX.append((TR[i]-TR[i-1])/TR[i-1]*100)
+/root/meta_stra_framwork/src/index_24.py:341: RuntimeWarning: divide by zero encountered in double_scalars
+  TRIX.append((TR[i]-TR[i-1])/TR[i-1]*100)
+/root/meta_stra_framwork/src/quick_sig.py:13: FutureWarning: 
+Passing list-likes to .loc or [] with any missing label will raise
+KeyError in the future, you can use .reindex() as an alternative.
+
+See the documentation here:
+https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#deprecate-loc-reindex-listlike
+  use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index]
+copy 600000.XSHG finished
+copy 600004.XSHG finished
+copy 600009.XSHG finished
+copy 600010.XSHG finished
+copy 600011.XSHG finished
+copy 600015.XSHG finished
+copy 600016.XSHG finished
+copy 600018.XSHG finished
+copy 600019.XSHG finished
+copy 600023.XSHG finished
+copy 600025.XSHG finished
+copy 600027.XSHG finished
+copy 600028.XSHG finished
+copy 600029.XSHG finished
+copy 600030.XSHG finished
+copy 600031.XSHG finished
+copy 600036.XSHG finished
+copy 600038.XSHG finished
+copy 600048.XSHG finished
+copy 600050.XSHG finished
+copy 600061.XSHG finished
+copy 600066.XSHG finished
+copy 600068.XSHG finished
+copy 600085.XSHG finished
+copy 600089.XSHG finished
+copy 600100.XSHG finished
+copy 600104.XSHG finished
+copy 600109.XSHG finished
+copy 600111.XSHG finished
+copy 600115.XSHG finished
+copy 600118.XSHG finished
+copy 600153.XSHG finished
+copy 600170.XSHG finished
+copy 600176.XSHG finished
+copy 600177.XSHG finished
+copy 600183.XSHG finished
+copy 600188.XSHG finished
+copy 600196.XSHG finished
+copy 600208.XSHG finished
+copy 600219.XSHG finished
+copy 600221.XSHG finished
+copy 600233.XSHG finished
+copy 600271.XSHG finished
+copy 600276.XSHG finished
+copy 600297.XSHG finished
+copy 600299.XSHG finished
+copy 600309.XSHG finished
+copy 600332.XSHG finished
+copy 600340.XSHG finished
+copy 600346.XSHG finished
+copy 600352.XSHG finished
+copy 600362.XSHG finished
+copy 600369.XSHG finished
+copy 600372.XSHG finished
+copy 600383.XSHG finished
+copy 600390.XSHG finished
+copy 600398.XSHG finished
+copy 600406.XSHG finished
+copy 600436.XSHG finished
+copy 600438.XSHG finished
+copy 600482.XSHG finished
+copy 600487.XSHG finished
+copy 600489.XSHG finished
+copy 600498.XSHG finished
+copy 600516.XSHG finished
+copy 600519.XSHG finished
+copy 600522.XSHG finished
+copy 600535.XSHG finished
+copy 600547.XSHG finished
+copy 600566.XSHG finished
+copy 600570.XSHG finished
+copy 600583.XSHG finished
+copy 600585.XSHG finished
+copy 600588.XSHG finished
+copy 600606.XSHG finished
+copy 600637.XSHG finished
+copy 600655.XSHG finished
+copy 600660.XSHG finished
+copy 600663.XSHG finished
+copy 600674.XSHG finished
+copy 600690.XSHG finished
+copy 600703.XSHG finished
+copy 600705.XSHG finished
+copy 600733.XSHG finished
+copy 600741.XSHG finished
+copy 600760.XSHG finished
+copy 600795.XSHG finished
+copy 600809.XSHG finished
+copy 600816.XSHG finished
+copy 600837.XSHG finished
+copy 600848.XSHG finished
+copy 600867.XSHG finished
+copy 600886.XSHG finished
+copy 600887.XSHG finished
+copy 600893.XSHG finished
+copy 600900.XSHG finished
+copy 600919.XSHG finished
+copy 600926.XSHG finished
+copy 600928.XSHG finished
+copy 600958.XSHG finished
+copy 600968.XSHG finished
+copy 600977.XSHG finished
+copy 600989.XSHG finished
+copy 600998.XSHG finished
+copy 600999.XSHG finished
+copy 601006.XSHG finished
+copy 601009.XSHG finished
+copy 601012.XSHG finished
+copy 601018.XSHG finished
+copy 601021.XSHG finished
+copy 601066.XSHG finished
+copy 601088.XSHG finished
+copy 601108.XSHG finished
+copy 601111.XSHG finished
+copy 601117.XSHG finished
+copy 601138.XSHG finished
+copy 601155.XSHG finished
+copy 601162.XSHG finished
+copy 601166.XSHG finished
+copy 601169.XSHG finished
+copy 601186.XSHG finished
+copy 601198.XSHG finished
+copy 601211.XSHG finished
+copy 601212.XSHG finished
+copy 601216.XSHG finished
+copy 601225.XSHG finished
+copy 601229.XSHG finished
+copy 601236.XSHG finished
+copy 601238.XSHG finished
+copy 601288.XSHG finished
+copy 601298.XSHG finished
+copy 601318.XSHG finished
+copy 601319.XSHG finished
+copy 601328.XSHG finished
+copy 601336.XSHG finished
+copy 601360.XSHG finished
+copy 601377.XSHG finished
+copy 601390.XSHG finished
+copy 601398.XSHG finished
+copy 601555.XSHG finished
+copy 601577.XSHG finished
+copy 601600.XSHG finished
+copy 601601.XSHG finished
+copy 601607.XSHG finished
+copy 601618.XSHG finished
+copy 601628.XSHG finished
+copy 601633.XSHG finished
+copy 601668.XSHG finished
+copy 601669.XSHG finished
+copy 601688.XSHG finished
+copy 601698.XSHG finished
+copy 601727.XSHG finished
+copy 601766.XSHG finished
+copy 601788.XSHG finished
+copy 601800.XSHG finished
+copy 601808.XSHG finished
+copy 601818.XSHG finished
+copy 601828.XSHG finished
+copy 601838.XSHG finished
+copy 601857.XSHG finished
+copy 601877.XSHG finished
+copy 601878.XSHG finished
+copy 601881.XSHG finished
+copy 601888.XSHG finished
+copy 601898.XSHG finished
+copy 601899.XSHG finished
+copy 601901.XSHG finished
+copy 601919.XSHG finished
+copy 601933.XSHG finished
+copy 601939.XSHG finished
+copy 601985.XSHG finished
+copy 601988.XSHG finished
+copy 601989.XSHG finished
+copy 601992.XSHG finished
+copy 601997.XSHG finished
+copy 601998.XSHG finished
+copy 603019.XSHG finished
+copy 603156.XSHG finished
+copy 603160.XSHG finished
+copy 603259.XSHG finished
+copy 603260.XSHG finished
+copy 603288.XSHG finished
+copy 603501.XSHG finished
+copy 603799.XSHG finished
+copy 603833.XSHG finished
+copy 603899.XSHG finished
+copy 603986.XSHG finished
+copy 603993.XSHG finished
+copy 000001.XSHE finished
+copy 000002.XSHE finished
+copy 000063.XSHE finished
+copy 000069.XSHE finished
+copy 000100.XSHE finished
+copy 000157.XSHE finished
+copy 000166.XSHE finished
+copy 000333.XSHE finished
+copy 000338.XSHE finished
+copy 000413.XSHE finished
+copy 000415.XSHE finished
+copy 000423.XSHE finished
+copy 000425.XSHE finished
+copy 000538.XSHE finished
+copy 000568.XSHE finished
+copy 000596.XSHE finished
+copy 000625.XSHE finished
+copy 000627.XSHE finished
+copy 000629.XSHE finished
+copy 000630.XSHE finished
+copy 000651.XSHE finished
+copy 000656.XSHE finished
+copy 000661.XSHE finished
+copy 000671.XSHE finished
+copy 000703.XSHE finished
+copy 000709.XSHE finished
+copy 000723.XSHE finished
+copy 000725.XSHE finished
+copy 000728.XSHE finished
+copy 000768.XSHE finished
+copy 000776.XSHE finished
+copy 000783.XSHE finished
+copy 000786.XSHE finished
+copy 000858.XSHE finished
+copy 000876.XSHE finished
+copy 000895.XSHE finished
+copy 000898.XSHE finished
+copy 000938.XSHE finished
+copy 000961.XSHE finished
+copy 000963.XSHE finished
+copy 001979.XSHE finished
+copy 002001.XSHE finished
+copy 002007.XSHE finished
+copy 002008.XSHE finished
+copy 002010.XSHE finished
+copy 002024.XSHE finished
+copy 002027.XSHE finished
+copy 002032.XSHE finished
+copy 002044.XSHE finished
+copy 002050.XSHE finished
+copy 002081.XSHE finished
+copy 002120.XSHE finished
+copy 002142.XSHE finished
+copy 002146.XSHE finished
+copy 002153.XSHE finished
+copy 002179.XSHE finished
+copy 002202.XSHE finished
+copy 002230.XSHE finished
+copy 002236.XSHE finished
+copy 002241.XSHE finished
+copy 002252.XSHE finished
+copy 002271.XSHE finished
+copy 002294.XSHE finished
+copy 002304.XSHE finished
+copy 002311.XSHE finished
+copy 002352.XSHE finished
+copy 002410.XSHE finished
+copy 002411.XSHE finished
+copy 002415.XSHE finished
+copy 002422.XSHE finished
+copy 002456.XSHE finished
+copy 002460.XSHE finished
+copy 002466.XSHE finished
+copy 002468.XSHE finished
+copy 002475.XSHE finished
+copy 002493.XSHE finished
+copy 002508.XSHE finished
+copy 002555.XSHE finished
+copy 002558.XSHE finished
+copy 002594.XSHE finished
+copy 002601.XSHE finished
+copy 002602.XSHE finished
+copy 002607.XSHE finished
+copy 002624.XSHE finished
+copy 002673.XSHE finished
+copy 002714.XSHE finished
+copy 002736.XSHE finished
+copy 002739.XSHE finished
+copy 002773.XSHE finished
+copy 002841.XSHE finished
+copy 002916.XSHE finished
+copy 002938.XSHE finished
+copy 002939.XSHE finished
+copy 002945.XSHE finished
+copy 002958.XSHE finished
+copy 300003.XSHE finished
+copy 300015.XSHE finished
+copy 300017.XSHE finished
+copy 300024.XSHE finished
+copy 300033.XSHE finished
+copy 300059.XSHE finished
+copy 300070.XSHE finished
+copy 300122.XSHE finished
+copy 300124.XSHE finished
+copy 300136.XSHE finished
+copy 300142.XSHE finished
+copy 300144.XSHE finished
+copy 300347.XSHE finished
+copy 300408.XSHE finished
+copy 300413.XSHE finished
+copy 300433.XSHE finished
+copy 300498.XSHE finished
+copy 999999.XSHG finished
+buy []
+sell []
