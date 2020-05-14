@@ -97,7 +97,7 @@ def singel_expre_test(off_line = False):
         HS_code = param['HS_code']
         sig_data.cal_index_data(HS_code)
     result = qs.get_signal(_code_list,ori_expre,param['begin_date'])
-    result.to_csv(up_file+'/result/quick/quick_sig.csv')
+    result.to_csv(up_file+'/result/tb_quick/quick_sig.csv')
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
     benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']

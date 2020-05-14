@@ -48,7 +48,7 @@ def myround(value, n):
         return round((value - 10**(-n-8)), n)
 
 def init(context):
-    context.signals         = pd.read_csv(up_file+'/result/quick/quick_sig.csv',index_col = 0)
+    context.signals         = pd.read_csv(up_file+'/result/diff/quick_sig.csv',index_col = 0)
     context.signals         = context.signals[context.signals.code!='601360.XSHG']
     context.signals.time    = context.signals.time.map(lambda x:str(x))
     context.operlist        = []
