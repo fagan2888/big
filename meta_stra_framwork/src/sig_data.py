@@ -140,7 +140,8 @@ def cal_index_data(code):
         data = index_24.calculatehistory(data,index_name = 'close_MA_5',Period = 1)
         data = index_24.calculatehistory(data,index_name = 'close',Period = 1)
         data = index_24.calculatehistory(data,index_name = 'DEA',Period = 1)
-        #data = index_24.
+        data = index_24.calculateShadowRate(data)
+        data = index_24.calculateLimit(data)
         #print(data)
         data.to_csv(up_file+'/index/'+code+'.csv',header=True, index='date')
         return 1

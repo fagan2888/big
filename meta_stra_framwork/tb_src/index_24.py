@@ -689,3 +689,26 @@ def calculateMeanAmplitude(df, period, d = 0):
         MAL.append(MALArray[i-period+1:i+1].mean())
     _df['MeanAmplitude'] = np.array(MAL)
     return _df
+
+def calculateShadowRate(df, d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    df = calculateKLowerLength(df)
+    df = calculateKUpperLength(df)
+    df = calculateKlength(df)
+    highArray = np.array(df['high'])
+    lowArray = np.array(df['low'])
+    df['ALLKlength'] = highArray - lowArray
+    _df['UpperShadowRate'] = df['KUpperlength']/df['ALLKlength']
+    _df['LowerShadowRate'] = df['KLowerLength']/df['ALLKlength']
+    _df['EntityRate'] = df['Klength']/df['ALLKlength']
+    return _df
+
+def calculateLimit(df,d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    _df['LimitUp'] = df['settle']*1.1
+    _df['LimitDown'] = df['settle']*0.9
+    return _df
