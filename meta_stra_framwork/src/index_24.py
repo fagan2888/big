@@ -115,6 +115,15 @@ def calculatehistory(df,index_name = 'close',Period = 4,d = 0):
     _df[index_name+'_'+'shift'+'_'+str(Period)] = np.array(new_data)
     return _df
 
+def calculatemultiply(df,index_name = 'close',rate = 1,d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    index_data = df[index_name]
+    new_data = index_data*rate
+    _df[index_name+'_'+'multiply'+'_'+str(rate)] = np.array(new_data)
+    return _df
+
 def calculateMACD(df, shortPeriod=12, longPeriod=26, signalPeriod=9,d = 0):
     _df = copy.copy(df)
     if(d != 0 ):

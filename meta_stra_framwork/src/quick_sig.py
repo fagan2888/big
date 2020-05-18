@@ -33,9 +33,9 @@ def diff_sig(data,type_name):
         print('error,two same index can not cal sig')
     else:
         if(thre_direction == '0'): 
-            data[type_name] = ((use_data[index_name_1]-use_data[index_name_2])<0)*1
+            data[type_name] = ((use_data[index_name_1]-use_data[index_name_2])<=0)*1
         elif(thre_direction == '1' ):
-            data[type_name] = ((use_data[index_name_1]-use_data[index_name_2])>0)*1
+            data[type_name] = ((use_data[index_name_1]-use_data[index_name_2])>=0)*1
     return data
 
 def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
