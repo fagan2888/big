@@ -188,7 +188,7 @@ def replace_exp(expression_list,data,code):
 
 def get_trade_date(code,expression,begin_date):
     #data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
-    data = pd.read_csv(up_file+'/hzy_index/'+code+'.csv',index_col='date').loc[begin_date:]
+    data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
     code_sig = replace_exp(expression,data,code)
     code_sig.loc[:,'code'] = code
     return code_sig[code_sig[expression[0]]]['code'],code_sig[code_sig[expression[1]]]['code']
