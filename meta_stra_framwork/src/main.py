@@ -16,6 +16,7 @@ import sharpe_2 as s2
 import KB
 import get_zl_expre
 import os
+import hzy_stra
 
 single_expre_save_path = up_file+'/result/single/single.xlsx'
 unit_save_path = up_file+'/result/single/unit.xlsx'
@@ -190,9 +191,30 @@ def bayesian_opt(expression):
     results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
     return results["sys_analyser"]['summary']['unit_net_value']
 
+def hzy_expre_test():
+    param =  params.PARAMS
+    if(param['get_code_data']):
+        #copydata.main(param['code_list'])
+        KB.copy_day_data(param['code_list'])
+        KB.copy_day_data([param['HS_code']])
+    code_list = param['code_list']
+    ori_expre = hzy_stra.get_hzy_stra(code_list)
+    _code_list = copy.copy(code_list)
+    result = qs.get_signal(_code_list,ori_expre,param['begin_date'])
+    result.to_csv(up_file+'/result/quick/quick_sig.csv')
+    results = run_func(init=init, handle_bar=handle_bar, config=param['_config'])
+    unit_seris = results["sys_analyser"]['portfolio']['unit_net_value']
+    benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
+    summ = results['sys_analyser']['summary']
+    _trade = results['sys_analyser']['trades']
+    summ['strategy_name'] = str(ori_expre)
+    summ['stock_num'] = len(code_list)
+    save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
+    return results
 
 
 if __name__ == "__main__":
     #optimal_expre()
     #singel_expre_test()
-    circle_expre(True)
+    #circle_expre(True)
+    hzy_expre_test()

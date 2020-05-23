@@ -28,6 +28,7 @@ def diff_sig(data,type_name):
         use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
     else:
         use_data = copy.copy(data)
+    #print(type_name)
     index_name_1,index_name_2,thre_direction = type_name.split('&')[0].split('#')
     if(index_name_1 == index_name_2):
         print('error,two same index can not cal sig')
@@ -187,7 +188,7 @@ def replace_exp(expression_list,data,code):
 
 def get_trade_date(code,expression,begin_date):
     #data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
-    data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
+    data = pd.read_csv(up_file+'/hzy_index/'+code+'.csv',index_col='date').loc[begin_date:]
     code_sig = replace_exp(expression,data,code)
     code_sig.loc[:,'code'] = code
     return code_sig[code_sig[expression[0]]]['code'],code_sig[code_sig[expression[1]]]['code']
@@ -201,7 +202,7 @@ def get_signal(_code_list,expression,begin_date):
             all_buy = all_buy.append(buy_date)
             all_sell = all_sell.append(sell_date)
         except Exception as e:
-            print(code,e) 
+            print('signal',code,e) 
     buy_df = pd.DataFrame(all_buy)
     buy_df['operation'] = 'long'
     buy_df.columns = ['code','operation']
