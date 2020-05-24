@@ -126,6 +126,7 @@ def remove_md(s):# 将不含括号的表达式里的乘除先递归计算完
     if '*' not in s and '/' not in s:
         return s# 没有乘除的话递归结束
     else:# 匹配一个最小乘除单元，调用multiply_divide计算，将结果拼接成一个新的表达式进行递归处理
+        #print(s)
         k = re.search(r'-?[\d\.]+[*/]-?[\d\.]+', s).group()
         s = s.replace(k, '+' + str(multiply_divide(k))) if len(re.findall(r'-', k)) == 2 else s.replace(k, str(
             multiply_divide(k)))
@@ -188,7 +189,7 @@ def replace_exp(expression_list,data,code):
 
 def get_trade_date(code,expression,begin_date):
     #data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
-    data = pd.read_csv(up_file+'/index/'+code+'.csv',index_col='date').loc[begin_date:]
+    data = pd.read_csv(params.PARAMS['_index_save_path']+code+'.csv',index_col='date').loc[begin_date:]
     code_sig = replace_exp(expression,data,code)
     code_sig.loc[:,'code'] = code
     return code_sig[code_sig[expression[0]]]['code'],code_sig[code_sig[expression[1]]]['code']
@@ -196,13 +197,13 @@ def get_trade_date(code,expression,begin_date):
 def get_signal(_code_list,expression,begin_date):
     all_buy,all_sell = pd.Series([]),pd.Series([])
     for code in _code_list:
-        try:
+        #try:
         #print(code)
-            buy_date,sell_date = get_trade_date(code,expression,begin_date)
-            all_buy = all_buy.append(buy_date)
-            all_sell = all_sell.append(sell_date)
-        except Exception as e:
-            print('signal',code,e) 
+        buy_date,sell_date = get_trade_date(code,expression,begin_date)
+        all_buy = all_buy.append(buy_date)
+        all_sell = all_sell.append(sell_date)
+        #except Exception as e:
+            #print('signal',code,e) 
     buy_df = pd.DataFrame(all_buy)
     buy_df['operation'] = 'long'
     buy_df.columns = ['code','operation']
