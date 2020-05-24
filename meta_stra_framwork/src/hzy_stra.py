@@ -4,7 +4,11 @@ import copy
 import index_24
 import sig_data
 from rqdata import up_file,now_file
+import params
+import quick_sig as qs
+
 #对表达式做乘法分配律
+
 def distribute_expre(new_as_list):
     new_expre = ''
     for i in range(1,len(new_as_list)):
@@ -133,14 +137,22 @@ def get_hzy_7(w = 3,vol_rate = 2,vol_mean_period = 3):
         ori = ori + '+' + 'high'+'_shift_'+str(d)+'#LimitUp'+'_shift_'+str(d)+'#1&diff*vol'+'_shift_'+str(d)+'#'+vol_mean_index+'_shift_'+str(d)+'#1&diff'      
     return ori
 
-def get_hzy_stra(code_list,w_1 = 2,w_2 = 3,w_5 = 3,w_6 = 3,w_7 = 3,day_list_1 = [5,10,20,60],vol_mean_period_2 = 3,vol_mean_period_3 = 3,vol_mean_period_4 = 3,vol_mean_period_5 = 3,vol_mean_period_7 = 3,vol_rate = 2,upper_shadow_rate = 0.8,m = 0.3,n = 0.3):
+def get_hzy_stra(w_1 = 2,w_2 = 3,w_5 = 3,w_6 = 3,w_7 = 3,day_list_1 = [5,10,20,60],vol_mean_period_2 = 3,vol_mean_period_3 = 3,vol_mean_period_4 = 3,vol_mean_period_5 = 3,vol_mean_period_7 = 3,vol_rate = 2,upper_shadow_rate = 0.8,m = 0.3,n = 0.3):
+    use_stra_index = [1,2,3,4,5,6,7]
+    param =  params.PARAMS
+    code_list = param['code_list']
     for code in code_list:
         cal_hzy_data(code,w_1 = w_1,w_2 = w_2,w_5 = w_5,w_6 = w_6,w_7 = w_7,day_list_1 = day_list_1,vol_mean_period_2 = vol_mean_period_2,vol_mean_period_3 = vol_mean_period_3,vol_mean_period_4 = vol_mean_period_4,vol_mean_period_5 = vol_mean_period_5,vol_mean_period_7 = vol_mean_period_7,vol_rate = vol_rate)
     #hzy_stra = get_hzy_1(w = w_1)+'+'+get_hzy_2(w = w_2,vol_mean_period = vol_mean_period_2)+'+'+get_hzy_3(vol_mean_period = vol_mean_period_3)+'+'+get_hzy_4(upper_shadow_rate = upper_shadow_rate,m = m,n = n,vol_mean_period = vol_mean_period_4)+'+'+get_hzy_5(w = w_5,vol_mean_period = vol_mean_period_5)+'+'+get_hzy_6(w = w_6)+'+'+get_hzy_7(w = w_7,vol_rate = vol_rate,vol_mean_period = vol_mean_period_7)
     hzy_as_list = [get_hzy_1(w = w_1),get_hzy_2(w = w_2,vol_mean_period = vol_mean_period_2),get_hzy_3(vol_mean_period = vol_mean_period_3),get_hzy_4(upper_shadow_rate = upper_shadow_rate,m = m,n = n,vol_mean_period = vol_mean_period_4),get_hzy_5(w = w_5,vol_mean_period = vol_mean_period_5),get_hzy_6(w = w_6),get_hzy_7(w = w_7,vol_rate = vol_rate,vol_mean_period = vol_mean_period_7)]
-    hzy_stra = distribute_expre(hzy_as_list)
-    return [hzy_stra,'MACD#0#0&thre']
+    #hzy_stra = distribute_expre(hzy_as_list)
+    for i in use_stra_index:
+        ori_expre = hzy_as_list[i-1]
+        _code_list = copy.copy(code_list)
+        result = qs.get_signal(_code_list,[ori_expre,'MACD#0#0&thre'],param['begin_date'])
+        result.to_csv(up_file+'/result/hzy/quick_sig'+'_'+str(i)+'.csv')
+    #return [hzy_stra,'MACD#0#0&thre']
+    return hzy_as_list
 
 if __name__ == "__main__":
-    code_list = ['000001.XSHE']
-    print(get_hzy_stra(code_list))
+    get_hzy_stra()
