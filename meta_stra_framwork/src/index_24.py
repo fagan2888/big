@@ -721,3 +721,12 @@ def calculateLimit(df,d = 0):
     _df['LimitUp'] = df['settle']*1.1
     _df['LimitDown'] = df['settle']*0.9
     return _df
+
+def calcuteMarketValue(df,d = 0):
+    _df = copy.copy(df)
+    if(d != 0 ):
+        df = diff.data_frame_diff(df,d)
+    _df['FlowMarketValue'] = df['flow']*df['close']*10000
+    _df['TotalMarketValue'] = df['total']*df['close']*10000
+    _df['turnover'] = _df['amount']/_df['FlowMarketValue']
+    return _df
