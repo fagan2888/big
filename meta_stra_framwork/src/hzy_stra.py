@@ -127,9 +127,9 @@ def get_hzy_5(w = 3,vol_mean_period = 3):
 
 #价格在涨停板阳线上方（可选）？应该用个最低价和涨停那天的最高价
 def get_hzy_6(w = 3):
-    ori = 'high#LimitUp#1&diff*close#high#1&diff'
+    ori = 'high#LimitUp#1&diff*low#high#1&diff'
     for d in range(1,w):
-        ori = ori + '+' + 'high'+'_shift_'+str(d)+'#LimitUp'+'_shift_'+str(d)+'#1&diff*close#high'+'_shift_'+str(d)+'#1&diff'      
+        ori = ori + '+' + 'high'+'_shift_'+str(d)+'#LimitUp'+'_shift_'+str(d)+'#1&diff*low#high'+'_shift_'+str(d)+'#1&diff'      
     return ori
 
 #前面n日内，出现了涨停板，且成交量很大（大于均量的2到3倍）
@@ -141,10 +141,10 @@ def get_hzy_7(w = 3,vol_rate = 2,vol_mean_period = 3):
     return ori
 
 def get_hzy_8():
-    return 'FlowMarketValue#50000000000#1&thre'
+    return 'FlowMarketValue#50000000000#0&thre'
 
 def get_hzy_stra(w_1 = 2,w_2 = 3,w_5 = 3,w_6 = 3,w_7 = 3,day_list_1 = [5,10,20,60],vol_mean_period_2 = 3,vol_mean_period_3 = 3,vol_mean_period_4 = 3,vol_mean_period_5 = 3,vol_mean_period_7 = 3,vol_rate = 2,upper_shadow_rate = 0.8,m = 0.3,n = 0.3):
-    use_stra_index = [1,2,3,4,5,6,7,8]
+    use_stra_index = [1,2,3]#,4,5,6,7,8]
     param =  params.PARAMS
     code_list = param['code_list']
     for code in code_list:
@@ -165,3 +165,19 @@ def get_hzy_stra(w_1 = 2,w_2 = 3,w_5 = 3,w_6 = 3,w_7 = 3,day_list_1 = [5,10,20,6
 
 if __name__ == "__main__":
     get_hzy_stra()
+    hzy_siganl_path = up_file+'/result/hzy/'
+    use_stra_index = [1,2,3]#,4,5,6,7,8]
+    ori_sig = pd.read_csv(hzy_siganl_path+'quick_sig_'+str(use_stra_index[0])+'.csv',index_col = 0)
+    #print(len(all_sig))
+    for i in use_stra_index[1:]:
+        sig = pd.read_csv(hzy_siganl_path+'quick_sig_'+str(i)+'.csv',index_col = 0)
+        #print(len(sig))
+        ori_sig = ori_sig.append(sig)
+    #print(len(all_sig))
+    all_sig =  ori_sig[ori_sig['operation'] == 'long']
+    group_sig = all_sig.groupby(['time','code']).sum()
+    group_sig = group_sig[group_sig['operation'] == 'long'*len(use_stra_index)]
+    last_sig = group_sig.reset_index(['code'])
+    last_sig['operation'] = 'long'
+    last_sig = last_sig.append(ori_sig[ori_sig['operation'] == 'long_sell'].set_index(['time']))
+    last_sig.to_csv(hzy_siganl_path+'last_sig.csv')

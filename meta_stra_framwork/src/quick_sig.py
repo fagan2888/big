@@ -25,7 +25,7 @@ def threshold_sig(data,type_name):
 def diff_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index.values]
     else:
         use_data = copy.copy(data)
     #print(type_name)
@@ -42,7 +42,7 @@ def diff_sig(data,type_name):
 def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index.values]
     else:
         use_data = copy.copy(data)
     index_name_short,index_name_long,thre_direction = type_name.split('&')[0].split('#')
@@ -52,12 +52,12 @@ def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
         if(thre_direction == '1'):
             now = (use_data[index_name_short]-use_data[index_name_long])>0
             yes = (use_data[index_name_short]-use_data[index_name_long])<0
-            result = now.shift(1)*yes
+            result = yes.shift(1)*now
             result.iloc[0] = 0
         elif(thre_direction == '0'):
             now = (use_data[index_name_short]-use_data[index_name_long])<0
             yes = (use_data[index_name_short]-use_data[index_name_long])>0
-            result = now.shift(1)*yes
+            result = yes.shift(1)*now
             result.iloc[0] = 0
         data[type_name] = result
     return data
@@ -65,7 +65,7 @@ def cross_sig(data,type_name):#thre_direction0是死叉，1是金叉
 def trend_sig(data,type_name):
     if('HS' in type_name):
         HS_code = params.PARAMS['HS_code']
-        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+        use_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date').loc[data.index.values]
     else:
         use_data = copy.copy(data)
     index_name,trend_num,thre_direction = type_name.split('&')[0].split('#')
@@ -82,9 +82,9 @@ def trend_sig(data,type_name):
     trend = []
     for i in range(len(data)):
         if(i<trend_num):
-            trend.append((d.iloc[:i].sum() == trend_num)*1)
+            trend.append((d.iloc[:(i+1)].sum() == trend_num)*1)
         else:
-            trend.append((d.iloc[(i-trend_num):i].sum() == trend_num)*1)
+            trend.append((d.iloc[(i-trend_num+1):(i+1)].sum() == trend_num)*1)
     data[type_name] = trend
     return data
 
@@ -197,13 +197,13 @@ def get_trade_date(code,expression,begin_date):
 def get_signal(_code_list,expression,begin_date):
     all_buy,all_sell = pd.Series([]),pd.Series([])
     for code in _code_list:
-        #try:
+        try:
         #print(code)
-        buy_date,sell_date = get_trade_date(code,expression,begin_date)
-        all_buy = all_buy.append(buy_date)
-        all_sell = all_sell.append(sell_date)
-        #except Exception as e:
-            #print('signal',code,e) 
+            buy_date,sell_date = get_trade_date(code,expression,begin_date)
+            all_buy = all_buy.append(buy_date)
+            all_sell = all_sell.append(sell_date)
+        except Exception as e:
+            print('signal',code,e) 
     buy_df = pd.DataFrame(all_buy)
     buy_df['operation'] = 'long'
     buy_df.columns = ['code','operation']

@@ -71,6 +71,13 @@ def cal_index_data(code):
     try:
         #data = get_wm_offline_data(code)
         data = get_wm_mongo_data(code)
+        HS_code = params.PARAMS['HS_code']
+        dp_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+        drop_d = []
+        for d in data.index.values:
+            if(d not in dp_data.index.values):
+                drop_d.append(d)
+        data = data.drop(index=drop_d)
         #data = get_wm_data(code)#通过tornado获取数据
         #print(data)
         data = index_24.calculateEMA(data,'close',5)
@@ -143,7 +150,7 @@ def cal_index_data(code):
         data = index_24.calculatehistory(data,index_name = 'DEA',Period = 1)
         data = index_24.calculateShadowRate(data)
         data = index_24.calculateLimit(data)
-        data = index_24.calcuteMarketValue(data)
+        #data = index_24.calcuteMarketValue(data)
         #print(data)
         data.to_csv(up_file+'/index/'+code+'.csv',header=True, index='date')
         return 1
