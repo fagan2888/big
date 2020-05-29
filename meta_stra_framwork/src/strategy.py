@@ -139,7 +139,7 @@ def sell(context, bar_dict):
                             continue
                         #print('sell', now, code, position.sellable,snap.last)
                         
-                        order_target_percent(code, 0, snap.open)
+                        order_target_percent(code, 0, snap.last)
             except Exception as e:
                 print(code,snap)
 
