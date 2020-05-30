@@ -72,7 +72,7 @@ def cal_index_data(code):
         #data = get_wm_offline_data(code)
         data = get_wm_mongo_data(code)
         HS_code = params.PARAMS['HS_code']
-        dp_data = pd.read_csv(up_file+'/index/'+HS_code+'.csv',index_col='date')
+        dp_data = pd.read_excel(up_file+'/day_data/'+HS_code+'.xlsx',index_col='date')
         drop_d = []
         for d in data.index.values:
             if(d not in dp_data.index.values):
