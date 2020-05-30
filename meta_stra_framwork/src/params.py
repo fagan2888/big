@@ -34,7 +34,7 @@ get_code_data = False,#True,#是否重新获得原始数据
 #get_code_data = False,#是否重新获得原始数据
 HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
 signal_lf = [1,1,1,1,1], #分别对应下面五种信号的生命周期,阈值，交叉，趋势，比较，计数
-_signal_save_path = up_file+'/result/mul/', #信号结果储存地址
+#_signal_save_path = up_file+'/result/mul/', #信号结果储存地址
 _index_save_path = up_file+'/index/',
 # 信号的表达式，第一个为做多买入信号，第二个为做多卖出信号
 # 信号的构建方法为 
