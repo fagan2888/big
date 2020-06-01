@@ -96,7 +96,7 @@ def get_expression_list_3():
     new_stra_list = []
     for k in range(1,5):
         for j in range(2,6):
-            csv_path = up_file+'/expressions/results'+str(k)+'_wzh_0422_r0.'+str(j)+'.csv'
+            csv_path = up_file+'/expressions/results'+str(k)+'_wzh_0526_r0.'+str(j)+'.csv'
             if(os.path.exists(csv_path)):
                 expre = pd.read_csv(csv_path,index_col = 0)
                 #for i in expre.values:#[0].split(',')[0].strip("[]''")

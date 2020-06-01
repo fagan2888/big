@@ -26,7 +26,7 @@ sys.path.append(up_file)
 
 
 PARAMS = defaultdict(
-begin_date = 20150101,#信号计算开始日期
+begin_date = 20100101,#信号计算开始日期
 #code_list = ['000002.XSHE','600000.XSHG','002422.XSHE','300142.XSHE'],
 #code_list = get_all_code_list(),#
 code_list = get_code_list(),#信号计算的股票池
@@ -69,7 +69,7 @@ _config = {
     {
           "benchmark": "399300.XSHE", #基准
           "margin_multiplier": 1.4, #
-          "start_date": "2015-01-03", #回测开始日期
+          "start_date": "2010-01-03", #回测开始日期
           "end_date":   "2020-05-24", #回测结束日期
           "frequency": "1d", #回测频率
           "accounts":{
