@@ -148,6 +148,7 @@ def cal_index_data(code):
         data = index_24.calculatehistory(data,index_name = 'close',Period = 1)
         data = index_24.calculatemultiply(data,index_name = 'close',rate = 0.5)
         data = index_24.calculatehistory(data,index_name = 'DEA',Period = 1)
+        data = index_24.calculatehistory(data,index_name = 'OBV',Period = 1)
         data = index_24.calculateShadowRate(data)
         data = index_24.calculateLimit(data)
         #data = index_24.calcuteMarketValue(data)

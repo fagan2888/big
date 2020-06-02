@@ -92,6 +92,7 @@ def get_expression_list_2():
         new_stra_list.append([i[0].split(',')[0].strip("[]''"),i[0].split(',')[1].strip("[]''")])
     return new_stra_list
 
+#得到每个json文件的第一个表达式
 def get_expression_list_3():
     new_stra_list = []
     for k in range(1,5):
@@ -105,3 +106,35 @@ def get_expression_list_3():
             else:
                 print(csv_path)
     return new_stra_list
+
+#得到每个json文件的所有表达式
+def get_expression_list_4():
+    new_stra_list = []
+    for k in range(1,5):
+        for j in range(2,6):
+            csv_path = up_file+'/expressions/results'+str(k)+'_wzh_0526_r0.'+str(j)+'.csv'
+            if(os.path.exists(csv_path)):
+                expre = pd.read_csv(csv_path,index_col = 0)
+                for i in expre.values:#[0].split(',')[0].strip("[]''")
+                #i = expre.values[0]
+                    new_stra_list.append([i[0].split(',')[0].strip("[]''"),i[0].split(',')[1].strip("[]''")])
+            else:
+                print(csv_path)
+    return new_stra_list
+
+#根据回测结果中的vol和年化收益
+def get_selected_code_list(expre):
+    diff_file = up_file+'/result/diff/'
+    #score = pd.read_excel(diff_file+'score.xlsx')
+    ar = pd.read_excel(diff_file+'ar.xlsx',index_col = 0)
+    vol = pd.read_excel(diff_file+'vol.xlsx',index_col = 0)
+    
+    new_code_list = []
+    vol_one = vol.loc[:,str(expre)]
+    ar_one = ar.loc[:,str(expre)]
+    vol_selected = vol_one[vol_one<0.1].index.values
+    ar_selected = ar_one[ar_one>0.05].index.values
+    for code in vol_selected:
+        if(code in ar_selected):
+            new_code_list.append(code)
+    return new_code_list
