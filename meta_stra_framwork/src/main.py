@@ -89,7 +89,7 @@ def singel_expre_test(off_line = False):
         #copydata.main(param['code_list'])
         KB.copy_day_data(param['code_list'])
         KB.copy_day_data([param['HS_code']])
-    ori_expre = ['close#2#0&trend&HS*MACD#2#1&trend*MB#2#1&trend','close#2#1&trend&HS*MACD#2#0&trend*MB#2#0&trend']#param['_Expression']
+    ori_expre = param['_Expression']
     code_list = get_zl_expre.get_selected_code_list(param['_Expression'])#param['code_list']
     _code_list = copy.copy(code_list)
     if(not off_line):
