@@ -46,7 +46,7 @@ def distribute_expre(new_as_list):
 
 def get_buy_sell(mh_s):
     
-    signal_path = up_file+'/ori_signal'
+    signal_path = up_file+'/signal'
     index_path = up_file+'/index'
     code = '000001.XSHE'
 
