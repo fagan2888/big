@@ -116,7 +116,7 @@ def circle_expre(off_line = False):
         #copydata.main(param['code_list'])
         KB.copy_day_data(param['code_list'])
         KB.copy_day_data([param['HS_code']])
-    expre_list = get_zl_expre.get_expression_list_4()#get_zl_expre.get_expression_list()
+    expre_list = get_zl_expre.get_expression_list_3()#get_zl_expre.get_expression_list()
     code_list = param['code_list']
     _code_list = copy.copy(code_list)
     if(not off_line):
@@ -216,6 +216,6 @@ def hzy_expre_test():
 
 if __name__ == "__main__":
     #optimal_expre()
-    singel_expre_test(True)
-    #circle_expre(True)
+    #singel_expre_test(True)
+    circle_expre(True)
     #hzy_expre_test()

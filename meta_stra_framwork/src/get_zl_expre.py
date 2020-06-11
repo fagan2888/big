@@ -138,3 +138,6 @@ def get_selected_code_list(expre):
         if(code in ar_selected):
             new_code_list.append(code)
     return new_code_list
+
+if __name__ == "__main__":
+    print(len(get_expression_list_3()))
