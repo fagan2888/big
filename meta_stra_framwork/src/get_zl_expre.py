@@ -86,7 +86,7 @@ def get_expression_list():
     #best_zl_expre = sf.sort_index(axis = 0,ascending = True,by = [0]).index.values[-1]
 
 def get_expression_list_2():
-    expre_fra = pd.read_csv(up_file+'/expressions/results1_wzh_0422_r0.2.csv',index_col = 0)
+    expre_fra = pd.read_csv(up_file+'/expressions/wxk_0601.csv',index_col = 0)
     new_stra_list = []
     for i in expre_fra.values:#[0].split(',')[0].strip("[]''")
         new_stra_list.append([i[0].split(',')[0].strip("[]''"),i[0].split(',')[1].strip("[]''")])
@@ -110,9 +110,10 @@ def get_expression_list_3():
 #得到每个json文件的所有表达式
 def get_expression_list_4():
     new_stra_list = []
-    for k in range(1,5):
+    for k in range(4,0,-1):
         for j in range(2,6):
             csv_path = up_file+'/expressions/results'+str(k)+'_wzh_0526_r0.'+str(j)+'.csv'
+            print(csv_path)
             if(os.path.exists(csv_path)):
                 expre = pd.read_csv(csv_path,index_col = 0)
                 for i in expre.values:#[0].split(',')[0].strip("[]''")
@@ -121,6 +122,8 @@ def get_expression_list_4():
             else:
                 print(csv_path)
     return new_stra_list
+
+
 
 #根据回测结果中的vol和年化收益
 def get_selected_code_list(expre):
@@ -140,4 +143,4 @@ def get_selected_code_list(expre):
     return new_code_list
 
 if __name__ == "__main__":
-    print(len(get_expression_list_3()))
+    print(len(get_expression_list_4()))
