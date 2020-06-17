@@ -216,6 +216,6 @@ def hzy_expre_test():
 
 if __name__ == "__main__":
     #optimal_expre()
-    #singel_expre_test()
-    circle_expre()
+    singel_expre_test()
+    #circle_expre()
     #hzy_expre_test()
