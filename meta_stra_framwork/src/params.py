@@ -27,9 +27,9 @@ sys.path.append(up_file)
 
 PARAMS = defaultdict(
 begin_date = 20150101,#信号计算开始日期
-#code_list = ['002739.XSHE','600000.XSHG','002384.XSHE','300684.XSHE','002533.XSHE','002335.XSHE','002048.XSHE','002402.XSHE','300207.XSHE','002139.XSHE','002508.XSHE','300166.XSHE','300383.XSHE','300308.XSHE','300136.XSHE','002183.XSHE','300166.XSHE'],
+code_list = ['000001.XSHE','002739.XSHE','600000.XSHG','002384.XSHE','300684.XSHE','002533.XSHE','002335.XSHE','002048.XSHE','002402.XSHE','300207.XSHE','002139.XSHE','002508.XSHE','300166.XSHE','300383.XSHE','300308.XSHE','300136.XSHE','002183.XSHE','300166.XSHE'],
 #code_list = get_all_code_list(),#
-code_list = get_code_list(),#信号计算的股票池
+#code_list = get_code_list(),#信号计算的股票池
 get_code_data = False,#True,#是否重新获得原始数据
 #get_code_data = False,#是否重新获得原始数据
 HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
@@ -48,7 +48,7 @@ _index_save_path = up_file+'/index/',
 # 计数型信号就会计算100天内其他信号发生的次数
 # 信号组合可以使用+和*进行或和且逻辑运算,指标名称可在index_24中查询
 #_Expression = ['close_MA_5#close_MA_30#1&cross','close_MA_5#3250#0&HS&thre'],
-_Expression = ['K#40#1&thre&HS', 'K#40#0&thre&HS*MACD#3#0&trend'],  
+_Expression = ['K#40#1&thre&HS+close#close_shift_1_multiply_1.02#1&diff', 'K#40#0&thre&HS*MACD#3#0&trend'],  
 #_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close_EMA_15#2#1&trend*close_EMA_25#2#1&trend*MACD#0#1&thre*close#close_shift_4#1&diff*K#40#1&thre&HS','MACD#0#0&thre+K#40#0&thre&HS'],#+close#close_MA_10#0&cross'],
 #_Expression = ['close_EMA_7#close_EMA_15#1&diff*close_EMA_15#close_EMA_25#1&diff*close#2#0&trend&HS*MACD#3#1&trend*MB#3#1&trend*K#40#1&thre&HS', 'close_EMA_7#close_EMA_15#0&diff*close#2#1&trend&HS*MACD#3#0&trend*MB#3#0&trend*K#40#0&thre&HS'],
 #_Expression = ['close_EMA_25#2#1&trend*MACD#0#1&thre+close_EMA_25#2#1&trend*K#40#0&thre&HS',
