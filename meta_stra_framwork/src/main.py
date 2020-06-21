@@ -105,8 +105,16 @@ def singel_expre_test(off_line = False):
     benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
     summ = results['sys_analyser']['summary']
     _trade = results['sys_analyser']['trades']
+
+    _trade.to_excel(up_file+'/result/quick/trade.xlsx')
+
+    sp = results["sys_analyser"]['stock_positions']
+    sp_use = sp[sp['quantity'] == 0]
+
     summ['strategy_name'] = str(ori_expre)
     summ['stock_num'] = len(code_list)
+    summ['win_rate'] = len(sp_use[(sp_use['last_price']-sp_use['avg_price'])>0])/len(sp_use)
+
     save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
     return results
 
@@ -208,6 +216,7 @@ def hzy_expre_test():
     benchmark_unit = results["sys_analyser"]['benchmark_portfolio']['unit_net_value']
     summ = results['sys_analyser']['summary']
     _trade = results['sys_analyser']['trades']
+    _trade.to_excel(up_file+'/result/quick/trade.xlsx')
     summ['strategy_name'] = str(ori_expre)
     summ['stock_num'] = len(code_list)
     save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
