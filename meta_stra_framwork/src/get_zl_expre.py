@@ -123,6 +123,12 @@ def get_expression_list_4():
                 print(csv_path)
     return new_stra_list
 
+def get_expression_list_split():
+    expre = pd.read_excel('/Users/wode/Desktop/expre.xlsx',index_col = 0)
+    expre_list = []
+    for i in expre.values:
+        expre_list.append([i[0].split(',')[0].strip("[]''"),i[0].split(',')[1].strip("[]''")])
+    return expre_list
 
 
 #根据回测结果中的vol和年化收益
