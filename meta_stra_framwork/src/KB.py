@@ -96,5 +96,5 @@ def copy_day_data(code_list):
 
 if __name__ == "__main__":
     #get_mongo_data()
-    code_list = ['002739.XSHE','600000.XSHG','002384.XSHE','300684.XSHE','002533.XSHE','002335.XSHE','002048.XSHE','002402.XSHE','300207.XSHE','002139.XSHE','002508.XSHE','300166.XSHE','300383.XSHE','300308.XSHE','300136.XSHE','002183.XSHE','300166.XSHE']#pd.read_excel(now_file+'/all_code.xlsx')['code']
+    code_list = get_code_list()#pd.read_excel(now_file+'/all_code.xlsx')['code']
     copy_day_data(code_list)

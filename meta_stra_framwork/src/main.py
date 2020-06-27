@@ -95,7 +95,7 @@ def calculate_pro_ratio(sp,trade,unit):
             monney = (one_sell['last_quantity']*(one_day_sell['last_price']-one_day_sell['avg_price']))#.values[0]
         else:
             new_one_date = get_mindis_date(mul_sell,all_date,one_date)
-            print(one_date,new_one_date)
+            #print(one_date,new_one_date)
             one_day_sell = mul_sell.loc[new_one_date]         
             monney = (one_sell['last_quantity']*(one_day_sell['last_price']-one_day_sell['avg_price']))#.values[0]
         if(monney>0):
