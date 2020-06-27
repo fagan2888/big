@@ -17,6 +17,7 @@ import KB
 import get_zl_expre
 import os
 import hzy_stra
+import numpy as np
 
 single_expre_save_path = up_file+'/result/single/single.xlsx'
 unit_save_path = up_file+'/result/single/unit.xlsx'
@@ -73,6 +74,36 @@ def save_unit_result(unit_seris,benchmark_unit,ori_expre):
         unit_fra = pd.DataFrame(unit_dict,index = unit_seris.index.tolist())
     unit_fra.to_excel(unit_save_path)
 
+def get_mindis_date(mul_sell,all_date,one_date):
+    mul_date = mul_sell.index.tolist()
+    mul_date_index = np.abs(np.array([all_date.index(x) for x in mul_date])-all_date.index(one_date))
+    return mul_date[mul_date_index.argmin()]
+
+def calculate_pro_ratio(sp,trade,unit):
+    sell = sp[sp['quantity'] == 0]
+    sell['time'] = [str(x)[0:10] for x in sell.index.tolist()]
+    sell = sell.set_index(['time'])
+    win,lose = 0,0
+    date = [str(x)[0:10] for x in trade.index.tolist()]
+    all_date = [str(x)[0:10] for x in unit.index.tolist()]
+    for i in range(len(trade)):
+        one_sell = trade.iloc[i]
+        one_date = date[i]
+        mul_sell = sell[sell['order_book_id'] == one_sell['order_book_id']]
+        if(one_date in mul_sell.index.values):
+            one_day_sell = mul_sell.loc[one_date]
+            monney = (one_sell['last_quantity']*(one_day_sell['last_price']-one_day_sell['avg_price']))#.values[0]
+        else:
+            new_one_date = get_mindis_date(mul_sell,all_date,one_date)
+            print(one_date,new_one_date)
+            one_day_sell = mul_sell.loc[new_one_date]         
+            monney = (one_sell['last_quantity']*(one_day_sell['last_price']-one_day_sell['avg_price']))#.values[0]
+        if(monney>0):
+            win += monney
+        else:
+            lose += monney
+    return(np.abs(win/lose))
+
 def save_result(unit_seris,ori_expre,summ,trade,benchmark_unit):
     if not os.path.exists(single_expre_save_path):
         all_re = pd.DataFrame(summ,index = [0])
@@ -114,7 +145,7 @@ def singel_expre_test(off_line = False):
     summ['strategy_name'] = str(ori_expre)
     summ['stock_num'] = len(code_list)
     summ['win_rate'] = len(sp_use[(sp_use['last_price']-sp_use['avg_price'])>0])/len(sp_use)
-
+    summ['profit_ratio'] = calculate_pro_ratio(sp,_trade,unit_seris)
     save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
     return results
 
