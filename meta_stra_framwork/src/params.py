@@ -27,9 +27,9 @@ sys.path.append(up_file)
 
 PARAMS = defaultdict(
 begin_date = 20150101,#信号计算开始日期
-#code_list = ['000001.XSHE','002739.XSHE','600000.XSHG','002384.XSHE','300684.XSHE','002533.XSHE','002335.XSHE','002048.XSHE','002402.XSHE','300207.XSHE','002139.XSHE','002508.XSHE','300166.XSHE','300383.XSHE','300308.XSHE','300136.XSHE','002183.XSHE','300166.XSHE'],
+code_list = ['000001.XSHE','002739.XSHE','600000.XSHG','002384.XSHE','300684.XSHE','002533.XSHE','002335.XSHE','002048.XSHE','002402.XSHE','300207.XSHE','002139.XSHE','002508.XSHE','300166.XSHE','300383.XSHE','300308.XSHE','300136.XSHE','002183.XSHE','300166.XSHE'],
 #code_list = get_all_code_list(),#
-code_list = get_code_list(),#信号计算的股票池
+#code_list = get_code_list(),#信号计算的股票池
 get_code_data = False,#True,#是否重新获得原始数据
 #get_code_data = False,#是否重新获得原始数据
 HS_code = '999999.XSHG',#'399300.XSHE',#信号中的大盘信号代码
@@ -72,7 +72,7 @@ _config = {
     {
           "benchmark": "399300.XSHE", #基准
           "margin_multiplier": 1.4, #
-          "start_date": "2015-01-01", #回测开始日期
+          "start_date": "2018-01-01", #回测开始日期
           "end_date":   "2020-06-26", #回测结束日期
           "frequency": "1d", #回测频率
           "accounts":{
