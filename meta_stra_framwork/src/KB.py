@@ -96,5 +96,7 @@ def copy_day_data(code_list):
 
 if __name__ == "__main__":
     #get_mongo_data()
-    code_list = get_code_list()#pd.read_excel(now_file+'/all_code.xlsx')['code']
+    code_list = []
+    #code_list = get_code_list()#pd.read_excel(now_file+'/all_code.xlsx')['code']
+    code_list+= ['999999.XSHG']
     copy_day_data(code_list)

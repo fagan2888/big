@@ -196,4 +196,4 @@ if __name__ == "__main__":
     #print(len(code_list))
     #for code in code_list:
     code = '999999.XSHG'
-    cal_tb_index_data(code)
+    cal_index_data(code)
