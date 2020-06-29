@@ -215,8 +215,6 @@ def save_expre(result,result2,save_name = 'expre_2'):
     expre_fra = pd.DataFrame(expre_split)
     expre_fra.to_excel(up_file+'/result/split/'+save_name+'.xlsx')
 
-def save_remain(remain_stra):
-
 
 if __name__ == "__main__":
     s = "['K#90#1&HS&thre+K_shift_1#10#0&HS&thre+D_shift_1#10#0&HS&thre*D_shift_1#70#1&thre+OBV#0#0&thre', 'close_MA_10_shift_1#close_MA_10#1&HS&diff+K_shift_1#20#0&HS&thre+D_shift_1#10#0&HS&thre*D_shift_1#80#1&HS&thre+K_shift_1#90#1&thre+OBV#0#0&thre']"
@@ -225,7 +223,7 @@ if __name__ == "__main__":
     main.singel_expre_test(off_line = True,result_path = up_file+'/result/split')
     main.circle_expre(off_line = True,result_path = up_file+'/result/split')
     remain_stra_name_short,remain_stra_name_pure = get_remain_stra(result,_s_long)
-    while(len(remain_stra)>0):
+    while(len(remain_stra_name_short)>0):
         save_expre(remain_stra_name_short,remain_stra_name_pure,'remain_expre')
         result,result2 = gss.get_split_expre_list(remain_stra_name_short)
         result,result2 = clear_result(result,result2)
