@@ -124,7 +124,7 @@ def get_expression_list_4():
     return new_stra_list
 
 def get_expression_list_split():
-    expre = pd.read_excel('/Users/wode/Desktop/expre.xlsx',index_col = 0)
+    expre = pd.read_excel(up_file+'/result/split'+'/expre_2.xlsx',index_col = 0)
     expre_list = []
     for i in expre.values:
         expre_list.append([i[0].split(',')[0].strip("[]''"),i[0].split(',')[1].strip("[]''")])

@@ -19,10 +19,7 @@ import os
 import hzy_stra
 import numpy as np
 
-single_expre_save_path = up_file+'/result/single/single.xlsx'
-unit_save_path = up_file+'/result/single/unit.xlsx'
-
-def get_year_result(writer,trade,unit_seris,ori_expre):
+def get_year_result(writer,trade,unit_seris,ori_expre,single_expre_save_path):
     summ = {}
     date = unit_seris.index.tolist()
     year_list = list(set([x.year for x in date]))
@@ -36,7 +33,7 @@ def get_year_result(writer,trade,unit_seris,ori_expre):
         summ[str(year)+'trade_num'] = one_trade_num 
         summ[str(year)+'Sharpe'] = s2.Sharpe_2(one_list)
         summ[str(year)+'Total_Return'] = s2.Total_Return(one_list)
-    save_backtest_result(writer,summ,ori_expre,sheet_name = '分年')
+    save_backtest_result(writer,summ,ori_expre,single_expre_save_path,sheet_name = '分年')
 
 def add_new_result(old,new):
     if(len(old)==0):
@@ -47,7 +44,7 @@ def add_new_result(old,new):
         old[key].append(new[key])
     return old
 
-def save_backtest_result(writer,summ,ori_expre,sheet_name = ''):
+def save_backtest_result(writer,summ,ori_expre,single_expre_save_path,sheet_name = ''):
     df = pd.read_excel(single_expre_save_path, None)
     sheet_names = df.keys()
     if (sheet_name not in sheet_names):
@@ -57,19 +54,19 @@ def save_backtest_result(writer,summ,ori_expre,sheet_name = ''):
         all_re.loc[str(ori_expre)+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())] = summ
     all_re.T.to_excel(writer,sheet_name)
 
-def save_unit_result(unit_seris,benchmark_unit,ori_expre):
+def save_unit_result(unit_seris,benchmark_unit,ori_expre,unit_save_path):
     if os.path.exists(unit_save_path):
         unit_fra = pd.read_excel(unit_save_path,index_col = 0)
         if(len(unit_fra) == len(unit_seris)):
             unit_fra[str(ori_expre)+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())] = unit_seris.tolist()
         else:
             unit_dict = {}
-            unit_dict[str(ori_expre)] = unit_seris.tolist()
+            unit_dict[str(ori_expre)+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())] = unit_seris.tolist()
             unit_dict['benchmark'] = benchmark_unit.tolist()
             unit_fra = pd.DataFrame(unit_dict,index = unit_seris.index.tolist())
     else:
         unit_dict = {}
-        unit_dict[str(ori_expre)] = unit_seris.tolist()
+        unit_dict[str(ori_expre)+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())] = unit_seris.tolist()
         unit_dict['benchmark'] = benchmark_unit.tolist()
         unit_fra = pd.DataFrame(unit_dict,index = unit_seris.index.tolist())
     unit_fra.to_excel(unit_save_path)
@@ -104,17 +101,19 @@ def calculate_pro_ratio(sp,trade,unit):
             lose += monney
     return(np.abs(win/lose))
 
-def save_result(unit_seris,ori_expre,summ,trade,benchmark_unit):
+def save_result(unit_seris,ori_expre,summ,trade,benchmark_unit,result_path):
+    single_expre_save_path = result_path+'/single.xlsx'
+    unit_save_path = result_path+'/unit.xlsx'
     if not os.path.exists(single_expre_save_path):
         all_re = pd.DataFrame(summ,index = [0])
         all_re.T.to_excel(single_expre_save_path,sheet_name= '综合')
     writer = pd.ExcelWriter(single_expre_save_path)
-    get_year_result(writer,trade,unit_seris,ori_expre)
-    save_backtest_result(writer,summ,ori_expre,sheet_name = '综合')
+    get_year_result(writer,trade,unit_seris,ori_expre,single_expre_save_path)
+    save_backtest_result(writer,summ,ori_expre,single_expre_save_path,sheet_name = '综合')
     writer.save()
-    save_unit_result(unit_seris,benchmark_unit,ori_expre)
+    save_unit_result(unit_seris,benchmark_unit,ori_expre,unit_save_path)
 
-def singel_expre_test(off_line = False):
+def singel_expre_test(off_line = False,result_path = up_file+'/result/single'):
     param =  params.PARAMS
     if(param['get_code_data']):
         #copydata.main(param['code_list'])
@@ -144,12 +143,13 @@ def singel_expre_test(off_line = False):
 
     summ['strategy_name'] = str(ori_expre)
     summ['stock_num'] = len(code_list)
-    summ['win_rate'] = len(sp_use[(sp_use['last_price']-sp_use['avg_price'])>0])/len(sp_use)
-    summ['profit_ratio'] = calculate_pro_ratio(sp,_trade,unit_seris)
-    save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
+    #summ['win_rate'] = len(sp_use[(sp_use['last_price']-sp_use['avg_price'])>0])/len(sp_use)
+    #summ['profit_ratio'] = calculate_pro_ratio(sp,_trade,unit_seris)
+    #result_path = up_file+'/result/single'
+    save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit,result_path)
     return results
 
-def circle_expre(off_line = False):
+def circle_expre(off_line = False,expre_list = [],result_path = up_file+'/result/single'):
     param =  params.PARAMS
     if(param['get_code_data']):
         #copydata.main(param['code_list'])
@@ -176,7 +176,7 @@ def circle_expre(off_line = False):
             _trade = results['sys_analyser']['trades']
             summ['strategy_name'] = str(ori_expre)
             summ['stock_num'] = len(code_list)
-            save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit)
+            save_result(unit_seris,ori_expre,summ,_trade,benchmark_unit,result_path)
         except Exception as e:
             print(e)
 
