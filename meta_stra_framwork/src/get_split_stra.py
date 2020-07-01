@@ -160,11 +160,15 @@ def get_split_expre(s):
     return result,result2
 
 def get_split_expre_list(ori_result):
-    result_list,result2_list = [],[]
+    result_list,result2_list,mother_expre,mother_expre_list = [],[],[],[]
     for _s in ori_result:
         result,result2 = get_split_expre(_s)
         result_list += result
         result2_list += result2
+        mother_expre += [_s]*len(result)
+    output_result_list = np.array(get_sort_norep(result_list))
+    for _r in np.array(list(set(result_list))):
+        mother_expre_list.append(mother_expre[result_list.index(_r)])
     '''
     expre_split= {}
     expre_split['expre_long'] = list(set(result2_list))
@@ -172,8 +176,10 @@ def get_split_expre_list(ori_result):
     expre_fra = pd.DataFrame(expre_split)
     expre_fra.to_excel('/Users/wode/Desktop/expre_2.xlsx')
     '''
-    return np.array(list(set(result_list))),np.array(list(set(result2_list)))
+    return output_result_list,np.array(get_sort_norep(result2_list)),mother_expre_list
 
+
+####有问题######
 def get_remain_stra(result,_s_long,com_thre = 0.99):
     unit = pd.read_excel(up_file+'/result/split'+'/unit.xlsx')
     unit_columns = unit.columns.values
@@ -215,6 +221,25 @@ def save_expre(result,result2,save_name = 'expre_2'):
     expre_fra = pd.DataFrame(expre_split)
     expre_fra.to_excel(up_file+'/result/split/'+save_name+'.xlsx')
 
+def all_result_init():
+    re = {}
+    re['long'] = []
+    re['short'] = []
+    re['mother'] = []
+    return re
+
+def all_result_add(re,result,result2,mother_list):
+    re['long'] += result2.tolist()
+    re['short'] += result.tolist()
+    re['mother'] += mother_list
+    return re
+
+#得到不改变顺序的不重复元素列表
+def get_sort_norep(l1):
+    l2 = [] 
+    [l2.append(i) for i in l1 if not i in l2] 
+    return(l2)
+
 
 if __name__ == "__main__":
     s = "['K#90#1&HS&thre+K_shift_1#10#0&HS&thre+D_shift_1#10#0&HS&thre*D_shift_1#70#1&thre+OBV#0#0&thre', 'close_MA_10_shift_1#close_MA_10#1&HS&diff+K_shift_1#20#0&HS&thre+D_shift_1#10#0&HS&thre*D_shift_1#80#1&HS&thre+K_shift_1#90#1&thre+OBV#0#0&thre']"
@@ -223,10 +248,18 @@ if __name__ == "__main__":
     main.singel_expre_test(off_line = True,result_path = up_file+'/result/split')
     main.circle_expre(off_line = True,result_path = up_file+'/result/split')
     remain_stra_name_short,remain_stra_name_pure = get_remain_stra(result,_s_long)
+    all_result = all_result_init()
+    flag = 0
     while(len(remain_stra_name_short)>0):
+    #while(flag<1):
         save_expre(remain_stra_name_short,remain_stra_name_pure,'remain_expre')
-        result,result2 = gss.get_split_expre_list(remain_stra_name_short)
+        #result,result2,mother_list = gss.get_split_expre_list(remain_stra_name_short)
+        result,result2,mother_list = get_split_expre_list(remain_stra_name_short)
+        all_result = all_result_add(all_result,result,result2,mother_list)
         result,result2 = clear_result(result,result2)
         save_expre(result,result2)
         main.circle_expre(off_line = True,result_path = up_file+'/result/split')
         remain_stra_name_short,remain_stra_name_pure = get_remain_stra(result,_s_long)
+        flag+=1
+    all_fra = pd.DataFrame(all_result)
+    all_fra.to_excel(up_file+'/result/split/'+'all_result.xlsx')
