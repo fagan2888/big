@@ -151,8 +151,8 @@ def get_result2(result,s,s1_1,s1_2,s2_1,s2_2):
 
 def get_split_expre(s):
     s1_1,s1_2,s2_1,s2_2 = get_s(s)
-    result = get_result(s,s1_1,s1_2,s2_1,s2_2)
-    result2 = get_result2(result,s,s1_1,s1_2,s2_1,s2_2)
+    result = get_sort_norep(get_result(s,s1_1,s1_2,s2_1,s2_2))
+    result2 = get_sort_norep(get_result2(result,s,s1_1,s1_2,s2_1,s2_2))
     expre_split= {}
     expre_split['expre'] = result2
     expre_fra = pd.DataFrame(expre_split)
@@ -242,8 +242,8 @@ def get_sort_norep(l1):
 
 
 if __name__ == "__main__":
-    s = "['K#90#1&HS&thre+K_shift_1#10#0&HS&thre+D_shift_1#10#0&HS&thre*D_shift_1#70#1&thre+OBV#0#0&thre', 'close_MA_10_shift_1#close_MA_10#1&HS&diff+K_shift_1#20#0&HS&thre+D_shift_1#10#0&HS&thre*D_shift_1#80#1&HS&thre+K_shift_1#90#1&thre+OBV#0#0&thre']"
-    _s_long = "['K#90#1&HS&thre*D_shift_1#70#1&thre+K#90#1&HS&thre*OBV#0#0&thre+K_shift_1#10#0&HS&thre*D_shift_1#70#1&thre+K_shift_1#10#0&HS&thre*OBV#0#0&thre+D_shift_1#10#0&HS&thre*D_shift_1#70#1&thre+D_shift_1#10#0&HS&thre*OBV#0#0&thre', 'close_MA_10_shift_1#close_MA_10#1&HS&diff*D_shift_1#80#1&HS&thre+close_MA_10_shift_1#close_MA_10#1&HS&diff*K_shift_1#90#1&thre+close_MA_10_shift_1#close_MA_10#1&HS&diff*OBV#0#0&thre+K_shift_1#20#0&HS&thre*D_shift_1#80#1&HS&thre+K_shift_1#20#0&HS&thre*K_shift_1#90#1&thre+K_shift_1#20#0&HS&thre*OBV#0#0&thre+D_shift_1#10#0&HS&thre*D_shift_1#80#1&HS&thre+D_shift_1#10#0&HS&thre*K_shift_1#90#1&thre+D_shift_1#10#0&HS&thre*OBV#0#0&thre']"
+    s = "['K#90#1&HS&thre+D_shift_1#10#0&HS&thre', 'close_MA_10_shift_1#close_MA_10#1&HS&diff+K_shift_1#20#0&HS&thre+D_shift_1#10#0&HS&thre*D_shift_1#80#1&HS&thre+K_shift_1#90#1&thre]"
+    _s_long = "['K#90#1&HS&thre+D_shift_1#10#0&HS&thre', 'close_MA_10_shift_1#close_MA_10#1&HS&diff*D_shift_1#80#1&HS&thre+close_MA_10_shift_1#close_MA_10#1&HS&diff*K_shift_1#90#1&thre+K_shift_1#20#0&HS&thre*D_shift_1#80#1&HS&thre+K_shift_1#20#0&HS&thre*K_shift_1#90#1&thre+D_shift_1#10#0&HS&thre*D_shift_1#80#1&HS&thre+D_shift_1#10#0&HS&thre*K_shift_1#90#1&thre']"
     result,result2 = gss.get_split_expre(s)
     main.singel_expre_test(off_line = True,result_path = up_file+'/result/split')
     main.circle_expre(off_line = True,result_path = up_file+'/result/split')
