@@ -15,6 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import params
 import talib
+import copy
 #from sig_meta_stratege import main
 from rqdata import up_file,now_file
 k = 10
@@ -76,12 +77,15 @@ def buy(context, bar_dict):
     now = context.now.strftime('%Y%m%d')
     if context.operlist:
         positions = context.portfolio.positions
-        cash1      = context.portfolio.cash
-        cash       = cash1
+        cash1      = (context.portfolio.cash)*0.5
+        #cash1      = (context.portfolio.cash)
+        cash       = copy.copy(cash1)
         if len(positions) == 0:
             cash       = cash1/3
-
-
+            #cash       = copy.copy(cash1)
+        #else:
+            #cash       = 0
+        '''
         cash_each = 0
         if len(context.operlist) > 50:
             cash_each = cash / len(context.operlist) * 0.9
@@ -89,11 +93,15 @@ def buy(context, bar_dict):
             cash_each = cash / 10
         else:
             cash_each = cash / 100 * 0.9
+        '''
+        cash_each = 0
+        cash_each = cash / len(context.operlist) * 0.98
         for code in context.operlist:
             try:
                 snap = current_snapshot(code)
                 if is_suspended(code):
                     #停牌无法买入
+                    #print('tingpaimai',code)
                     continue
                 if is_st_stock(code):
                     #st股票不考虑
@@ -127,6 +135,7 @@ def sell(context, bar_dict):
                 elif(code in context.selllist):  
                     if position.sellable > 0:
                         if is_suspended(code):
+                            #print('tingpaimai',code)
                             #停牌无法卖出
                             continue
                         if snap.last <= snap.limit_down:
@@ -151,7 +160,7 @@ def handle_bar(context, bar_dict):
     after_trading(context)
     #plot('market', context.portfolio.market_value/context.portfolio.total_value)
     #plot('stocknum', len(context.operlist))
-    #print('%s, %4.2f, %10.2f' % (now, context.portfolio.market_value/context.portfolio.total_value, context.portfolio.total_value))
+    #print('%s,%4.2f %4.2f, %10.2f' % (now,context.portfolio.cash,context.portfolio.market_value/context.portfolio.total_value, context.portfolio.total_value))
 def after_trading(context):
     pass
 

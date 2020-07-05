@@ -78,20 +78,22 @@ _config = {
           "end_date":   "2020-06-26", #回测结束日期
           "frequency": "1d", #回测频率
           "accounts":{
-            "stock":  100000000, #回测本金
+            "stock":  10000000000, #回测本金
             #"future": "~",
           }
     },
     "extra":{
-        #"log_level": "warning",
-        "log_level": "error",
+        #"log_level" : "verbose",
+        #"log_level": "code:info",
+        "log_level": "warning",
+        #"log_level": "error",
     },
     "mod":{
       "sys_analyser":{
         "enabled":             True,
         "report":              True,
-        #"plot":                True,
-        "plot":                False
+        "plot":                True,
+        #"plot":                False
       },
       "sys_simulation":{
         "enabled":               True,
