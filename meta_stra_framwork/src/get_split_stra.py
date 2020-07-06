@@ -184,13 +184,16 @@ def get_remain_stra(result,_s_long,com_thre = 0.99):
     unit = pd.read_excel(up_file+'/result/split'+'/unit.xlsx')
     unit_columns = unit.columns.values
     ori_expre_list = get_zl_expre.get_expression_list_split()
-    ori_expre_list.append(_s_long)
+    #ori_expre_list.append(_s_long)
     expre_list = [str(x) for x in ori_expre_list]
+    if(str(_s_long) in expre_list):
+        expre_list.remove(str(_s_long))
+    expre_list.append(str(_s_long))
     pure_uc = [x[:-19] for x in unit_columns]
     uc_index = []
     for r in expre_list:
         uc_index.append(pure_uc.index(r))
-    use_uc =  unit_columns[uc_index] 
+    use_uc =  get_sort_norep(unit_columns[uc_index]) 
     use_unit = unit.loc[:,use_uc]
     remain_stra = use_unit.corr()[(use_unit.corr().loc[:,use_uc[-1]])>com_thre]
     remain_stra_name = remain_stra.index.values[:-1]
@@ -198,7 +201,7 @@ def get_remain_stra(result,_s_long,com_thre = 0.99):
     remain_stra_name_short = []
     for _r in remain_stra_name_pure:
         remain_stra_name_short.append(result[expre_list.index(_r)])
-    return remain_stra_name_short,remain_stra_name_pure
+    return get_sort_norep(remain_stra_name_short),get_sort_norep(remain_stra_name_pure)
 
 def clear_result(result,result2):
     
