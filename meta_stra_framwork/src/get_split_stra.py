@@ -210,9 +210,9 @@ def clear_result(result,result2):
     unit = pd.read_excel(up_file+'/result/split'+'/unit.xlsx')
     unit_columns = unit.columns.values
     pure_uc = [x[:-19] for x in unit_columns]
-    for i in range(len(result)):
-        com_e = [result[i].split(',')[0].strip("[]''"),result[i].split(',')[1].strip("[]''")]
-        if(com_e not in pure_uc):
+    for i in range(len(result2)):
+        com_e = [result2[i].split(',')[0].strip("[]''"),result2[i].split(',')[1].strip("[]''")]
+        if(str(com_e) not in pure_uc):
             new_result.append(result[i])
             new_result2.append(result2[i])
     return new_result,new_result2
