@@ -11,6 +11,7 @@ import time
 import sig_data
 import os
 import KB
+import numpy as np
 
 import smtplib
 from email.mime.multipart import MIMEMultipart    
@@ -41,6 +42,21 @@ def email(estr,subject):
     smtp.sendmail('lsz17801016296@163.com','495506796@qq.com', msg.as_string()) 
     smtp.quit()
 
+def send_index(HS_code,param):
+    _index = pd.read_csv(param['_index_save_path']+HS_code+'.csv',index_col='date')
+    K = _index.iloc[-1]['K']
+    close_MA_10_shift_1 = _index.iloc[-1]['close_MA_10_shift_1']
+    close_MA_10 = _index.iloc[-1]['close_MA_10']
+    D_shift_1 = _index.iloc[-1]['D_shift_1']
+    now_time = time.strftime("%Y%m%d", time.localtime())
+    buy_bool = K>=90
+    if(close_MA_10_shift_1 > close_MA_10 and D_shift_1 >= 80 ):
+        sell_bool = True
+    else:
+        sell_bool = False
+
+    mes = now_time+' Buy:'+str(buy_bool)+' Sell:'+str(sell_bool)+ ' K is ' + str(np.round(K,3))+' close_MA_10_shift_1 is ' + str(np.round(close_MA_10_shift_1,3))+' close_MA_10 is ' + str(np.round(close_MA_10,3))+' D_shift_1 is ' + str(np.round(D_shift_1,3))
+    email(mes,'index')
 
 def get_day_code():
     param =  params_1.PARAMS
@@ -57,6 +73,7 @@ def get_day_code():
     result.to_csv(up_file+'/result/quick/quick_sig_1.csv')
     new_signal = pd.read_csv(up_file+'/result/quick/quick_sig_1.csv')
     now_time = time.strftime("%Y%m%d", time.localtime())
+    #now_time = '20200710'
     new_code = new_signal[new_signal['time'] == int(now_time)]
     #print(new_signal['time'].values[-1],type(new_signal['time'].values[-1]),new_code)
     new_buy = new_code[new_code['operation'] == 'long']['code']
@@ -65,7 +82,7 @@ def get_day_code():
     print('sell',new_sell.values)
     email(str(new_buy.values),'buy')
     email(str(new_sell.values),'sell')
-
+    send_index(HS_code,param)
 
 if __name__ == "__main__":
     get_day_code()
