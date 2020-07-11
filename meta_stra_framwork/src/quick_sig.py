@@ -184,7 +184,7 @@ def replace_exp(expression_list,data,code):
                 new_expre.append(calculate(new_expression))
         data[expression] = np.array(new_expre)
     
-    #data.to_csv(up_file+'/signal/'+code+'.csv')
+    data.to_csv(up_file+'/signal/'+code+'.csv')
     return data[expression_list]>0
 
 def get_trade_date(code,expression,begin_date):

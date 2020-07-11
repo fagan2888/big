@@ -180,7 +180,7 @@ def get_split_expre_list(ori_result):
 
 
 ####有问题######
-def get_remain_stra(result,_s_long,com_thre = 0.99):
+def get_remain_stra(result,_s_long,com_thre = 0.90):
     unit = pd.read_excel(up_file+'/result/split'+'/unit.xlsx')
     unit_columns = unit.columns.values
     ori_expre_list = get_zl_expre.get_expression_list_split()
